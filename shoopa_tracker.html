@@ -258,28 +258,33 @@ main{padding-top:70px;min-height:100vh;}
   window._fbRef = ref;
   window._fbSet = set;
 
-  // Listen for remote changes and merge into local state
+  // Listen for remote changes in real time
   const dataRef = ref(db, 'shoopa/data');
   onValue(dataRef, (snapshot) => {
     const val = snapshot.val();
-    if (val) {
-      // Only update if different from what we last wrote (avoid loop)
-      const incoming = JSON.stringify(val);
-      if (incoming !== window._lastWritten) {
-        if (window.state) {
-          window.state.data = val;
-          // Re-render active page
-          const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
-          if (activePage === 'log')       renderLog();
-          if (activePage === 'stats')     renderStats();
-          if (activePage === 'year')      renderYear();
-          if (activePage === 'versus')    renderVersus();
-          if (activePage === 'badges')    renderBadges();
-          if (activePage === 'dashboard') renderDashboard();
-          showSyncBadge('synced');
-        }
-      }
+    if (!val) return;
+    const incoming = JSON.stringify(val);
+    // Skip if this is our own write echoing back
+    if (incoming === window._lastWritten) return;
+    // Wait for app to be ready then update
+    function applyUpdate() {
+      if (!window.state) { setTimeout(applyUpdate, 100); return; }
+      window.state.data = val;
+      // Also update localStorage
+      try { localStorage.setItem('shoopa_v2', JSON.stringify(val)); } catch(e) {}
+      // Re-render whatever page is active
+      const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
+      try {
+        if (activePage === 'log')       { renderLog(); updateLogBadge(); }
+        if (activePage === 'stats')     renderStats();
+        if (activePage === 'year')      renderYear();
+        if (activePage === 'versus')    renderVersus();
+        if (activePage === 'badges')    renderBadges();
+        if (activePage === 'dashboard') renderDashboard();
+      } catch(e) { console.log('render error:', e); }
+      showSyncBadge('synced');
     }
+    applyUpdate();
   });
 
   // Save to Firebase
