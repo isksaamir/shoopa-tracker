@@ -362,6 +362,8 @@ main{padding-top:70px;min-height:100vh;}
     // Wait for app to be ready then update
     function applyUpdate() {
       if (!window.state) { setTimeout(applyUpdate, 100); return; }
+      if (!val.saamir) val.saamir = {};
+      if (!val.jana) val.jana = {};
       window.state.data = val;
       // Also update localStorage
       try { localStorage.setItem('shoopa_v2', JSON.stringify(val)); } catch(e) {}
@@ -795,7 +797,7 @@ let state = {
 
 try {
   const s = localStorage.getItem('shoopa_v2');
-  if(s) { const p = JSON.parse(s); state.data = p; }
+  if(s) { const p = JSON.parse(s); if(!p.saamir) p.saamir={}; if(!p.jana) p.jana={}; state.data = p; }
 } catch(e) {}
 // Firebase will override with cloud data once it loads via onValue listener above
 
@@ -835,9 +837,10 @@ function getCurrentWeek() {
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function k(user, week, habitId, day) { return `${user}_w${week}_${habitId}_d${day}`; }
-function isChecked(user, week, habitId, day) { return !!state.data[user][k(user,week,habitId,day)]; }
+function isChecked(user, week, habitId, day) { if(!state.data[user]) return false; return !!state.data[user][k(user,week,habitId,day)]; }
 
 function toggle(user, week, habitId, day) {
+  if(!state.data[user]) state.data[user]={};
   const key = k(user,week,habitId,day);
   state.data[user][key] = !state.data[user][key];
   if(!state.data[user][key]) delete state.data[user][key];
