@@ -75,7 +75,7 @@ main{padding-top:70px;min-height:100vh;}
 .habit-name{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);padding:0 8px 0 0;}
 .habit-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;}
 .habit-freq{font-size:10px;color:var(--dimmer);margin-left:auto;font-family:'Space Mono',monospace;padding-left:6px;}
-.check-cell{display:flex;align-items:center;justify-content:center;}
+.check-cell{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;}
 .chk{width:34px;height:34px;border:1px solid rgba(255,255,255,0.08);background:var(--navy3);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;color:transparent;}
 .chk:hover{border-color:rgba(0,200,255,0.3);background:rgba(0,200,255,0.04);}
 .chk.done-s{border-color:var(--cyan);background:rgba(0,200,255,0.12);color:var(--cyan);}
@@ -215,8 +215,101 @@ main{padding-top:70px;min-height:100vh;}
 .cal-close{width:100%;margin-top:16px;padding:10px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--dim);cursor:pointer;transition:all 0.2s;}
 .cal-close:hover{border-color:var(--cyan);color:var(--cyan);}
 .cal-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(0,200,255,0.3);background:rgba(0,200,255,0.06);color:var(--cyan);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.exam-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(245,200,66,0.3);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.exam-btn.exam-on{border-color:var(--gold);background:rgba(245,200,66,0.1);color:var(--gold);}
+.luna-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.luna-btn.luna-on{border-color:var(--purple2);background:rgba(160,126,213,0.1);color:var(--purple2);}
+.exam-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;padding:3px 10px;border:1px solid rgba(245,200,66,0.4);background:rgba(245,200,66,0.08);color:var(--gold);}
+.habit-row.exam-exempt{opacity:0.3;pointer-events:none;}
+.habit-row.exam-exempt .habit-name::after{content:' — exam week';font-size:9px;color:var(--gold);margin-left:4px;}
 .cal-btn:hover{background:rgba(0,200,255,0.12);}
 
+/* PRAYER SECTION */
+.prayer-section{margin-bottom:6px;}
+.prayer-toggle-row{display:grid;grid-template-columns:220px repeat(7,1fr);gap:3px;align-items:center;cursor:pointer;margin-bottom:3px;}
+.prayer-toggle-row:hover .habit-name{color:var(--white);}
+.prayer-expand-icon{font-size:10px;margin-left:6px;transition:transform 0.2s;display:inline-block;}
+.prayer-expand-icon.open{transform:rotate(90deg);}
+.prayer-pip{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.prayer-pip.done-s{background:var(--cyan);}
+.prayer-pip.done-j{background:var(--purple2);}
+.prayer-pip.auto{background:var(--purple2);opacity:0.45;}
+
+/* Prayer Cards - the beautiful part */
+.prayer-cards-wrap{display:none;padding:4px 0 12px 0;}
+.prayer-cards-wrap.open{display:block;}
+.prayer-day-tabs{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px;}
+.prayer-day-tab{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:6px 12px;border:1px solid rgba(255,255,255,0.08);background:var(--navy3);color:var(--dimmer);cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;position:relative;}
+.prayer-day-tab:hover{border-color:rgba(0,200,255,0.2);color:var(--dim);}
+.prayer-day-tab.active-s{border-color:var(--cyan);background:rgba(0,200,255,0.06);color:var(--cyan);}
+.prayer-day-tab.active-j{border-color:var(--purple2);background:rgba(160,126,213,0.06);color:var(--purple2);}
+.prayer-day-tab.today-tab{border-color:rgba(245,200,66,0.4);}
+.prayer-day-tab .day-pips{display:flex;gap:2px;margin-top:4px;justify-content:center;}
+.prayer-day-tab .day-pip{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.1);}
+.prayer-day-tab .day-pip.p-done-s{background:var(--cyan);}
+.prayer-day-tab .day-pip.p-done-j{background:var(--purple2);}
+.prayer-day-tab .day-pip.p-auto{background:var(--purple2);opacity:0.4;}
+
+.prayer-day-panel{background:var(--navy2);border:1px solid rgba(26,110,245,0.12);padding:16px;}
+.prayer-cards-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.prayer-card{background:var(--navy3);border:1px solid rgba(255,255,255,0.06);padding:14px 10px;text-align:center;position:relative;transition:all 0.15s;}
+.prayer-card.done-s{border-color:var(--cyan);background:rgba(0,200,255,0.06);}
+.prayer-card.done-j{border-color:var(--purple2);background:rgba(160,126,213,0.06);}
+.prayer-card.auto-done{border-color:rgba(160,126,213,0.3);background:rgba(160,126,213,0.04);opacity:0.6;}
+.prayer-card-icon{font-size:20px;margin-bottom:6px;display:block;}
+.prayer-card-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.05em;color:var(--dim);margin-bottom:8px;}
+.prayer-card.done-s .prayer-card-name{color:var(--cyan);}
+.prayer-card.done-j .prayer-card-name{color:var(--purple2);}
+.prayer-card-time{font-family:'Space Mono',monospace;font-size:8px;color:var(--dimmer);margin-bottom:10px;letter-spacing:0.1em;}
+.prayer-card-btns{display:flex;gap:6px;justify-content:center;}
+.prayer-pray-btn{width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);background:var(--navy2);cursor:pointer;font-size:14px;transition:all 0.15s;color:transparent;}
+.prayer-pray-btn:hover{border-color:rgba(0,200,255,0.3);}
+.prayer-pray-btn.done-s{border-color:var(--cyan);background:rgba(0,200,255,0.12);color:var(--cyan);}
+.prayer-pray-btn.done-j{border-color:var(--purple2);background:rgba(160,126,213,0.12);color:var(--purple2);}
+.prayer-wudhu-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:var(--navy2);cursor:pointer;font-size:13px;transition:all 0.15s;}
+.prayer-wudhu-btn:hover{border-color:rgba(0,200,255,0.3);}
+.prayer-wudhu-btn.done-s{border-color:var(--cyan);background:rgba(0,200,255,0.12);}
+.prayer-wudhu-btn.done-j{border-color:var(--purple2);background:rgba(160,126,213,0.12);}
+.prayer-btn-labels{display:flex;gap:6px;justify-content:center;margin-top:4px;}
+.prayer-btn-lbl{font-family:'Space Mono',monospace;font-size:7px;color:var(--dimmer);width:36px;text-align:center;letter-spacing:0.08em;}
+.prayer-day-score{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;margin-top:12px;text-align:right;}
+.prayer-day-score.s{color:var(--cyan);}
+.prayer-day-score.j{color:var(--purple2);}
+
+/* BADGE CABINET */
+.badge-section-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:0.05em;color:var(--white);margin:24px 0 12px;display:flex;align-items:center;gap:10px;}
+.badge-section-title::after{content:'';flex:1;height:1px;background:rgba(26,110,245,0.15);}
+.badge-tier{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;padding:3px 10px;margin-left:10px;}
+.tier-weekly{background:rgba(0,200,255,0.1);color:var(--cyan);border:1px solid rgba(0,200,255,0.3);}
+.tier-monthly{background:rgba(160,126,213,0.1);color:var(--purple2);border:1px solid rgba(160,126,213,0.3);}
+.tier-legendary{background:rgba(245,200,66,0.1);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
+.badge-cabinet{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px;}
+.badge-card{background:var(--navy2);border:1px solid rgba(26,110,245,0.08);padding:18px 12px;text-align:center;position:relative;transition:all 0.2s;cursor:default;}
+.badge-card:hover{transform:translateY(-2px);}
+.badge-card.locked{opacity:0.25;filter:grayscale(1);}
+.badge-card.earned-s{border-color:var(--cyan);background:rgba(0,200,255,0.05);}
+.badge-card.earned-s::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);}
+.badge-card.earned-j{border-color:var(--purple2);background:rgba(160,126,213,0.05);}
+.badge-card.earned-j::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--purple2);}
+.badge-icon-big{font-size:32px;margin-bottom:8px;display:block;}
+.badge-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.03em;margin-bottom:4px;}
+.badge-card.earned-s .badge-title{color:var(--cyan);}
+.badge-card.earned-j .badge-title{color:var(--purple2);}
+.badge-card.locked .badge-title{color:var(--dimmer);}
+.badge-desc{font-size:10px;color:var(--dimmer);line-height:1.4;}
+.badge-earned-tag{position:absolute;top:8px;right:8px;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:0.1em;padding:2px 5px;}
+.badge-earned-tag.s{background:rgba(0,200,255,0.15);color:var(--cyan);}
+.badge-earned-tag.j{background:rgba(160,126,213,0.15);color:var(--purple2);}
+.badge-earned-tag.both{background:rgba(245,200,66,0.15);color:var(--gold);}
+.badge-count-pill{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;font-style:italic;}
+
+.bk-bar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;background:var(--navy2);border:1px solid rgba(26,110,245,0.1);margin-bottom:24px;}
+.bk-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;transition:all 0.2s;border:none;}
+.bk-exp{background:rgba(0,200,255,0.08);color:var(--cyan);border:1px solid rgba(0,200,255,0.3);}
+.bk-imp{background:rgba(245,200,66,0.08);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
+.bk-rst{background:rgba(224,85,85,0.06);color:var(--red);border:1px solid rgba(224,85,85,0.25);}
+.bk-ok{font-family:'Space Mono',monospace;font-size:9px;padding:4px 10px;color:var(--green);background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);}
+.bk-err{font-family:'Space Mono',monospace;font-size:9px;padding:4px 10px;color:var(--red);background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.2);}
 /* RESPONSIVE */
 @media(max-width:768px){
   nav{padding:12px 16px;}
@@ -313,6 +406,7 @@ main{padding-top:70px;min-height:100vh;}
     <button class="nav-tab" onclick="showPage('year')">Year</button>
     <button class="nav-tab" onclick="showPage('versus')">Head-to-Head</button>
     <button class="nav-tab" onclick="showPage('badges')">Badges</button>
+    <button class="nav-tab" onclick="showPage('backup')">Backup</button>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
     <div class="sync-badge" id="sync-badge" style="display:none;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:4px 10px;border-radius:2px;"></div>
@@ -325,7 +419,7 @@ main{padding-top:70px;min-height:100vh;}
 <!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
   <div class="page-title">Your Arena.</div>
-  <div class="page-sub">SAAMIR & JANA · 2026</div>
+  <div class="page-sub">SAAMIR & JANA · STARTS APR 6, 2026 · SUN–SAT</div>
   <div class="hero-dash">
     <div class="hero-card s">
       <div class="hero-name s">SAAMIR</div>
@@ -370,17 +464,19 @@ main{padding-top:70px;min-height:100vh;}
     </div>
     <div id="log-week-badge"></div>
     <button class="cal-btn" onclick="openCal()">&#128197; Jump to week</button>
+    <button class="exam-btn" id="exam-btn" onclick="toggleExamWeek()">&#127979; Exam week</button>
+    <button class="luna-btn" id="luna-btn" onclick="toggleLunaWeek()" style="display:none;">&#127775; Luna week</button>
     <button class="wk-btn" onclick="changeWeek(1)">&#8250;</button>
   </div>
   <div class="day-header">
     <div></div>
-    <div class="day-lbl" id="dl0">Mon</div>
-    <div class="day-lbl" id="dl1">Tue</div>
-    <div class="day-lbl" id="dl2">Wed</div>
-    <div class="day-lbl" id="dl3">Thu</div>
-    <div class="day-lbl" id="dl4">Fri</div>
-    <div class="day-lbl" id="dl5">Sat</div>
-    <div class="day-lbl" id="dl6">Sun</div>
+    <div class="day-lbl" id="dl0">Sun</div>
+    <div class="day-lbl" id="dl1">Mon</div>
+    <div class="day-lbl" id="dl2">Tue</div>
+    <div class="day-lbl" id="dl3">Wed</div>
+    <div class="day-lbl" id="dl4">Thu</div>
+    <div class="day-lbl" id="dl5">Fri</div>
+    <div class="day-lbl" id="dl6">Sat</div>
   </div>
   <div id="habit-rows"></div>
 </div>
@@ -452,9 +548,31 @@ main{padding-top:70px;min-height:100vh;}
     <button class="user-btn saamir active" id="badge-s-btn" onclick="setBadgeUser('saamir')">Saamir</button>
     <button class="user-btn jana" id="badge-j-btn" onclick="setBadgeUser('jana')">Jana</button>
   </div>
-  <div class="badges-grid" id="badges-grid"></div>
+  <div id="badges-grid"></div>
 </div>
 
+
+<!-- LUNA PICKER MODAL -->
+<div id="luna-picker-overlay" style="display:none;position:fixed;inset:0;background:rgba(5,12,26,0.88);z-index:300;align-items:center;justify-content:center;">
+  <div style="background:var(--navy2);border:1px solid rgba(160,126,213,0.3);padding:28px;width:320px;max-width:90vw;">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--white);margin-bottom:4px;">🌸 Luna Week</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.15em;margin-bottom:20px;" id="luna-picker-week">Week 1</div>
+    <div style="font-size:13px;color:var(--dim);margin-bottom:16px;">How many days this week? Prayers will be auto-counted for those days, everything else stays normal.</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <label style="font-family:'Space Mono',monospace;font-size:10px;color:var(--purple2);letter-spacing:0.15em;">DAYS</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="adjustLunaDays(-1)" style="width:32px;height:32px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">−</button>
+        <input type="number" id="luna-days-input" min="1" max="7" value="5" style="width:52px;height:32px;text-align:center;border:1px solid rgba(160,126,213,0.4);background:var(--navy3);color:var(--purple2);font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;">
+        <button onclick="adjustLunaDays(1)" style="width:32px;height:32px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">+</button>
+      </div>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);">/ 7 days</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button id="luna-picker-save" style="padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;border:1px solid rgba(160,126,213,0.4);background:rgba(160,126,213,0.1);color:var(--purple2);cursor:pointer;">SAVE</button>
+      <button id="luna-picker-cancel" style="padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--dimmer);cursor:pointer;">CANCEL</button>
+    </div>
+  </div>
+</div>
 
 <!-- CALENDAR OVERLAY -->
 <div class="cal-overlay" id="cal-overlay" onclick="calOverlayClick(event)">
@@ -474,39 +592,191 @@ main{padding-top:70px;min-height:100vh;}
   </div>
 </div>
 
+
+<div class="page" id="page-backup">
+  <div class="page-title">Backup.</div>
+  <div class="page-sub">EXPORT &middot; IMPORT &middot; RESTORE</div>
+  <div class="bk-bar">
+    <button class="bk-btn bk-exp" onclick="doExport()">&#11015; Export data</button>
+    <button class="bk-btn bk-imp" onclick="document.getElementById('bk-file').click()">&#11014; Import backup</button>
+    <input type="file" id="bk-file" accept=".json" style="display:none" onchange="doImport(event)"/>
+    <button class="bk-btn bk-rst" onclick="doReset()">&#9888; Reset all data</button>
+    <span id="bk-msg"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+    <div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--white);margin-bottom:8px;">&#11015; Export</div>
+      <div style="font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:12px;">Downloads a .json file of all habit data. Save it to Google Drive or iCloud as a backup.</div>
+      <div style="font-size:10px;color:var(--dimmer);font-family:'Space Mono',monospace;">Last export: <span id="bk-last-exp">never</span></div>
+    </div>
+    <div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--white);margin-bottom:8px;">&#11014; Import</div>
+      <div style="font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:12px;">Restore from a .json backup file. Will overwrite current data &mdash; export first.</div>
+      <div style="font-size:10px;color:var(--dimmer);font-family:'Space Mono',monospace;">Last import: <span id="bk-last-imp">never</span></div>
+    </div>
+  </div>
+  <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">DATA SNAPSHOT</div>
+  <div id="bk-snap" style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;"></div>
+</div>
+
 </main>
 
 <script>
 // ── CONFIG ───────────────────────────────────────────────────────
-const START_DATE = new Date(2026, 3, 1); // April 1st 2026
+const START_DATE = new Date(2026, 3, 5); // Week 1 starts Sunday Apr 5 (they log from Apr 6)
 
 // ── DATA ─────────────────────────────────────────────────────────
-const HABITS = [
-  {id:'quran',    name:'Quran daily',       icon:'☪',  section:'Spirit', freq:7},
-  {id:'fajr',     name:'5 prayers on time', icon:'🕌', section:'Spirit', freq:7},
-  {id:'athkar_m', name:'Morning athkar',    icon:'✨', section:'Spirit', freq:7},
-  {id:'athkar_e', name:'Evening athkar',    icon:'🌙', section:'Spirit', freq:7},
-  {id:'sleep',    name:'Sleep 6.5h+',       icon:'💤', section:'Body',   freq:7},
-  {id:'abs',      name:'Abs session',       icon:'⚡', section:'Body',   freq:2},
-  {id:'mobility', name:'Mobility session',  icon:'🧘', section:'Body',   freq:3},
-  {id:'explosive',name:'Explosive session', icon:'🔥', section:'Body',   freq:1},
-  {id:'reading',  name:'Read 5 pages+',     icon:'📖', section:'Mind',   freq:7},
-  {id:'journal',  name:'Journal',           icon:'✍',  section:'Mind',   freq:7},
+// Individual prayers — each tracked per day
+const PRAYERS = [
+  {id:'fajr',    name:'Fajr',    icon:'🌅', time:'Dawn'},
+  {id:'dhuhr',   name:'Dhuhr',   icon:'☀',  time:'Midday'},
+  {id:'asr',     name:'Asr',     icon:'🌤',  time:'Afternoon'},
+  {id:'maghrib', name:'Maghrib', icon:'🌇', time:'Sunset'},
+  {id:'isha',    name:'Isha',    icon:'🌙', time:'Night'},
 ];
 
+const HABITS = [
+  {id:'quran',    name:'Quran daily',       icon:'☪',  section:'Spirit', freq:7, examExempt:false},
+  {id:'prayers',  name:'5 Daily Prayers',   icon:'🕌', section:'Spirit', freq:7, examExempt:false, lunaExempt:true, isPrayers:true},
+  {id:'athkar_m', name:'Morning athkar',    icon:'✨', section:'Spirit', freq:7, examExempt:false},
+  {id:'athkar_e', name:'Evening athkar',    icon:'🌙', section:'Spirit', freq:7, examExempt:false},
+  {id:'sleep',    name:'Sleep 6.5h+',       icon:'💤', section:'Body',   freq:7, examExempt:false},
+  {id:'abs',      name:'Abs session',       icon:'⚡', section:'Body',   freq:2, examExempt:true},
+  {id:'mobility', name:'Mobility session',  icon:'🧘', section:'Body',   freq:2, examExempt:true},
+  {id:'explosive',name:'Explosive session', icon:'🔥', section:'Body',   freq:1, examExempt:true},
+  {id:'reading',  name:'Read 5 pages+',     icon:'📖', section:'Mind',   freq:7, examExempt:true},
+  {id:'journal',  name:'Journal',           icon:'✍',  section:'Mind',   freq:7, examExempt:false},
+];
+
+// Prayer key helper — stores each prayer+wudhu individually
+function pKey(user, week, prayerId, day, type) {
+  // type: 'prayer' or 'wudhu'
+  return `${user}_w${week}_${prayerId}_d${day}_${type}`;
+}
+function isPrayerChecked(user, week, prayerId, day) {
+  return !!state.data[user][pKey(user,week,prayerId,day,'prayer')];
+}
+function isWudhuChecked(user, week, prayerId, day) {
+  return !!state.data[user][pKey(user,week,prayerId,day,'wudhu')];
+}
+function togglePrayer(user, week, prayerId, day, type) {
+  const k = pKey(user,week,prayerId,day,type);
+  state.data[user][k] = !state.data[user][k];
+  if(!state.data[user][k]) delete state.data[user][k];
+  save();
+  renderLog();
+  updateLogBadge();
+}
+// How many prayers done in a day (0-5)
+function dayPrayersDone(user, week, day) {
+  return PRAYERS.filter(p => isPrayerChecked(user,week,p.id,day)).length;
+}
+// How many full-prayer days (all 5) in a week
+function weekFullPrayerDays(user, week) {
+  let c=0;
+  for(let d=0;d<7;d++) if(dayPrayersDone(user,week,d)===5) c++;
+  return c;
+}
+// Wudhu count for a week
+function weekWudhuCount(user, week) {
+  let c=0;
+  for(let d=0;d<7;d++)
+    PRAYERS.forEach(p => { if(isWudhuChecked(user,week,p.id,d)) c++; });
+  return c;
+}
+
+// Wudhu % out of prayers actually done (wudhu only makes sense if you prayed)
+function getWudhuPct(user, maxW) {
+  const wLimit = maxW || getElapsedWeeks();
+  let prayersDone = 0, wudhuDone = 0;
+  for(let w=1;w<=wLimit;w++) {
+    for(let d=0;d<7;d++) {
+      PRAYERS.forEach(p => {
+        if(isPrayerChecked(user,w,p.id,d)) {
+          prayersDone++;
+          if(isWudhuChecked(user,w,p.id,d)) wudhuDone++;
+        }
+      });
+    }
+  }
+  return prayersDone===0 ? 0 : Math.round(wudhuDone/prayersDone*100);
+}
+
+function getPrayerWudhuPct(user, prayerId, maxW) {
+  const wLimit = maxW || getElapsedWeeks();
+  let prayed=0, wudhu=0;
+  for(let w=1;w<=wLimit;w++) {
+    for(let d=0;d<7;d++) {
+      if(isPrayerChecked(user,w,prayerId,d)) {
+        prayed++;
+        if(isWudhuChecked(user,w,prayerId,d)) wudhu++;
+      }
+    }
+  }
+  return prayed===0 ? 0 : Math.round(wudhu/prayed*100);
+}
+
+function weekWudhuPct(user, week) {
+  let prayed=0, wudhu=0;
+  for(let d=0;d<7;d++) {
+    PRAYERS.forEach(p => {
+      if(isPrayerChecked(user,week,p.id,d)) {
+        prayed++;
+        if(isWudhuChecked(user,week,p.id,d)) wudhu++;
+      }
+    });
+  }
+  return prayed===0 ? 0 : Math.round(wudhu/prayed*100);
+}
+// prayers completion % for a week (35 total = 5 prayers × 7 days)
+function weekPrayerPct(user, week) {
+  let done=0;
+  for(let d=0;d<7;d++) done += dayPrayersDone(user,week,d);
+  return Math.round(done/35*100);
+}
+
+// Track which prayer rows are expanded
+const expandedPrayers = {};
+
+// Habits that count — respects exam week and luna week
+function activeHabits(week, user) {
+  const isExam = isExamWeek(week);
+  return HABITS.filter(h => {
+    if (isExam && h.examExempt) return false;
+    return true;
+  });
+}
+
 const BADGE_DEFS = [
-  {id:'perfect_week', icon:'🏆', title:'Perfect Week',    desc:'Complete 100% of all habits in a single week'},
-  {id:'fire_2',       icon:'🔥', title:'On Fire',         desc:'Two perfect weeks in a row'},
-  {id:'fire_4',       icon:'🌋', title:'Volcano',         desc:'Four perfect weeks in a row'},
-  {id:'spirit_30',    icon:'☪',  title:'Spirit King',     desc:'Quran 30 days without missing'},
-  {id:'bookworm_30',  icon:'📚', title:'Bookworm',        desc:'Reading 30 days straight'},
-  {id:'iron_mind',    icon:'🧠', title:'Iron Mind',       desc:'Journal 21 days straight'},
-  {id:'warrior',      icon:'⚔',  title:'Warrior',         desc:'All body sessions complete 4 weeks'},
-  {id:'trophy_4',     icon:'🥇', title:'Trophy Hunter',   desc:'Win 4 weekly head-to-heads'},
-  {id:'consistent_10',icon:'💎', title:'Consistent',      desc:'80%+ in 10 or more weeks'},
-  {id:'prayer_30',    icon:'🕌', title:'Devoted',         desc:'5 prayers on time 30 days straight'},
-  {id:'full_month',   icon:'📅', title:'Full Month',      desc:'Complete a full calendar month'},
-  {id:'comeback',     icon:'⚡', title:'Comeback',        desc:'100% week after a 0% week'},
+  // ── WEEKLY TROPHIES ──────────────────────────────────────────────
+  {id:'perfect_week',   icon:'🏆', title:'Perfect Week',     desc:'100% completion in any single week',                tier:'weekly'},
+  {id:'fire_2',         icon:'🔥', title:'On Fire',          desc:'Two perfect weeks back to back',                   tier:'weekly'},
+  {id:'comeback',       icon:'⚡', title:'Comeback',         desc:'100% week immediately after a 0% week',            tier:'weekly'},
+  {id:'trophy_winner',  icon:'🥇', title:'Trophy Winner',    desc:'Win your first weekly head-to-head vs the other',  tier:'weekly'},
+  {id:'trophy_3',       icon:'🎖', title:'Hat Trick',        desc:'Win 3 weekly head-to-heads in a row',              tier:'weekly'},
+  {id:'wudhu_week',     icon:'💧', title:'Pure Week',        desc:'Wudhu for every single prayer in a week',          tier:'weekly'},
+  {id:'full_prayers_week',icon:'🕌',title:'Devoted Week',    desc:'All 5 prayers complete every day for a full week', tier:'weekly'},
+
+  // ── MONTHLY TROPHIES ─────────────────────────────────────────────
+  {id:'fire_4',         icon:'🌋', title:'Volcano',          desc:'Four perfect weeks in a row',                      tier:'monthly'},
+  {id:'full_month',     icon:'📅', title:'Full Month',       desc:'80%+ every single week in a calendar month',       tier:'monthly'},
+  {id:'trophy_month',   icon:'👑', title:'Month Ruler',      desc:'Win every weekly trophy in a month (4 in a row)',  tier:'monthly'},
+  {id:'spirit_month',   icon:'☪',  title:'Spirit Month',     desc:'Quran + all prayers every day for a full month',   tier:'monthly'},
+  {id:'body_month',     icon:'💪', title:'Body Month',       desc:'All physical habits complete every week for a month', tier:'monthly'},
+  {id:'mind_month',     icon:'🧠', title:'Mind Month',       desc:'Reading + Journal every day for a full month',     tier:'monthly'},
+  {id:'wudhu_month',    icon:'🫧', title:'Purified',         desc:'Wudhu streak — every prayer, every day for 30 days', tier:'monthly'},
+
+  // ── LEGENDARY ────────────────────────────────────────────────────
+  {id:'spirit_30',      icon:'⭐', title:'Spirit King',      desc:'Quran 30 days in a row without missing once',      tier:'legendary'},
+  {id:'prayer_perfect', icon:'🕌', title:'30 Days On Time',  desc:'All 5 prayers complete every single day for 30 days straight', tier:'legendary'},
+  {id:'ninja_creamy',   icon:'🍦', title:'Ninja Creamy',     desc:'Jana only — earned her ice cream 🍦', tier:'legendary', janaOnly:true},
+  {id:'bookworm_30',    icon:'📚', title:'Bookworm',         desc:'Reading 5+ pages every single day for 30 days',    tier:'legendary'},
+  {id:'iron_mind',      icon:'🧠', title:'Iron Mind',        desc:'Journal every single day for 21 days straight',    tier:'legendary'},
+  {id:'warrior',        icon:'⚔',  title:'Warrior',         desc:'All body sessions complete for 4 consecutive weeks', tier:'legendary'},
+  {id:'trophy_4',       icon:'🏅', title:'Trophy Hunter',    desc:'Win 4 or more weekly head-to-heads total',         tier:'legendary'},
+  {id:'consistent_10',  icon:'💎', title:'Diamond',          desc:'80%+ completion in 10 or more weeks',              tier:'legendary'},
+  {id:'fire_8',         icon:'☄',  title:'Unstoppable',      desc:'Eight perfect weeks in a row',                    tier:'legendary'},
+  {id:'full_year',      icon:'🌙', title:'Year of SHOOPA',   desc:'Complete the full 52-week challenge at 80%+',      tier:'legendary'},
 ];
 
 const SECTIONS = ['Spirit','Body','Mind'];
@@ -578,8 +848,24 @@ function toggle(user, week, habitId, day) {
 
 function weekPct(user, week) {
   let total = 0, done = 0;
-  HABITS.forEach(h => {
+  const luna = user === 'jana' && isLunaWeek(week);
+  activeHabits(week, user).forEach(h => {
+    if (h.isPrayers) {
+      total += 7;
+      if (luna) {
+        // Auto-count prayer days only for the luna days, rest user logs normally
+        const lunaDays = getLunaDays(week);
+        // Non-luna days: count actual full prayer days
+        let actualDone = weekFullPrayerDays(user, week);
+        // Luna days: auto-count those days as done (add days not already counted)
+        done += Math.min(7, actualDone + lunaDays);
+        return;
+      }
+      done += weekFullPrayerDays(user, week);
+      return;
+    }
     total += h.freq;
+    if (luna && h.lunaExempt) { done += h.freq; return; }
     let hDone = 0;
     for(let d=0;d<7;d++) { if(isChecked(user,week,h.id,d)) hDone++; }
     done += Math.min(hDone, h.freq);
@@ -589,7 +875,19 @@ function weekPct(user, week) {
 
 function weekDone(user, week) {
   let done = 0;
-  HABITS.forEach(h => {
+  const luna = user === 'jana' && isLunaWeek(week);
+  activeHabits(week, user).forEach(h => {
+    if (h.isPrayers) {
+      if (luna) {
+        const lunaDays = getLunaDays(week);
+        let actualDone = weekFullPrayerDays(user, week);
+        done += Math.min(7, actualDone + lunaDays);
+        return;
+      }
+      done += weekFullPrayerDays(user, week);
+      return;
+    }
+    if (luna && h.lunaExempt) { done += h.freq; return; }
     let hDone = 0;
     for(let d=0;d<7;d++) { if(isChecked(user,week,h.id,d)) hDone++; }
     done += Math.min(hDone, h.freq);
@@ -618,6 +916,91 @@ function getFireWeekCount(user) {
   let c=0;
   for(let w=1;w<=TOTAL_WEEKS;w++) if(isFireWeek(user,w)) c++;
   return c;
+}
+
+function isExamWeek(week) {
+  if (!state.data.examWeeks) return false;
+  return !!state.data.examWeeks[week];
+}
+
+function toggleExamWeek() {
+  const w = state.currentWeek;
+  if (!state.data.examWeeks) state.data.examWeeks = {};
+  state.data.examWeeks[w] = !state.data.examWeeks[w];
+  if (!state.data.examWeeks[w]) delete state.data.examWeeks[w];
+  save();
+  renderLog();
+  updateLogBadge();
+  updateExamBtn();
+}
+
+function updateExamBtn() {
+  const btn = document.getElementById('exam-btn');
+  if (!btn) return;
+  const on = isExamWeek(state.currentWeek);
+  btn.className = 'exam-btn' + (on ? ' exam-on' : '');
+  btn.textContent = on ? '📚 Exam week ON' : '📚 Exam week';
+}
+
+function isLunaWeek(week) {
+  if (!state.data.lunaWeeks) return false;
+  return !!state.data.lunaWeeks[week];
+}
+
+function getLunaDays(week) {
+  if (!state.data.lunaWeeks) return 0;
+  return state.data.lunaWeeks[week] || 0;
+}
+
+function setLunaDays(week, days) {
+  if (!state.data.lunaWeeks) state.data.lunaWeeks = {};
+  if (!days || days <= 0) {
+    delete state.data.lunaWeeks[week];
+  } else {
+    state.data.lunaWeeks[week] = days;
+  }
+  save();
+  renderLog();
+  updateLogBadge();
+  updateExamBtn();
+  updateLunaBtn();
+}
+
+function toggleLunaWeek() {
+  // Just open the modal — actual save happens via setLunaDays
+  const w = state.currentWeek;
+  const current = getLunaDays(w);
+  if (current > 0) {
+    // Already on — turn off
+    setLunaDays(w, 0);
+  } else {
+    // Show day picker
+    showLunaPicker(w);
+  }
+}
+
+function showLunaPicker(week) {
+  document.getElementById('luna-picker-overlay').style.display = 'flex';
+  document.getElementById('luna-days-input').value = getLunaDays(week) || 5;
+  document.getElementById('luna-picker-week').textContent = 'Week ' + week;
+  document.getElementById('luna-picker-save').onclick = function() {
+    const days = parseInt(document.getElementById('luna-days-input').value) || 5;
+    setLunaDays(week, Math.min(7, Math.max(1, days)));
+    document.getElementById('luna-picker-overlay').style.display = 'none';
+  };
+  document.getElementById('luna-picker-cancel').onclick = function() {
+    document.getElementById('luna-picker-overlay').style.display = 'none';
+  };
+}
+
+function updateLunaBtn() {
+  const btn = document.getElementById('luna-btn');
+  if (!btn) return;
+  btn.style.display = state.logUser === 'jana' ? '' : 'none';
+  const days = getLunaDays(state.currentWeek);
+  const on = days > 0;
+  btn.className = 'luna-btn' + (on ? ' luna-on' : '');
+  btn.textContent = on ? '🌸 Luna (' + days + ' days)' : '🌸 Luna week';
 }
 
 function getElapsedWeeks() {
@@ -693,41 +1076,139 @@ function getTrophies(user) {
 }
 
 function checkBadge(user, id) {
-  if(id==='perfect_week') { for(let w=1;w<=TOTAL_WEEKS;w++) if(isFireWeek(user,w)) return true; }
+  // ── WEEKLY ──────────────────────────────────────────────────
+  if(id==='perfect_week') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) if(isFireWeek(user,w)) return true;
+  }
   if(id==='fire_2') {
-    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++) { if(isFireWeek(user,w)) { s++; if(s>=2) return true; } else s=0; }
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++) { if(isFireWeek(user,w)){s++;if(s>=2)return true;}else s=0; }
   }
+  if(id==='comeback') {
+    for(let w=2;w<=TOTAL_WEEKS;w++) if(weekPct(user,w-1)===0&&isFireWeek(user,w)) return true;
+  }
+  if(id==='trophy_winner') { return getTrophies(user)>=1; }
+  if(id==='trophy_3') {
+    let s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) {
+      const sp=weekPct('saamir',w), jp=weekPct('jana',w);
+      if(sp===0&&jp===0){s=0;continue;}
+      const won=(user==='saamir'&&sp>jp)||(user==='jana'&&jp>sp);
+      if(won){s++;if(s>=3)return true;}else s=0;
+    }
+  }
+  if(id==='wudhu_week') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) {
+      let all=true;
+      for(let d=0;d<7;d++)
+        PRAYERS.forEach(p=>{ if(!isWudhuChecked(user,w,p.id,d)) all=false; });
+      if(all) return true;
+    }
+  }
+  if(id==='full_prayers_week') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) if(weekFullPrayerDays(user,w)===7) return true;
+  }
+
+  // ── MONTHLY ─────────────────────────────────────────────────
   if(id==='fire_4') {
-    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++) { if(isFireWeek(user,w)) { s++; if(s>=4) return true; } else s=0; }
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){if(isFireWeek(user,w)){s++;if(s>=4)return true;}else s=0;}
   }
+  if(id==='full_month') {
+    for(let w=1;w<=TOTAL_WEEKS-3;w++){
+      let ok=true;
+      for(let i=0;i<4;i++) if(weekPct(user,w+i)<80){ok=false;break;}
+      if(ok) return true;
+    }
+  }
+  if(id==='trophy_month') {
+    for(let w=1;w<=TOTAL_WEEKS-3;w++){
+      let ok=true;
+      for(let i=0;i<4;i++){
+        const sp=weekPct('saamir',w+i),jp=weekPct('jana',w+i);
+        if(sp===0&&jp===0){ok=false;break;}
+        if(!((user==='saamir'&&sp>jp)||(user==='jana'&&jp>sp))){ok=false;break;}
+      }
+      if(ok) return true;
+    }
+  }
+  if(id==='spirit_month') {
+    for(let w=1;w<=TOTAL_WEEKS-3;w++){
+      let ok=true;
+      for(let ww=w;ww<w+4;ww++){
+        for(let d=0;d<7;d++){
+          if(!isChecked(user,ww,'quran',d)){ok=false;break;}
+          if(dayPrayersDone(user,ww,d)<5){ok=false;break;}
+        }
+        if(!ok) break;
+      }
+      if(ok) return true;
+    }
+  }
+  if(id==='body_month') {
+    let good=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++){
+      let wd=0;
+      let a=0;for(let d=0;d<7;d++)if(isChecked(user,w,'abs',d))a++;wd+=Math.min(a,2);
+      let m=0;for(let d=0;d<7;d++)if(isChecked(user,w,'mobility',d))m++;wd+=Math.min(m,3);
+      let e=0;for(let d=0;d<7;d++)if(isChecked(user,w,'explosive',d))e++;wd+=Math.min(e,1);
+      if(wd>=6) good++; else good=0;
+      if(good>=4) return true;
+    }
+  }
+  if(id==='mind_month') {
+    let s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++){
+      if(isChecked(user,w,'reading',d)&&isChecked(user,w,'journal',d)){s++;if(s>=28)return true;}else s=0;
+    }
+  }
+  if(id==='wudhu_month') {
+    let s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++){
+      let allWudhu=true;
+      PRAYERS.forEach(p=>{if(!isWudhuChecked(user,w,p.id,d))allWudhu=false;});
+      if(allWudhu){s++;if(s>=30)return true;}else s=0;
+    }
+  }
+
+  // ── LEGENDARY ───────────────────────────────────────────────
   if(id==='spirit_30') {
     let s=0;
-    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++) {
-      if(isChecked(user,w,'quran',d)) { s++; if(s>=30) return true; } else s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++){
+      if(isChecked(user,w,'quran',d)){s++;if(s>=30)return true;}else s=0;
     }
+  }
+  if(id==='prayer_perfect') {
+    let s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++){
+      if(dayPrayersDone(user,w,d)===5){s++;if(s>=30)return true;}else s=0;
+    }
+  }
+  if(id==='ninja_creamy') {
+    // Only Jana can earn this — requires prayer_perfect
+    if(user !== 'jana') return false;
+    return checkBadge('jana', 'prayer_perfect');
   }
   if(id==='bookworm_30') {
     let s=0;
-    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++) {
-      if(isChecked(user,w,'reading',d)) { s++; if(s>=30) return true; } else s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++){
+      if(isChecked(user,w,'reading',d)){s++;if(s>=30)return true;}else s=0;
     }
   }
   if(id==='iron_mind') {
     let s=0;
-    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++) {
-      if(isChecked(user,w,'journal',d)) { s++; if(s>=21) return true; } else s=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++){
+      if(isChecked(user,w,'journal',d)){s++;if(s>=21)return true;}else s=0;
     }
   }
   if(id==='warrior') {
     let good=0;
-    for(let w=1;w<=TOTAL_WEEKS;w++) {
-      let done=0;
-      let absDone=0; for(let d=0;d<7;d++) if(isChecked(user,w,'abs',d)) absDone++; done+=Math.min(absDone,2);
-      let mobDone=0; for(let d=0;d<7;d++) if(isChecked(user,w,'mobility',d)) mobDone++; done+=Math.min(mobDone,3);
-      let expDone=0; for(let d=0;d<7;d++) if(isChecked(user,w,'explosive',d)) expDone++; done+=Math.min(expDone,1);
-      if(done>=6) good++;
+    for(let w=1;w<=TOTAL_WEEKS;w++){
+      let wd=0;
+      let a=0;for(let d=0;d<7;d++)if(isChecked(user,w,'abs',d))a++;wd+=Math.min(a,2);
+      let m=0;for(let d=0;d<7;d++)if(isChecked(user,w,'mobility',d))m++;wd+=Math.min(m,3);
+      let e=0;for(let d=0;d<7;d++)if(isChecked(user,w,'explosive',d))e++;wd+=Math.min(e,1);
+      if(wd>=6) good++; else good=0;
+      if(good>=4) return true;
     }
-    return good>=4;
   }
   if(id==='trophy_4') { return getTrophies(user)>=4; }
   if(id==='consistent_10') {
@@ -735,23 +1216,13 @@ function checkBadge(user, id) {
     for(let w=1;w<=TOTAL_WEEKS;w++) if(weekPct(user,w)>=80) good++;
     return good>=10;
   }
-  if(id==='prayer_30') {
-    let s=0;
-    for(let w=1;w<=TOTAL_WEEKS;w++) for(let d=0;d<7;d++) {
-      if(isChecked(user,w,'fajr',d)) { s++; if(s>=30) return true; } else s=0;
-    }
+  if(id==='fire_8') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){if(isFireWeek(user,w)){s++;if(s>=8)return true;}else s=0;}
   }
-  if(id==='full_month') {
-    for(let w=1;w<=TOTAL_WEEKS-3;w++) {
-      let allFire=true;
-      for(let i=0;i<4;i++) if(!isFireWeek(user,w+i)) { allFire=false; break; }
-      if(allFire) return true;
-    }
-  }
-  if(id==='comeback') {
-    for(let w=2;w<=TOTAL_WEEKS;w++) {
-      if(weekPct(user,w-1)===0 && isFireWeek(user,w)) return true;
-    }
+  if(id==='full_year') {
+    let good=0;
+    for(let w=1;w<=TOTAL_WEEKS;w++) if(weekPct(user,w)>=80) good++;
+    return good>=52;
   }
   return false;
 }
@@ -761,7 +1232,7 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById(`page-${id}`).classList.add('active');
-  const tabs = ['dashboard','log','stats','year','versus','badges'];
+  const tabs = ['dashboard','log','stats','year','versus','badges','backup'];
   document.querySelectorAll('.nav-tab')[tabs.indexOf(id)].classList.add('active');
   if(id==='dashboard') renderDashboard();
   if(id==='log') renderLog();
@@ -769,6 +1240,7 @@ function showPage(id) {
   if(id==='year') renderYear();
   if(id==='versus') renderVersus();
   if(id==='badges') renderBadges();
+  if(id==='backup') initBackup();
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────
@@ -809,6 +1281,32 @@ function setLogUser(u) {
   document.querySelector(`#page-log .user-btn.${u}`).classList.add('active');
   renderLog();
   updateLogBadge();
+  updateExamBtn();
+  updateLunaBtn();
+}
+
+function adjustLunaDays(delta) {
+  const inp = document.getElementById('luna-days-input');
+  let v = parseInt(inp.value) + delta;
+  inp.value = Math.min(7, Math.max(1, v));
+}
+
+function togglePrayerExpand(key) {
+  expandedPrayers[key] = !expandedPrayers[key];
+  // Default to today's day when opening
+  if (expandedPrayers[key]) {
+    const startOfWeek = new Date(START_DATE.getTime() + (state.currentWeek-1)*7*24*60*60*1000);
+    const todayIdx = Math.min(6, Math.max(0, Math.floor((new Date()-startOfWeek)/(24*60*60*1000))));
+    if (!window.prayerActiveDay) window.prayerActiveDay = {};
+    window.prayerActiveDay[key] = todayIdx;
+  }
+  renderLog();
+}
+
+function setPrayerDay(key, day) {
+  if (!window.prayerActiveDay) window.prayerActiveDay = {};
+  window.prayerActiveDay[key] = day;
+  renderLog();
 }
 
 function changeWeek(delta) {
@@ -839,38 +1337,162 @@ function renderLog() {
   const startOfWeek = new Date(START_DATE.getTime() + (w-1)*7*24*60*60*1000);
   const today = new Date();
   const todayIdx = Math.floor((today - startOfWeek) / (24*60*60*1000));
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   days.forEach((d,i) => {
     const el = document.getElementById(`dl${i}`);
     if(el) el.className = 'day-lbl' + (i===todayIdx&&w===getCurrentWeek()?' today-lbl':'');
   });
 
+  const isExam = isExamWeek(w);
   let html = '';
+  if (isExam) {
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,200,66,0.06);border:1px solid rgba(245,200,66,0.2);margin-bottom:16px;">
+      <span style="font-size:14px;">📚</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--gold);">EXAM WEEK — Physical & Reading habits paused. Focus on what matters.</span>
+    </div>`;
+  }
+  const isLuna = u === 'jana' && isLunaWeek(w);
+  if (isLuna) {
+    const ld = getLunaDays(w);
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(160,126,213,0.06);border:1px solid rgba(160,126,213,0.25);margin-bottom:16px;">
+      <span style="font-size:14px;">🌸</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--purple2);">LUNA WEEK (${ld} days) — Prayers auto-counted for first ${ld} days. Rest, recover, keep showing up.</span>
+    </div>`;
+  }
+  const lunaDays = isLuna ? getLunaDays(w) : 0;
   let lastSec = '';
   HABITS.forEach(h => {
+    const sLabel = h.section==='Spirit'?'Spiritual':h.section==='Body'?'Physical':'Mental';
     if(h.section!==lastSec) {
-      html += `<div class="section-sep"><span class="section-title">${h.section}</span><div class="section-line"></div></div>`;
+      html += `<div class="section-sep"><span class="section-title">${sLabel}</span><div class="section-line"></div></div>`;
       lastSec = h.section;
     }
-    html += `<div class="habit-row">`;
+    const isExempt = isExam && h.examExempt;
+
+    // ── PRAYERS: beautiful card layout ───────────────────────────────
+    if (h.isPrayers) {
+      const expKey = u + '_' + w;
+      const isOpen = !!expandedPrayers[expKey];
+      const dc = u==='saamir'?'done-s':'done-j';
+      const prayersDone = weekFullPrayerDays(u,w);
+      // Active tab = today if open, else Mon
+      if (!window.prayerActiveDay) window.prayerActiveDay = {};
+      const activeDay = window.prayerActiveDay[expKey] !== undefined ? window.prayerActiveDay[expKey] : 0;
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+      // ── Summary row (always visible) ──
+      html += `<div class="prayer-section">`;
+      html += `<div class="prayer-toggle-row" onclick="togglePrayerExpand('${expKey}')">`;
+      html += `<div class="habit-name" style="cursor:pointer;">
+        <span class="habit-icon">🕌</span>
+        <span>5 Daily Prayers</span>
+        <span style="font-size:9px;color:var(--dimmer);margin-left:6px;font-family:'Space Mono',monospace;">${prayersDone}/7 days</span>
+        <span class="prayer-expand-icon ${isOpen?'open':''}">▶</span>
+      </div>`;
+      for(let d=0;d<7;d++) {
+        const isAutoDay = isLuna && d < lunaDays;
+        html += `<div class="check-cell"><div style="display:flex;flex-wrap:wrap;gap:2px;justify-content:center;width:30px;">`;
+        PRAYERS.forEach(p => {
+          const checked = isAutoDay || isPrayerChecked(u,w,p.id,d);
+          html += `<div class="prayer-pip ${isAutoDay?'auto':checked?dc:''}" title="${p.name}"></div>`;
+        });
+        html += `</div></div>`;
+      }
+      html += `</div>`;
+
+      // ── Expanded card view ──
+      html += `<div class="prayer-cards-wrap ${isOpen?'open':''}" id="prayer-cards-${expKey}">`;
+
+      // Day tabs
+      html += `<div class="prayer-day-tabs">`;
+      days.forEach((dayName, d) => {
+        const isAutoDay = isLuna && d < lunaDays;
+        const donePrayers = isAutoDay ? 5 : PRAYERS.filter(p=>isPrayerChecked(u,w,p.id,d)).length;
+        const isActive = d === activeDay;
+        const tabCls = isActive ? (u==='saamir'?'active-s':'active-j') : '';
+        html += `<div class="prayer-day-tab ${tabCls}" onclick="setPrayerDay('${expKey}',${d})">
+          <div>${dayName}</div>
+          <div class="day-pips">`;
+        PRAYERS.forEach((p,pi) => {
+          const done = isAutoDay || isPrayerChecked(u,w,p.id,d);
+          html += `<div class="day-pip ${isAutoDay?'p-auto':done?'p-done-'+u.slice(0,1):''}"></div>`;
+        });
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+
+      // Active day panel
+      const ad = activeDay;
+      const isAutoDay = isLuna && ad < lunaDays;
+      html += `<div class="prayer-day-panel">`;
+
+      if (isAutoDay) {
+        html += `<div style="text-align:center;padding:20px;font-family:'Space Mono',monospace;font-size:9px;color:var(--purple2);letter-spacing:0.15em;">
+          🌸 AUTO-COUNTED — LUNA DAY ${ad+1}
+        </div>`;
+        html += `<div class="prayer-cards-grid">`;
+        PRAYERS.forEach(p => {
+          html += `<div class="prayer-card auto-done">
+            <span class="prayer-card-icon">${p.icon}</span>
+            <div class="prayer-card-name">${p.name}</div>
+            <div class="prayer-card-time">${p.time}</div>
+            <div style="font-size:18px;color:var(--purple2);opacity:0.5;">✦</div>
+          </div>`;
+        });
+        html += `</div>`;
+      } else {
+        const totalPrayedToday = PRAYERS.filter(p=>isPrayerChecked(u,w,p.id,ad)).length;
+        const totalWudhuToday = PRAYERS.filter(p=>isWudhuChecked(u,w,p.id,ad)).length;
+        html += `<div class="prayer-cards-grid">`;
+        PRAYERS.forEach(p => {
+          const pDone = isPrayerChecked(u,w,p.id,ad);
+          const wDone = isWudhuChecked(u,w,p.id,ad);
+          const cardCls = pDone ? dc : '';
+          html += `<div class="prayer-card ${cardCls}">
+            <span class="prayer-card-icon">${p.icon}</span>
+            <div class="prayer-card-name">${p.name}</div>
+            <div class="prayer-card-time">${p.time}</div>
+            <div class="prayer-card-btns">
+              <button class="prayer-pray-btn ${pDone?dc:''}" onclick="togglePrayer('${u}',${w},'${p.id}',${ad},'prayer')" title="Prayed">${pDone?'✓':''}</button>
+              <button class="prayer-wudhu-btn ${wDone?dc:''}" onclick="togglePrayer('${u}',${w},'${p.id}',${ad},'wudhu')" title="Wudhu">💧</button>
+            </div>
+            <div class="prayer-btn-labels"><span class="prayer-btn-lbl">PRAYED</span><span class="prayer-btn-lbl">WUDHU</span></div>
+          </div>`;
+        });
+        html += `</div>`;
+        const scoreCol = u==='saamir'?'s':'j';
+        html += `<div class="prayer-day-score ${scoreCol}">${totalPrayedToday}/5 prayers · ${totalWudhuToday}/5 with wudhu</div>`;
+      }
+
+      html += `</div></div></div>`;
+      return;
+    }
+
+    // ── REGULAR HABIT ─────────────────────────────────────────────────
+    let rowClass = 'habit-row';
+    if (isExempt) rowClass += ' exam-exempt';
+    html += `<div class="${rowClass}">`;
     const wkDoneCount = Array.from({length:7},(_,x)=>isChecked(u,w,h.id,x)).filter(Boolean).length;
     const capped = Math.min(wkDoneCount, h.freq);
-    const freqLabel = h.freq<7 ? `<span class="habit-freq" style="color:${capped>=h.freq?'#00C896':'var(--dimmer)'}">${capped}/${h.freq}</span>` : `<span class="habit-freq">${h.freq}×</span>`;
+    const freqLabel = h.freq<7
+      ? `<span class="habit-freq" style="color:${capped>=h.freq?'#00C896':'var(--dimmer)'}">${capped}/${h.freq}</span>`
+      : `<span class="habit-freq">${h.freq}×</span>`;
     html += `<div class="habit-name"><span class="habit-icon">${h.icon}</span><span>${h.name}</span>${freqLabel}</div>`;
     for(let d=0;d<7;d++) {
       const done = isChecked(u,w,h.id,d);
       const doneClass = done ? (u==='saamir'?'done-s':'done-j') : '';
       const daysDoneThisHabit = Array.from({length:7},(_,x)=>isChecked(u,w,h.id,x)).filter(Boolean).length;
-      // If not checked AND already at/over limit → blocked. If checked → always allow uncheck.
       const blocked = !done && daysDoneThisHabit >= h.freq;
       html += `<div class="check-cell">`;
-      html += `<button class="chk ${blocked ? 'na' : doneClass}" onclick="${blocked ? '' : `toggle('${u}',${w},'${h.id}',${d})`}">${done?'✓':''}</button>`;
+      html += `<button class="chk ${blocked?'na':doneClass}" onclick="${blocked?'':`toggle('${u}',${w},'${h.id}',${d})`}">${done?'✓':''}</button>`;
       html += `</div>`;
     }
     html += `</div>`;
   });
   document.getElementById('habit-rows').innerHTML = html;
   updateLogBadge();
+  updateExamBtn();
+  updateLunaBtn();
 }
 
 // ── STATS ─────────────────────────────────────────────────────────
@@ -926,7 +1548,7 @@ function renderStats() {
   catHtml += `</div>`;
 
   // ── Per-habit breakdown ──
-  let habitBarsHtml = `<div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">EVERY HABIT — SINCE APR 1, 2026</div>`;
+  let habitBarsHtml = `<div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">EVERY HABIT — SINCE APR 6, 2026</div>`;
 
   let lastSec = '';
   HABITS.forEach(h => {
@@ -974,7 +1596,62 @@ function renderStats() {
   }
   if(!hasAny) barsHtml += `<div style="font-size:13px;color:var(--dimmer);padding:12px 0;">No data yet — start logging!</div>`;
 
-  document.getElementById('stats-bars').innerHTML = catHtml + habitBarsHtml + barsHtml;
+  // ── Wudhu Section (informational only — doesn't count toward score) ──
+  const wudhuOverall = getWudhuPct(u);
+  const wColor = u==='saamir' ? 'var(--cyan)' : 'var(--purple2)';
+  let wudhuHtml = `<div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin:28px 0 12px;display:flex;align-items:center;gap:10px;">
+    <span>💧 WUDHU — PERSONAL TRACKER</span>
+    <div style="flex:1;height:1px;background:rgba(26,110,245,0.08);"></div>
+    <span style="color:var(--dimmer);font-size:8px;">DOES NOT COUNT TOWARD SCORE</span>
+  </div>`;
+
+  wudhuHtml += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">`;
+
+  // Overall wudhu card
+  wudhuHtml += `<div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;border-top:2px solid rgba(0,200,255,0.3);">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;font-style:italic;color:${wColor};line-height:1;">${wudhuOverall}%</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--dimmer);margin-top:4px;">OF PRAYERS WITH WUDHU</div>
+    <div style="margin-top:10px;height:4px;background:var(--navy3);">
+      <div style="height:100%;width:${wudhuOverall}%;background:${wColor};"></div>
+    </div>
+  </div>`;
+
+  // Wudhu by prayer
+  wudhuHtml += `<div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:16px;">
+    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.15em;color:var(--dimmer);margin-bottom:10px;">BY PRAYER</div>`;
+  PRAYERS.forEach(p => {
+    const pPct = getPrayerWudhuPct(u, p.id);
+    const barColor = pPct===100 ? '#ff7a00' : wColor;
+    wudhuHtml += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span style="font-size:12px;width:18px;">${p.icon}</span>
+      <span style="font-size:11px;color:var(--dim);width:56px;flex-shrink:0;">${p.name}</span>
+      <div style="flex:1;height:5px;background:var(--navy3);">
+        <div style="height:100%;width:${pPct}%;background:${barColor};"></div>
+      </div>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:${barColor};width:36px;text-align:right;">${pPct}%</span>
+    </div>`;
+  });
+  wudhuHtml += `</div></div>`;
+
+  // Week by week wudhu bars
+  wudhuHtml += `<div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.15em;color:var(--dimmer);margin:12px 0 8px;">WEEK BY WEEK WUDHU %</div>`;
+  let hasWudhu = false;
+  for(let w=1;w<=elapsed;w++) {
+    const wp = weekWudhuPct(u,w);
+    const wc = weekWudhuCount(u,w);
+    if(wc===0) continue;
+    hasWudhu = true;
+    const barColor = wp===100 ? '#ff7a00' : wColor;
+    wudhuHtml += `<div class="week-bar-row">
+      <span class="wb-label">WK ${w}</span>
+      <div class="wb-bg"><div style="height:100%;width:${wp}%;background:${barColor};"></div></div>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:${barColor};width:36px;text-align:right;">${wp}%</span>
+      <span style="font-size:10px;color:var(--dimmer);width:50px;text-align:right;">${wc}/35</span>
+    </div>`;
+  }
+  if(!hasWudhu) wudhuHtml += `<div style="font-size:12px;color:var(--dimmer);padding:8px 0;">No wudhu logged yet.</div>`;
+
+  document.getElementById('stats-bars').innerHTML = catHtml + habitBarsHtml + barsHtml + wudhuHtml;
 }
 
 // ── YEAR HEATMAP ──────────────────────────────────────────────────
@@ -1112,22 +1789,73 @@ function setBadgeUser(u) {
 function renderBadges() {
   const u = state.badgeUser;
   const isJana = u==='jana';
-  let html = BADGE_DEFS.map(b => {
-    const earned = checkBadge(u,b.id);
-    const cls = earned ? (isJana?'earned-j':'earned-s') : 'locked';
-    return `<div class="badge-card ${cls}">
-      ${earned ? `<div class="badge-earned-tag ${isJana?'j':'s'}">EARNED</div>` : ''}
-      <div class="badge-icon-big">${b.icon}</div>
-      <div class="badge-title">${b.title}</div>
-      <div class="badge-desc">${b.desc}</div>
+  const cls = isJana ? 'j' : 's';
+  const col = isJana ? 'var(--purple2)' : 'var(--cyan)';
+
+  const tiers = [
+    { id:'weekly',    label:'Weekly Trophies',   tagClass:'tier-weekly',    tagLabel:'WEEKLY'   },
+    { id:'monthly',   label:'Monthly Trophies',  tagClass:'tier-monthly',   tagLabel:'MONTHLY'  },
+    { id:'legendary', label:'Legendary Badges',  tagClass:'tier-legendary', tagLabel:'LEGENDARY'},
+  ];
+
+  let earnedCount = BADGE_DEFS.filter(b=>!b.janaOnly || u==='jana').filter(b=>checkBadge(u,b.id)).length;
+  const totalBadges = BADGE_DEFS.filter(b=>!b.janaOnly || u==='jana').length;
+  let html = `<div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:20px;background:var(--navy2);border:1px solid rgba(26,110,245,0.12);">
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;font-style:italic;color:${col};line-height:1;">${earnedCount}</div>
+      <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--dimmer);">BADGES EARNED</div>
+    </div>
+    <div style="flex:1;height:6px;background:var(--navy3);">
+      <div style="height:100%;width:${Math.round(earnedCount/totalBadges*100)}%;background:${col};"></div>
+    </div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--dimmer);">${earnedCount} / ${totalBadges}</div>
+  </div>`;
+
+  tiers.forEach(tier => {
+    const tierBadges = BADGE_DEFS.filter(b=>b.tier===tier.id);
+    const visibleTierBadges = tierBadges.filter(b=>!b.janaOnly || u==='jana');
+    const tierEarned = visibleTierBadges.filter(b=>checkBadge(u,b.id)).length;
+    html += `<div class="badge-section-title">
+      ${tier.label}
+      <span class="badge-tier ${tier.tagClass}">${tier.tagLabel}</span>
+      <span style="font-size:12px;color:var(--dimmer);font-family:'Space Mono',monospace;">${tierEarned}/${visibleTierBadges.length}</span>
     </div>`;
-  }).join('');
+    html += `<div class="badge-cabinet">`;
+    tierBadges.forEach(b => {
+      const isJanaOnly = !!b.janaOnly;
+      // Jana-only badge shown as locked/greyed for Saamir
+      if (isJanaOnly && u !== 'jana') {
+        html += `<div class="badge-card locked">
+          <div style="position:absolute;top:8px;right:8px;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:0.08em;padding:2px 5px;background:rgba(160,126,213,0.1);color:var(--purple2);border:1px solid rgba(160,126,213,0.2);">JANA ONLY</div>
+          <div class="badge-icon-big" style="filter:grayscale(1);">🍦</div>
+          <div class="badge-title" style="color:var(--dimmer);">${b.title}</div>
+          <div class="badge-desc">${b.desc}</div>
+        </div>`;
+        return;
+      }
+      const earned = checkBadge(u, b.id);
+      const cardCls = earned ? 'earned-' + cls : 'locked';
+      const bothEarned = !isJanaOnly && checkBadge('saamir',b.id) && checkBadge('jana',b.id);
+      const isNinjaEarned = b.id === 'ninja_creamy' && earned;
+      html += '<div class="badge-card ' + cardCls + '"' + (isNinjaEarned ? ' style="border-color:var(--purple2);"' : '') + '>';
+      html += earned ? '<div class="badge-earned-tag ' + (bothEarned?'both':cls) + '">' + (bothEarned?'BOTH':'EARNED') + '</div>' : '';
+      html += '<div class="badge-icon-big">' + b.icon + '</div>';
+      html += '<div class="badge-title">' + b.title + '</div>';
+      html += '<div class="badge-desc">' + b.desc + '</div>';
+      if (isNinjaEarned) {
+        html += '<div style="margin-top:10px;font-family:Space Mono,monospace;font-size:8px;letter-spacing:0.1em;color:var(--purple2);padding:6px 8px;border:1px solid rgba(160,126,213,0.3);background:rgba(160,126,213,0.06);">🎉 GO GET YOUR NINJA CREAMY!</div>';
+      }
+      html += '</div>';
+    });
+    html += `</div>`;
+  });
+
   document.getElementById('badges-grid').innerHTML = html;
 }
 
 // ── CALENDAR ──────────────────────────────────────────────────────
 const CAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-let calState = { month: 3, year: 2026 }; // April = 3
+let calState = { month: 3, year: 2026 }; // April 2026
 
 function openCal() {
   // Open to the month containing current week
@@ -1201,6 +1929,7 @@ function renderCal() {
     const isCurrent = w === state.currentWeek;
     const isFire = pct === 100;
     const hasData = pct > 0;
+    const isExamW = isExamWeek(w);
 
     // Format date range compactly
     const ms = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1232,6 +1961,8 @@ function renderCal() {
       </div>
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:${barColor};width:36px;text-align:right;">${pct>0?pct+'%':''}</div>
       ${isFire ? '<div style="font-size:12px;">🔥</div>' : ''}
+      ${isExamW ? '<div style="font-size:10px;" title="Exam week">📚</div>' : ''}
+      ${isLunaWeek(w) ? '<div style="font-size:10px;" title="Luna week">🌸</div>' : ''}
       ${isCurrent ? `<div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:${isJana?'var(--purple2)':'var(--cyan)'};padding:2px 6px;border:1px solid ${isJana?'rgba(160,126,213,0.3)':'rgba(0,200,255,0.3)'};">NOW</div>` : ''}
     </div>`;
   });
@@ -1246,8 +1977,112 @@ function jumpToWeek(w) {
   updateLogBadge();
 }
 
+// ── BACKUP ───────────────────────────────────────────────────────
+function doExport() {
+  var ts = new Date().toISOString().slice(0,19).replace('T','_').replace(/:/g,'-');
+  var fn = 'shoopa_backup_' + ts + '.json';
+  var payload = JSON.stringify({version:2, exportedAt:new Date().toISOString(), data:state.data}, null, 2);
+  var blob = new Blob([payload], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = fn; a.click();
+  URL.revokeObjectURL(url);
+  var now = new Date().toLocaleString();
+  localStorage.setItem('shoopa_last_export', now);
+  var el = document.getElementById('bk-last-exp');
+  if (el) el.textContent = now;
+  bkMsg('Exported: ' + fn, true);
+}
+
+function doImport(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var parsed = JSON.parse(ev.target.result);
+      var d = parsed.data || parsed;
+      if (!d.saamir && !d.jana) { bkMsg('Invalid backup file', false); return; }
+      if (!d.saamir) d.saamir = {};
+      if (!d.jana) d.jana = {};
+      state.data = d;
+      save();
+      var now = new Date().toLocaleString();
+      localStorage.setItem('shoopa_last_import', now);
+      var el = document.getElementById('bk-last-imp');
+      if (el) el.textContent = now;
+      renderSnap();
+      bkMsg('Imported from ' + file.name, true);
+    } catch(err) {
+      bkMsg('Error: ' + err.message, false);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function doReset() {
+  if (!confirm('Delete ALL data for Saamir and Jana? This cannot be undone.')) return;
+  if (!confirm('Last chance — are you sure?')) return;
+  state.data = {saamir:{}, jana:{}};
+  save();
+  renderSnap();
+  bkMsg('All data reset.', true);
+}
+
+function bkMsg(msg, ok) {
+  var el = document.getElementById('bk-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = ok ? 'bk-ok' : 'bk-err';
+  if (ok) setTimeout(function(){ el.textContent=''; el.className=''; }, 4000);
+}
+
+function renderSnap() {
+  var el = document.getElementById('bk-snap');
+  if (!el) return;
+  var sK = Object.keys(state.data.saamir||{}).length;
+  var jK = Object.keys(state.data.jana||{}).length;
+  var sW=0, jW=0;
+  for (var w=1; w<=TOTAL_WEEKS; w++) {
+    if (weekPct('saamir',w)>0) sW++;
+    if (weekPct('jana',w)>0) jW++;
+  }
+  var exW = Object.keys(state.data.examWeeks||{}).length;
+  var luW = Object.keys(state.data.lunaWeeks||{}).length;
+  var kb = (JSON.stringify(state.data).length/1024).toFixed(1);
+  var rows = [
+    ['Saamir habit entries', sK],
+    ['Jana habit entries', jK],
+    ['Saamir weeks logged', sW],
+    ['Jana weeks logged', jW],
+    ['Exam weeks', exW],
+    ['Luna weeks', luW],
+    ['Data size', kb + ' KB'],
+    ['Firebase', window._fbReady ? 'Connected' : 'Not connected']
+  ];
+  var html = '';
+  rows.forEach(function(r) {
+    html += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,110,245,0.06);">';
+    html += '<span style="font-size:12px;color:var(--dim);">' + r[0] + '</span>';
+    html += '<span style="font-size:18px;font-weight:700;color:var(--white);letter-spacing:0.02em;">' + r[1] + '</span>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function initBackup() {
+  var le = localStorage.getItem('shoopa_last_export');
+  var li = localStorage.getItem('shoopa_last_import');
+  var leEl = document.getElementById('bk-last-exp');
+  var liEl = document.getElementById('bk-last-imp');
+  if (le && leEl) leEl.textContent = le;
+  if (li && liEl) liEl.textContent = li;
+  renderSnap();
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
-const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const now = new Date();
 document.getElementById('nav-date').textContent = `${days[now.getDay()===0?6:now.getDay()-1]}, ${months[now.getMonth()]} ${now.getDate()}`;
