@@ -422,6 +422,15 @@ main{padding-top:70px;min-height:100vh;}
 <div class="page active" id="page-dashboard">
   <div class="page-title">Your Arena.</div>
   <div class="page-sub">SAAMIR & JANA · STARTS APR 6, 2026 · SUN–SAT</div>
+  <div class="daily-msg-wrap" id="daily-msg-wrap">
+    <div class="daily-msg-border"></div>
+    <div class="daily-msg-inner">
+      <div class="daily-msg-label">TODAY &middot; <span id="daily-msg-date"></span></div>
+      <div class="daily-msg-text" id="daily-msg-text"></div>
+      <div class="daily-msg-sub" id="daily-msg-sub"></div>
+      <div id="daily-msg-tag"></div>
+    </div>
+  </div>
   <div class="hero-dash">
     <div class="hero-card s">
       <div class="hero-name s">SAAMIR</div>
@@ -1248,6 +1257,7 @@ function showPage(id) {
 
 // ── DASHBOARD ─────────────────────────────────────────────────────
 function renderDashboard() {
+  renderDailyMessage();
   const w = state.currentWeek;
   ['saamir','jana'].forEach(u => {
     const prefix = u==='saamir' ? 's' : 'j';
@@ -2082,6 +2092,81 @@ function initBackup() {
   if (le && leEl) leEl.textContent = le;
   if (li && liEl) liEl.textContent = li;
   renderSnap();
+}
+
+// ── DAILY MESSAGE ────────────────────────────────────────────────
+const DAILY_MESSAGES = [
+  // FIRE / GRIND
+  { text: "The mats don't care how you feel. Show up anyway.", sub: "One rep, one page, one prayer. That's all it takes.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "You're not training for a competition. You're training for life.", sub: "Every habit today is an investment in who you're becoming.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "Tired is temporary. The belt is forever.", sub: "Keep rolling. Keep grinding. Keep showing up.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "The only bad training session is the one you skipped.", sub: "Get on the mats. Read the page. Log the prayer.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "Champions aren't made on their best days.", sub: "They're made on the days they showed up anyway.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "Your future self is watching you right now.", sub: "Make them proud.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "Discipline is choosing what you want most over what you want now.", sub: "You both know what you want most.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "Small acts of consistency beat rare acts of intensity.", sub: "Every checked box is a brick in the wall.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "The body achieves what the mind believes.", sub: "And the soul fuels them both.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "Pain is temporary. Progress is permanent.", sub: "Log it. Own it. Repeat.", tag: "FIRE", tagClass: "tag-fire" },
+  // SPIRIT
+  { text: "Every prayer is a reset. A breath. A reminder of what matters.", sub: "Five times a day, you're called back to yourself.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "The most disciplined people in the world pray on time.", sub: "Not because it's easy. Because it's worth it.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "Start with Bismillah. End with Alhamdulillah.", sub: "Everything in between is a gift.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "Your athkar in the morning is armor for the day.", sub: "Don't leave home without it.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "The Quran doesn't need you. You need the Quran.", sub: "Even one page. Every day.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "Tawakkul isn't passive. It's doing your best then trusting Allah.", sub: "You've already done your part — check those habits.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "The strongest people carry both a prayer rug and discipline.", sub: "You two are building both.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  // CHESS / MIND
+  { text: "A grandmaster sees 10 moves ahead. What's your next move today?", sub: "Read the page. Journal the thought. Move the piece.", tag: "CHESS", tagClass: "tag-chess" },
+  { text: "The knight doesn't move in a straight line. Neither does growth.", sub: "Trust the process even when it looks sideways.", tag: "CHESS", tagClass: "tag-chess" },
+  { text: "Every chess player knows: the endgame is decided in the opening.", sub: "Your morning habits are your opening moves.", tag: "CHESS", tagClass: "tag-chess" },
+  { text: "Write in your journal like you're leaving notes for your future self.", sub: "Because you are.", tag: "CHESS", tagClass: "tag-chess" },
+  { text: "Read something today that makes you think differently tomorrow.", sub: "5 pages is all it takes to shift a perspective.", tag: "CHESS", tagClass: "tag-chess" },
+  // COUPLE / FLIRTY
+  { text: "Imagine looking back in a year and seeing everything you built together.", sub: "That's the real flex.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "You're competing against each other but growing together.", sub: "That's the most romantic thing I've ever seen.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "She's out there rolling on the mats thinking about you.", sub: "The least you can do is check your habits.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "He's logging his prayers. Are you logging yours?", sub: "Healthy competition is the best kind of love language.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "Two people who build themselves together are unstoppable.", sub: "SHOOPA isn't just a gym. It's a lifestyle you share.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "The most attractive thing? Discipline.", sub: "Lucky you both have it.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "She earned a blue belt. You built a tracker. This is not a regular relationship.", sub: "Keep being extraordinary.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "Whoever wins the weekly trophy owes the other an ice cream.", sub: "Loser picks the flavor. Winner picks the place.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "Two people. One year. Unlimited potential.", sub: "Show up for yourself. Show up for each other.", tag: "LOVE", tagClass: "tag-love" },
+  { text: "A partner who tracks your habits with you is a partner worth keeping.", sub: "Don't let them down today.", tag: "LOVE", tagClass: "tag-love" },
+  // SHOOPA SPECIFIC
+  { text: "SHOOPA started with one word in a gi.", sub: "Everything you do today is building toward that moment.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "The chess knight moves in an L-shape. Unexpected. Unstoppable.", sub: "That's you. That's both of you.", tag: "CHESS", tagClass: "tag-chess" },
+  { text: "Blue belt today. Black belt someday.", sub: "Every mat session is a stripe closer.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "Jana kept showing up before SHOOPA existed.", sub: "That's the whole point. Keep showing up.", tag: "FIRE", tagClass: "tag-fire" },
+  { text: "Obhur is about to have the most dangerous gym.", sub: "And it starts with two people doing their habits daily.", tag: "FIRE", tagClass: "tag-fire" },
+  // MIDWEEK PUSH
+  { text: "Wednesday energy: halfway there. Don't coast.", sub: "The week is watching. Finish strong.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "Saturday is for looking back at a full week of green checks.", sub: "Make it happen today.", tag: "GRIND", tagClass: "tag-grind" },
+  { text: "Sunday reset. New week. Same mission.", sub: "You know what to do.", tag: "SPIRIT", tagClass: "tag-spirit" },
+  { text: "Monday sets the tone. Make it loud.", sub: "Check everything today and the week follows.", tag: "FIRE", tagClass: "tag-fire" },
+];
+
+function getDailyMessage() {
+  // Use date as seed so both get the same message on the same day
+  var d = new Date();
+  var seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+  var idx = seed % DAILY_MESSAGES.length;
+  return DAILY_MESSAGES[idx];
+}
+
+function renderDailyMessage() {
+  var msg = getDailyMessage();
+  var textEl = document.getElementById('daily-msg-text');
+  var subEl = document.getElementById('daily-msg-sub');
+  var tagEl = document.getElementById('daily-msg-tag');
+  var dateEl = document.getElementById('daily-msg-date');
+  if (!textEl) return;
+  var d = new Date();
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  if (dateEl) dateEl.textContent = dayNames[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+  textEl.textContent = msg.text;
+  if (subEl) subEl.textContent = msg.sub;
+  if (tagEl) tagEl.innerHTML = '<span class="daily-msg-tag ' + msg.tagClass + '">' + msg.tag + '</span>';
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
