@@ -303,13 +303,6 @@ main{padding-top:70px;min-height:100vh;}
 .badge-earned-tag.both{background:rgba(245,200,66,0.15);color:var(--gold);}
 .badge-count-pill{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;font-style:italic;}
 
-.bk-bar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;background:var(--navy2);border:1px solid rgba(26,110,245,0.1);margin-bottom:24px;}
-.bk-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;transition:all 0.2s;border:none;}
-.bk-exp{background:rgba(0,200,255,0.08);color:var(--cyan);border:1px solid rgba(0,200,255,0.3);}
-.bk-imp{background:rgba(245,200,66,0.08);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
-.bk-rst{background:rgba(224,85,85,0.06);color:var(--red);border:1px solid rgba(224,85,85,0.25);}
-.bk-ok{font-family:'Space Mono',monospace;font-size:9px;padding:4px 10px;color:var(--green);background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);}
-.bk-err{font-family:'Space Mono',monospace;font-size:9px;padding:4px 10px;color:var(--red);background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.2);}
 /* RESPONSIVE */
 @media(max-width:768px){
   nav{padding:12px 16px;}
@@ -362,8 +355,7 @@ main{padding-top:70px;min-height:100vh;}
     // Wait for app to be ready then update
     function applyUpdate() {
       if (!window.state) { setTimeout(applyUpdate, 100); return; }
-      if (!val.saamir) val.saamir = {};
-      if (!val.jana) val.jana = {};
+      if(!val.saamir)val.saamir={}; if(!val.jana)val.jana={};
       window.state.data = val;
       // Also update localStorage
       try { localStorage.setItem('shoopa_v2', JSON.stringify(val)); } catch(e) {}
@@ -408,6 +400,7 @@ main{padding-top:70px;min-height:100vh;}
     <button class="nav-tab" onclick="showPage('year')">Year</button>
     <button class="nav-tab" onclick="showPage('versus')">Head-to-Head</button>
     <button class="nav-tab" onclick="showPage('badges')">Badges</button>
+    <button class="nav-tab" onclick="showPage('monthly')">Monthly</button>
     <button class="nav-tab" onclick="showPage('backup')">Backup</button>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
@@ -422,13 +415,18 @@ main{padding-top:70px;min-height:100vh;}
 <div class="page active" id="page-dashboard">
   <div class="page-title">Your Arena.</div>
   <div class="page-sub">SAAMIR & JANA · STARTS APR 6, 2026 · SUN–SAT</div>
-  <div class="daily-msg-wrap" id="daily-msg-wrap">
-    <div class="daily-msg-border"></div>
-    <div class="daily-msg-inner">
-      <div class="daily-msg-label">TODAY &middot; <span id="daily-msg-date"></span></div>
-      <div class="daily-msg-text" id="daily-msg-text"></div>
-      <div class="daily-msg-sub" id="daily-msg-sub"></div>
-      <div id="daily-msg-tag"></div>
+  <div class="daily-msg-wrap" id="daily-msg-wrap" style="position:relative;margin-bottom:28px;border:1px solid rgba(26,110,245,0.15);background:var(--navy2);">
+    <div id="daily-msg-accent" style="position:absolute;top:0;left:0;width:4px;height:100%;"></div>
+    <div id="daily-msg-glow" style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;pointer-events:none;"></div>
+    <div style="padding:24px 28px 20px 32px;position:relative;z-index:2;">
+      <div id="daily-msg-label" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;margin-bottom:14px;display:flex;align-items:center;gap:12px;">TODAY</div>
+      <div id="daily-msg-emoji" style="font-size:48px;line-height:1;margin-bottom:12px;display:block;"></div>
+      <div id="daily-msg-text" style="font-size:clamp(22px,3vw,34px);font-weight:900;font-style:italic;line-height:1.15;margin-bottom:10px;"></div>
+      <div id="daily-msg-sub" style="font-size:13px;color:var(--dim);font-weight:300;line-height:1.6;max-width:600px;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05);">
+        <span id="daily-msg-tag" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.15em;padding:4px 12px;"></span>
+        <span id="daily-msg-date" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--dimmer);"></span>
+      </div>
     </div>
   </div>
   <div class="hero-dash">
@@ -604,27 +602,25 @@ main{padding-top:70px;min-height:100vh;}
 </div>
 
 
+<div class="page" id="page-monthly">
+  <div class="page-title">Monthly.</div>
+  <div class="page-sub">PROGRESS BY MONTH</div>
+  <div class="user-toggle">
+    <button class="user-btn saamir active" id="monthly-s-btn" onclick="setMonthlyUser('saamir')">Saamir</button>
+    <button class="user-btn jana" id="monthly-j-btn" onclick="setMonthlyUser('jana')">Jana</button>
+  </div>
+  <div id="monthly-content"></div>
+</div>
+
 <div class="page" id="page-backup">
   <div class="page-title">Backup.</div>
   <div class="page-sub">EXPORT &middot; IMPORT &middot; RESTORE</div>
-  <div class="bk-bar">
-    <button class="bk-btn bk-exp" onclick="doExport()">&#11015; Export data</button>
-    <button class="bk-btn bk-imp" onclick="document.getElementById('bk-file').click()">&#11014; Import backup</button>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;background:var(--navy2);border:1px solid rgba(26,110,245,0.1);margin-bottom:24px;">
+    <button onclick="doExport()" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;background:rgba(0,200,255,0.08);color:var(--cyan);border:1px solid rgba(0,200,255,0.3);">&#11015; Export data</button>
+    <button onclick="document.getElementById('bk-file').click()" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;background:rgba(245,200,66,0.08);color:var(--gold);border:1px solid rgba(245,200,66,0.3);">&#11014; Import backup</button>
     <input type="file" id="bk-file" accept=".json" style="display:none" onchange="doImport(event)"/>
-    <button class="bk-btn bk-rst" onclick="doReset()">&#9888; Reset all data</button>
+    <button onclick="doReset()" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;background:rgba(224,85,85,0.06);color:var(--red);border:1px solid rgba(224,85,85,0.25);">&#9888; Reset all data</button>
     <span id="bk-msg"></span>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
-    <div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--white);margin-bottom:8px;">&#11015; Export</div>
-      <div style="font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:12px;">Downloads a .json file of all habit data. Save it to Google Drive or iCloud as a backup.</div>
-      <div style="font-size:10px;color:var(--dimmer);font-family:'Space Mono',monospace;">Last export: <span id="bk-last-exp">never</span></div>
-    </div>
-    <div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--white);margin-bottom:8px;">&#11014; Import</div>
-      <div style="font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:12px;">Restore from a .json backup file. Will overwrite current data &mdash; export first.</div>
-      <div style="font-size:10px;color:var(--dimmer);font-family:'Space Mono',monospace;">Last import: <span id="bk-last-imp">never</span></div>
-    </div>
   </div>
   <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">DATA SNAPSHOT</div>
   <div id="bk-snap" style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:20px;"></div>
@@ -806,7 +802,7 @@ let state = {
 
 try {
   const s = localStorage.getItem('shoopa_v2');
-  if(s) { const p = JSON.parse(s); if(!p.saamir) p.saamir={}; if(!p.jana) p.jana={}; state.data = p; }
+  if(s) { const p = JSON.parse(s); if(!p.saamir)p.saamir={}; if(!p.jana)p.jana={}; state.data = p; }
 } catch(e) {}
 // Firebase will override with cloud data once it loads via onValue listener above
 
@@ -1244,7 +1240,7 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById(`page-${id}`).classList.add('active');
-  const tabs = ['dashboard','log','stats','year','versus','badges','backup'];
+  const tabs = ['dashboard','log','stats','year','versus','badges','monthly','backup'];
   document.querySelectorAll('.nav-tab')[tabs.indexOf(id)].classList.add('active');
   if(id==='dashboard') renderDashboard();
   if(id==='log') renderLog();
@@ -1252,6 +1248,7 @@ function showPage(id) {
   if(id==='year') renderYear();
   if(id==='versus') renderVersus();
   if(id==='badges') renderBadges();
+  if(id==='monthly') renderMonthly();
   if(id==='backup') initBackup();
 }
 
@@ -1990,190 +1987,288 @@ function jumpToWeek(w) {
   updateLogBadge();
 }
 
-// ── BACKUP ───────────────────────────────────────────────────────
-function doExport() {
-  var ts = new Date().toISOString().slice(0,19).replace('T','_').replace(/:/g,'-');
-  var fn = 'shoopa_backup_' + ts + '.json';
-  var payload = JSON.stringify({version:2, exportedAt:new Date().toISOString(), data:state.data}, null, 2);
-  var blob = new Blob([payload], {type:'application/json'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url; a.download = fn; a.click();
-  URL.revokeObjectURL(url);
-  var now = new Date().toLocaleString();
-  localStorage.setItem('shoopa_last_export', now);
-  var el = document.getElementById('bk-last-exp');
-  if (el) el.textContent = now;
-  bkMsg('Exported: ' + fn, true);
-}
-
-function doImport(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    try {
-      var parsed = JSON.parse(ev.target.result);
-      var d = parsed.data || parsed;
-      if (!d.saamir && !d.jana) { bkMsg('Invalid backup file', false); return; }
-      if (!d.saamir) d.saamir = {};
-      if (!d.jana) d.jana = {};
-      state.data = d;
-      save();
-      var now = new Date().toLocaleString();
-      localStorage.setItem('shoopa_last_import', now);
-      var el = document.getElementById('bk-last-imp');
-      if (el) el.textContent = now;
-      renderSnap();
-      bkMsg('Imported from ' + file.name, true);
-    } catch(err) {
-      bkMsg('Error: ' + err.message, false);
-    }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-}
-
-function doReset() {
-  if (!confirm('Delete ALL data for Saamir and Jana? This cannot be undone.')) return;
-  if (!confirm('Last chance — are you sure?')) return;
-  state.data = {saamir:{}, jana:{}};
-  save();
-  renderSnap();
-  bkMsg('All data reset.', true);
-}
-
-function bkMsg(msg, ok) {
-  var el = document.getElementById('bk-msg');
-  if (!el) return;
-  el.textContent = msg;
-  el.className = ok ? 'bk-ok' : 'bk-err';
-  if (ok) setTimeout(function(){ el.textContent=''; el.className=''; }, 4000);
-}
-
-function renderSnap() {
-  var el = document.getElementById('bk-snap');
-  if (!el) return;
-  var sK = Object.keys(state.data.saamir||{}).length;
-  var jK = Object.keys(state.data.jana||{}).length;
-  var sW=0, jW=0;
-  for (var w=1; w<=TOTAL_WEEKS; w++) {
-    if (weekPct('saamir',w)>0) sW++;
-    if (weekPct('jana',w)>0) jW++;
-  }
-  var exW = Object.keys(state.data.examWeeks||{}).length;
-  var luW = Object.keys(state.data.lunaWeeks||{}).length;
-  var kb = (JSON.stringify(state.data).length/1024).toFixed(1);
-  var rows = [
-    ['Saamir habit entries', sK],
-    ['Jana habit entries', jK],
-    ['Saamir weeks logged', sW],
-    ['Jana weeks logged', jW],
-    ['Exam weeks', exW],
-    ['Luna weeks', luW],
-    ['Data size', kb + ' KB'],
-    ['Firebase', window._fbReady ? 'Connected' : 'Not connected']
-  ];
-  var html = '';
-  rows.forEach(function(r) {
-    html += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,110,245,0.06);">';
-    html += '<span style="font-size:12px;color:var(--dim);">' + r[0] + '</span>';
-    html += '<span style="font-size:18px;font-weight:700;color:var(--white);letter-spacing:0.02em;">' + r[1] + '</span>';
-    html += '</div>';
-  });
-  el.innerHTML = html;
-}
-
-function initBackup() {
-  var le = localStorage.getItem('shoopa_last_export');
-  var li = localStorage.getItem('shoopa_last_import');
-  var leEl = document.getElementById('bk-last-exp');
-  var liEl = document.getElementById('bk-last-imp');
-  if (le && leEl) leEl.textContent = le;
-  if (li && liEl) liEl.textContent = li;
-  renderSnap();
-}
-
 // ── DAILY MESSAGE ────────────────────────────────────────────────
-const DAILY_MESSAGES = [
-  // FIRE / GRIND
-  { text: "The mats don't care how you feel. Show up anyway.", sub: "One rep, one page, one prayer. That's all it takes.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "You're not training for a competition. You're training for life.", sub: "Every habit today is an investment in who you're becoming.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "Tired is temporary. The belt is forever.", sub: "Keep rolling. Keep grinding. Keep showing up.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "The only bad training session is the one you skipped.", sub: "Get on the mats. Read the page. Log the prayer.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "Champions aren't made on their best days.", sub: "They're made on the days they showed up anyway.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "Your future self is watching you right now.", sub: "Make them proud.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "Discipline is choosing what you want most over what you want now.", sub: "You both know what you want most.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "Small acts of consistency beat rare acts of intensity.", sub: "Every checked box is a brick in the wall.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "The body achieves what the mind believes.", sub: "And the soul fuels them both.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "Pain is temporary. Progress is permanent.", sub: "Log it. Own it. Repeat.", tag: "FIRE", tagClass: "tag-fire" },
-  // SPIRIT
-  { text: "Every prayer is a reset. A breath. A reminder of what matters.", sub: "Five times a day, you're called back to yourself.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "The most disciplined people in the world pray on time.", sub: "Not because it's easy. Because it's worth it.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "Start with Bismillah. End with Alhamdulillah.", sub: "Everything in between is a gift.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "Your athkar in the morning is armor for the day.", sub: "Don't leave home without it.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "The Quran doesn't need you. You need the Quran.", sub: "Even one page. Every day.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "Tawakkul isn't passive. It's doing your best then trusting Allah.", sub: "You've already done your part — check those habits.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "The strongest people carry both a prayer rug and discipline.", sub: "You two are building both.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  // CHESS / MIND
-  { text: "A grandmaster sees 10 moves ahead. What's your next move today?", sub: "Read the page. Journal the thought. Move the piece.", tag: "CHESS", tagClass: "tag-chess" },
-  { text: "The knight doesn't move in a straight line. Neither does growth.", sub: "Trust the process even when it looks sideways.", tag: "CHESS", tagClass: "tag-chess" },
-  { text: "Every chess player knows: the endgame is decided in the opening.", sub: "Your morning habits are your opening moves.", tag: "CHESS", tagClass: "tag-chess" },
-  { text: "Write in your journal like you're leaving notes for your future self.", sub: "Because you are.", tag: "CHESS", tagClass: "tag-chess" },
-  { text: "Read something today that makes you think differently tomorrow.", sub: "5 pages is all it takes to shift a perspective.", tag: "CHESS", tagClass: "tag-chess" },
-  // COUPLE / FLIRTY
-  { text: "Imagine looking back in a year and seeing everything you built together.", sub: "That's the real flex.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "You're competing against each other but growing together.", sub: "That's the most romantic thing I've ever seen.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "She's out there rolling on the mats thinking about you.", sub: "The least you can do is check your habits.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "He's logging his prayers. Are you logging yours?", sub: "Healthy competition is the best kind of love language.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "Two people who build themselves together are unstoppable.", sub: "SHOOPA isn't just a gym. It's a lifestyle you share.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "The most attractive thing? Discipline.", sub: "Lucky you both have it.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "She earned a blue belt. You built a tracker. This is not a regular relationship.", sub: "Keep being extraordinary.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "Whoever wins the weekly trophy owes the other an ice cream.", sub: "Loser picks the flavor. Winner picks the place.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "Two people. One year. Unlimited potential.", sub: "Show up for yourself. Show up for each other.", tag: "LOVE", tagClass: "tag-love" },
-  { text: "A partner who tracks your habits with you is a partner worth keeping.", sub: "Don't let them down today.", tag: "LOVE", tagClass: "tag-love" },
-  // SHOOPA SPECIFIC
-  { text: "SHOOPA started with one word in a gi.", sub: "Everything you do today is building toward that moment.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "The chess knight moves in an L-shape. Unexpected. Unstoppable.", sub: "That's you. That's both of you.", tag: "CHESS", tagClass: "tag-chess" },
-  { text: "Blue belt today. Black belt someday.", sub: "Every mat session is a stripe closer.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "Jana kept showing up before SHOOPA existed.", sub: "That's the whole point. Keep showing up.", tag: "FIRE", tagClass: "tag-fire" },
-  { text: "Obhur is about to have the most dangerous gym.", sub: "And it starts with two people doing their habits daily.", tag: "FIRE", tagClass: "tag-fire" },
-  // MIDWEEK PUSH
-  { text: "Wednesday energy: halfway there. Don't coast.", sub: "The week is watching. Finish strong.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "Saturday is for looking back at a full week of green checks.", sub: "Make it happen today.", tag: "GRIND", tagClass: "tag-grind" },
-  { text: "Sunday reset. New week. Same mission.", sub: "You know what to do.", tag: "SPIRIT", tagClass: "tag-spirit" },
-  { text: "Monday sets the tone. Make it loud.", sub: "Check everything today and the week follows.", tag: "FIRE", tagClass: "tag-fire" },
+var MSGS = [
+  {e:"🔥",t:"The mats don't care how you feel. Show up anyway.",s:"One rep, one page, one prayer. Stack them up.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"⚡",t:"Tired is temporary. The belt is forever.",s:"Keep rolling. Keep grinding. Keep showing up.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏆",t:"Champions aren't made on their best days.",s:"They're made on the days they showed up when it was hard.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"💥",t:"Your future self is watching you right now.",s:"Make them proud. Check the box.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"⚔",t:"Blue belt today. Black belt someday.",s:"Every single mat session is a stripe closer.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌋",t:"SHOOPA started with one word in a gi.",s:"Everything you do today builds toward that moment.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"💎",t:"Small acts of consistency beat rare acts of intensity.",s:"Every checked box is a brick. Keep laying them.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🧱",t:"Discipline is choosing what you want most over what you want now.",s:"You both know what you want most.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"📈",t:"The only bad training session is the one you skipped.",s:"Get on the mats. Read the page. Log the prayer.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🎯",t:"Halfway there. Don't coast now.",s:"The week is watching. Finish strong.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🌅",t:"Sunday reset. New week. Same mission.",s:"You know exactly what to do.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🕌",t:"Every prayer is a reset. A breath. A reminder.",s:"Five times a day, you're called back to what matters.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"✨",t:"Your athkar in the morning is armor for the day.",s:"Don't step out without it.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"📖",t:"The Quran doesn't need you. You need the Quran.",s:"Even one ayah. Every single day.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌙",t:"The most disciplined people in the world pray on time.",s:"Not because it's easy. Because it transforms you.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🤲",t:"Tawakkul isn't passive. It's doing your best then trusting Allah.",s:"You've already done your part. Now check those habits.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"💧",t:"Start with Bismillah. End with Alhamdulillah.",s:"Everything in between is a gift.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"♟",t:"A grandmaster sees 10 moves ahead. What's yours today?",s:"Read the page. Journal the thought. Move the piece.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🧠",t:"The knight doesn't move in a straight line. Neither does growth.",s:"Trust the process even when it looks sideways.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"📚",t:"Read something today that changes how you think tomorrow.",s:"5 pages is all it takes to shift a perspective forever.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"✍",t:"Write in your journal like you're leaving notes for your future self.",s:"Because you are. Make them count.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🏰",t:"The endgame is decided in the opening.",s:"Your morning habits are your opening moves.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"💜",t:"You're competing against each other but growing together.",s:"That's honestly the most romantic thing.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🥋",t:"She's on the mats. Are you logging your habits?",s:"Healthy competition is the best love language.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"👑",t:"Two people who build themselves together are unstoppable.",s:"SHOOPA isn't just a gym. It's the life you're creating.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🔥",t:"The most attractive thing in the world? Discipline.",s:"Lucky you — you're both dripping in it.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🍦",t:"Whoever wins the weekly trophy owes the other an ice cream.",s:"Loser picks the flavor. Winner picks the place.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"💫",t:"Two people. One year. Unlimited potential.",s:"Show up for yourself. Show up for each other.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌸",t:"A partner who tracks habits with you is worth keeping.",s:"Don't let them down today.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🏅",t:"Imagine looking back in a year at everything you built.",s:"That's the real flex. And it starts today.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🩵",t:"SHOOPA started with one word.",s:"Everything you do today builds toward opening those doors.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.1)"},
+  {e:"♟",t:"The chess knight is the most unpredictable piece on the board.",s:"Nobody sees you two coming.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🥋",t:"Obhur is about to have the most dangerous gym.",s:"It starts with two people doing their habits daily.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.1)"},
+  {e:"🌊",t:"Consistency is not glamorous. It's just effective.",s:"Show up again today. That's the whole secret.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🦁",t:"Pressure makes diamonds. Or it makes excuses.",s:"You already know which one you're choosing.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🗓",t:"52 weeks. 365 days. One decision at a time.",s:"This is the one. Right now.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🧗",t:"The hardest part is starting. You already started.",s:"Keep going.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🏔",t:"The mountain doesn't move. You do.",s:"One step, one habit, one day at a time.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"⏳",t:"Every second you delay is a second your future self loses.",s:"Log it. Now.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🔩",t:"Systems beat motivation every single time.",s:"You built this system. Trust it.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🌱",t:"You don't rise to the level of your goals.",s:"You fall to the level of your habits. Make them count.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🎽",t:"The version of you that skips never wins.",s:"The version that shows up always does.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"💣",t:"One day or day one. You decide.",s:"Make it day one. Every day.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🚀",t:"You are not behind. You are exactly where the work begins.",s:"Stop looking back. Start logging.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🥊",t:"Fight for the life you want. No one else will.",s:"Every habit is a punch thrown in the right direction.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌟",t:"You are building something most people only dream about.",s:"A gym. A brand. A life. Keep going.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"⚡",t:"Don't wait for motivation. Build momentum.",s:"Motion creates emotion. Start moving.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🎯",t:"You don't need to be extreme. You need to be consistent.",s:"A little every day beats a lot sometimes.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏋",t:"The gym doesn't build your body. Your consistency does.",s:"Same with your mind. Same with your soul.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌄",t:"Every morning is a fresh start. Take it.",s:"Yesterday's score doesn't define today's effort.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🔑",t:"The key to everything is showing up when you don't feel like it.",s:"Especially when you don't feel like it.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🕋",t:"The Kaaba doesn't move. The people come to it.",s:"Build something worth coming to. Start with today.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌙",t:"Fajr is the hardest prayer because shaitan fights hardest for it.",s:"Win that fight today.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🤍",t:"Purity starts before the prayer. Wudhu is the first act of discipline.",s:"Cleanse before you call.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"📿",t:"Athkar is not just words. It's rewiring your mind toward gratitude.",s:"Say it. Mean it. Feel it.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌅",t:"Allah gave you today as a gift.",s:"Log your habits like you mean it.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌠",t:"Dua at Fajr hits different.",s:"Make it before the world wakes up.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🤲",t:"The strongest people you know carry both a weight and a prayer.",s:"You're one of them.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"💫",t:"Every ayah you read is a conversation with Allah.",s:"Don't ghost Him today.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌙",t:"Night athkar is how you end the day with peace.",s:"Close the day right.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌐",t:"The Quran has been preserved for 1400 years.",s:"Preserved for you. Read it.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"♟",t:"Every grandmaster lost thousands of games to become great.",s:"Log the loss. Learn. Come back stronger.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"📓",t:"The journal is your personal data set.",s:"Track your thoughts like you track your habits.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🔭",t:"Reading is borrowing someone else's lifetime of experience.",s:"5 pages. That's all. Do it.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🧩",t:"Your brain is a muscle. Train it like one.",s:"Journal, read, think, repeat.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🗺",t:"Strategy without execution is just fantasy.",s:"Execute today.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🎓",t:"The people who read daily know things the others don't.",s:"5 pages. Every day. For a year.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"💡",t:"An idea not written down is an idea lost.",s:"Journal it. Own it.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🏆",t:"Chess players don't just play the board. They play the opponent.",s:"Know yourself. Journal it.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🫀",t:"She prays beside you in spirit even when you're apart.",s:"Make her proud. Check those habits.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌺",t:"The best relationships are built by two people becoming better.",s:"That's exactly what you two are doing.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"💌",t:"Imagine showing Jana your streak at the end of the year.",s:"Build the streak worth showing.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🫶",t:"She didn't get a blue belt by taking days off.",s:"Neither will you.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌹",t:"The most beautiful thing is someone who works on themselves every day.",s:"You're both doing that. Don't stop.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🎯",t:"You're not just building a habit. You're building trust.",s:"With yourself. With each other.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"💬",t:"One day you'll tell people about the year you both went all in.",s:"Make sure you actually went all in.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🧲",t:"Discipline is magnetic. And you're both magnetic.",s:"Keep the streak. Keep the energy.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌙",t:"She's probably already logged her habits.",s:"Don't fall behind. She's watching.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🎁",t:"The greatest gift you can give each other is becoming your best selves.",s:"One habit at a time.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🔐",t:"A couple that builds together stays together.",s:"SHOOPA is the proof.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🎪",t:"Obhur has never seen anything like what you two are building.",s:"Keep going. The city's watching.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🥋",t:"The gi doesn't care what rank you are. It just wants you to put it on.",s:"Show up. Roll. Repeat.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🧵",t:"SHOOPA is being woven one habit at a time.",s:"Today is one more thread.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏗",t:"Every great thing was built by someone who just kept showing up.",s:"You're that someone. Both of you.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"📍",t:"You are here. Right now. This is the moment.",s:"Log your habits and own it.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🌊",t:"Progress isn't linear. But effort is a choice.",s:"Choose effort today.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🔋",t:"Sleep is a habit too.",s:"6.5 hours isn't a suggestion. It's the foundation.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🧬",t:"Your body adapts to what you repeatedly do.",s:"Make the repetition worth adapting to.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🎵",t:"The best athletes in the world still do the basics.",s:"Quran. Prayer. Sleep. Abs. Read. Journal. Every day.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🌻",t:"Growth is quiet. It doesn't announce itself.",s:"Keep doing the work. The results will speak.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🏄",t:"Ride the wave of momentum.",s:"One good day leads to another. Start now.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🧲",t:"Success is a magnet. But it only attracts those already in motion.",s:"Stay in motion.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🦅",t:"Eagles don't flock. They fly alone and higher.",s:"Be the eagle. Log the habits.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌍",t:"Most people quit when it gets boring.",s:"The ones who don't are the ones who win.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🎻",t:"Mastery is just a thousand boring repetitions done beautifully.",s:"Today is repetition number whatever. Make it beautiful.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🔮",t:"Future you already has everything you want.",s:"Present you just needs to keep the habits.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🕯",t:"Even one candle changes a dark room.",s:"Even one habit changes a dark day.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌈",t:"The week is just 7 chances to show up.",s:"You've already used some. Use the rest well.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🫁",t:"Breathe. Reset. Log.",s:"That's the whole system.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"💪",t:"Your muscles don't grow during the workout. They grow after.",s:"Same with your mind. Same with your faith.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
 ];
 
-function getDailyMessage() {
-  // Use date as seed so both get the same message on the same day
+function renderDailyMessage() {
   var d = new Date();
-  var seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
-  var idx = seed % DAILY_MESSAGES.length;
-  return DAILY_MESSAGES[idx];
+  var seed = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+  var m = MSGS[seed % MSGS.length];
+  var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var tagColors = {FIRE:"rgba(255,122,0,0.12);color:#ff7a00;border:1px solid rgba(255,122,0,0.35)",GRIND:"rgba(0,200,150,0.1);color:#00C896;border:1px solid rgba(0,200,150,0.3)",SPIRIT:"rgba(0,200,255,0.08);color:var(--cyan);border:1px solid rgba(0,200,255,0.3)",CHESS:"rgba(245,200,66,0.1);color:var(--gold);border:1px solid rgba(245,200,66,0.3)",LOVE:"rgba(160,126,213,0.12);color:var(--purple2);border:1px solid rgba(160,126,213,0.35)"};
+  var el = function(id){return document.getElementById(id);};
+  if(!el("daily-msg-text")) return;
+  el("daily-msg-accent").style.background = m.ac;
+  el("daily-msg-glow").style.background = "radial-gradient(circle,"+m.g+" 0%,transparent 70%)";
+  el("daily-msg-label").style.color = m.ac;
+  el("daily-msg-label").textContent = "TODAY — " + days[d.getDay()].toUpperCase();
+  el("daily-msg-emoji").textContent = m.e;
+  el("daily-msg-text").textContent = m.t;
+  el("daily-msg-text").style.color = m.c;
+  el("daily-msg-sub").textContent = m.s;
+  el("daily-msg-tag").style.cssText = "font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.15em;padding:4px 12px;background:"+tagColors[m.tag]+";";
+  el("daily-msg-tag").textContent = m.tag;
+  el("daily-msg-date").textContent = months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
 }
 
-function renderDailyMessage() {
-  var msg = getDailyMessage();
-  var textEl = document.getElementById('daily-msg-text');
-  var subEl = document.getElementById('daily-msg-sub');
-  var tagEl = document.getElementById('daily-msg-tag');
-  var dateEl = document.getElementById('daily-msg-date');
-  if (!textEl) return;
-  var d = new Date();
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  if (dateEl) dateEl.textContent = dayNames[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
-  textEl.textContent = msg.text;
-  if (subEl) subEl.textContent = msg.sub;
-  if (tagEl) tagEl.innerHTML = '<span class="daily-msg-tag ' + msg.tagClass + '">' + msg.tag + '</span>';
+// ── MONTHLY ──────────────────────────────────────────────
+var monthlyUser = "saamir";
+function setMonthlyUser(u) {
+  monthlyUser = u;
+  document.getElementById("monthly-s-btn").classList.toggle("active", u==="saamir");
+  document.getElementById("monthly-j-btn").classList.toggle("active", u==="jana");
+  renderMonthly();
 }
+
+function getMonthData(user, mi) {
+  var weeks = [];
+  for(var w=1;w<=TOTAL_WEEKS;w++) {
+    var ws = new Date(START_DATE.getTime()+(w-1)*7*24*60*60*1000);
+    if((ws.getMonth()-3+12)%12 === mi) weeks.push(w);
+  }
+  if(!weeks.length) return {weeks:[],pct:0,done:0,total:0,spPct:0,boPct:0,miPct:0,wuPct:0,fire:0,total_weeks:0};
+  var td=0,tp=0,sd=0,sp=0,bd=0,bp=0,md=0,mp=0,wd=0,wp=0,fire=0;
+  weeks.forEach(function(w) {
+    if(isFireWeek(user,w)) fire++;
+    HABITS.forEach(function(h) {
+      if(h.isPrayers) {
+        tp+=7; sp+=7;
+        var fd=weekFullPrayerDays(user,w); td+=fd; sd+=fd;
+        for(var d=0;d<7;d++) PRAYERS.forEach(function(p) {
+          if(isPrayerChecked(user,w,p.id,d)){wp++;if(isWudhuChecked(user,w,p.id,d))wd++;}
+        });
+        return;
+      }
+      tp+=h.freq;
+      if(h.section==="Spirit")sp+=h.freq;
+      else if(h.section==="Body")bp+=h.freq;
+      else mp+=h.freq;
+      var hd=0;for(var d=0;d<7;d++)if(isChecked(user,w,h.id,d))hd++;
+      hd=Math.min(hd,h.freq); td+=hd;
+      if(h.section==="Spirit")sd+=hd;
+      else if(h.section==="Body")bd+=hd;
+      else md+=hd;
+    });
+  });
+  return {weeks:weeks,pct:tp?Math.round(td/tp*100):0,done:td,total:tp,
+    spPct:sp?Math.round(sd/sp*100):0,boPct:bp?Math.round(bd/bp*100):0,
+    miPct:mp?Math.round(md/mp*100):0,wuPct:wp?Math.round(wd/wp*100):0,
+    fire:fire,total_weeks:weeks.length};
+}
+
+function renderMonthly() {
+  var u = monthlyUser;
+  var col = u==="saamir" ? "var(--cyan)" : "var(--purple2)";
+  var MNAMES = ["April","May","June","July","August","September","October","November","December","January","February","March"];
+  var allP=[],totalFire=0;
+  for(var mi=0;mi<12;mi++){var md=getMonthData(u,mi);if(md.pct>0)allP.push(md.pct);totalFire+=md.fire;}
+  var avg=allP.length?Math.round(allP.reduce(function(a,b){return a+b;},0)/allP.length):0;
+  var best=allP.length?Math.max.apply(null,allP):0;
+  var cls = u==="saamir"?"s":"j";
+  var html = "";
+  html += "<div style='display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;'>";
+  html += "<div class='stat-box "+cls+"'><div class='stat-num "+cls+"'>"+avg+"%</div><div class='stat-lbl'>Avg monthly</div></div>";
+  html += "<div class='stat-box "+cls+"'><div class='stat-num "+cls+"'>"+best+"%</div><div class='stat-lbl'>Best month</div></div>";
+  html += "<div class='stat-box "+cls+"'><div class='stat-num "+cls+"'>"+totalFire+"</div><div class='stat-lbl'>Fire weeks total</div></div>";
+  html += "</div><div style='display:flex;flex-direction:column;gap:12px;'>";
+  for(var mi=0;mi<12;mi++) {
+    var md=getMonthData(u,mi);
+    var bc=md.pct===100?"#ff7a00":col;
+    var bord=md.pct>0?bc:"rgba(26,110,245,0.08)";
+    html += "<div style='background:var(--navy2);border:1px solid "+bord+";overflow:hidden;'>";
+    html += "<div style='display:flex;align-items:center;gap:16px;padding:16px 20px;'>";
+    html += "<div style='font-size:20px;font-weight:900;letter-spacing:0.04em;color:"+(md.pct>0?"var(--white)":"var(--dimmer)")+";width:110px;flex-shrink:0;'>"+MNAMES[mi].toUpperCase()+"</div>";
+    if(!md.pct) {
+      html += "<div style='font-family:Space Mono,monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.15em;'>NOT STARTED YET</div>";
+    } else {
+      html += "<div style='font-size:32px;font-weight:900;font-style:italic;color:"+bc+";line-height:1;width:70px;flex-shrink:0;'>"+md.pct+"%</div>";
+      html += "<div style='flex:1;height:8px;background:var(--navy3);'><div style='height:100%;width:"+md.pct+"%;background:"+bc+";'></div></div>";
+      html += "<div style='font-family:Space Mono,monospace;font-size:9px;color:var(--dimmer);text-align:right;white-space:nowrap;'>"+md.fire+"/"+md.total_weeks+" fire<br>"+md.done+"/"+md.total+" done</div>";
+    }
+    html += "</div>";
+    if(md.pct>0) {
+      html += "<div style='display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(26,110,245,0.06);'>";
+      [{l:"Spirit",p:md.spPct,i:"☪"},{l:"Physical",p:md.boPct,i:"⚡"},{l:"Mental",p:md.miPct,i:"📖"},{l:"Wudhu",p:md.wuPct,i:"💧"}].forEach(function(cat,ci) {
+        var cc=cat.p===100?"#ff7a00":col;
+        html += "<div style='padding:10px 14px;"+(ci<3?"border-right:1px solid rgba(26,110,245,0.06);":"")+"'>";
+        html += "<div style='font-size:11px;margin-bottom:4px;'>"+cat.i+" <span style='font-family:Space Mono,monospace;font-size:8px;color:var(--dimmer);'>"+cat.l.toUpperCase()+"</span></div>";
+        html += "<div style='height:4px;background:var(--navy3);margin-bottom:4px;'><div style='height:100%;width:"+cat.p+"%;background:"+cc+";'></div></div>";
+        html += "<div style='font-size:16px;font-weight:700;color:"+cc+";'>"+cat.p+"%</div></div>";
+      });
+      html += "</div><div style='display:flex;gap:6px;padding:10px 20px;border-top:1px solid rgba(26,110,245,0.04);flex-wrap:wrap;'>";
+      md.weeks.forEach(function(w) {
+        var wp=weekPct(u,w);
+        var dc=wp===100?"#ff7a00":wp>=80?col:wp>=40?(u==="saamir"?"rgba(0,200,255,0.4)":"rgba(160,126,213,0.4)"):"rgba(255,255,255,0.08)";
+        html += "<div style='display:flex;flex-direction:column;align-items:center;gap:3px;'>";
+        html += "<div style='width:28px;height:28px;background:"+dc+";display:flex;align-items:center;justify-content:center;font-family:Space Mono,monospace;font-size:7px;color:"+(wp>=80?"#fff":"var(--navy)")+";'>"+(wp>0?wp+"%":"")+"</div>";
+        html += "<div style='font-family:Space Mono,monospace;font-size:7px;color:var(--dimmer);'>W"+w+"</div></div>";
+      });
+      html += "</div>";
+    }
+    html += "</div>";
+  }
+  html += "</div>";
+  document.getElementById("monthly-content").innerHTML = html;
+}
+
+// ── BACKUP ───────────────────────────────────────────────
+function doExport() {
+  var ts=new Date().toISOString().slice(0,19).replace("T","_").replace(/:/g,"-");
+  var blob=new Blob([JSON.stringify({version:2,data:state.data},null,2)],{type:"application/json"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download="shoopa_backup_"+ts+".json"; a.click();
+  URL.revokeObjectURL(url);
+  bkMsg("Exported!",true);
+}
+function doImport(e) {
+  var file=e.target.files[0]; if(!file)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var p=JSON.parse(ev.target.result);
+      var d=p.data||p;
+      if(!d.saamir)d.saamir={}; if(!d.jana)d.jana={};
+      state.data=d; save(); renderSnap(); bkMsg("Imported!",true);
+    }catch(err){bkMsg("Error: "+err.message,false);}
+  };
+  r.readAsText(file); e.target.value="";
+}
+function doReset() {
+  if(!confirm("Delete ALL data?"))return;
+  if(!confirm("Are you sure? Cannot be undone."))return;
+  state.data={saamir:{},jana:{}}; save(); renderSnap(); bkMsg("Reset done.",true);
+}
+function bkMsg(msg,ok) {
+  var el=document.getElementById("bk-msg"); if(!el)return;
+  el.textContent=msg;
+  el.style.cssText=ok?"font-family:Space Mono,monospace;font-size:9px;padding:4px 10px;color:var(--green);background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);":"font-family:Space Mono,monospace;font-size:9px;padding:4px 10px;color:var(--red);background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.2);";
+  if(ok)setTimeout(function(){el.textContent="";el.style.cssText="";},4000);
+}
+function renderSnap() {
+  var el=document.getElementById("bk-snap"); if(!el)return;
+  var sK=Object.keys(state.data.saamir||{}).length;
+  var jK=Object.keys(state.data.jana||{}).length;
+  var sW=0,jW=0;
+  for(var w=1;w<=TOTAL_WEEKS;w++){if(weekPct("saamir",w)>0)sW++;if(weekPct("jana",w)>0)jW++;}
+  var rows=[["Saamir entries",sK],["Jana entries",jK],["Saamir weeks",sW],["Jana weeks",jW],["Firebase",window._fbReady?"Connected":"Not connected"]];
+  var h="";
+  rows.forEach(function(r){
+    h+="<div style='display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(26,110,245,0.06);'>";
+    h+="<span style='font-size:12px;color:var(--dim);'>"+r[0]+"</span>";
+    h+="<span style='font-size:16px;font-weight:700;color:var(--white);'>"+r[1]+"</span></div>";
+  });
+  el.innerHTML=h;
+}
+function initBackup(){renderSnap();}
 
 // ── INIT ──────────────────────────────────────────────────────────
 const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const now = new Date();
-document.getElementById('nav-date').textContent = `${days[now.getDay()===0?6:now.getDay()-1]}, ${months[now.getMonth()]} ${now.getDate()}`;
+document.getElementById('nav-date').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
 
 renderDashboard();
 renderLog();
