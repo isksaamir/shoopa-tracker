@@ -443,7 +443,7 @@ main{padding-top:70px;min-height:100vh;}
 <!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
   <div class="page-title">Your Arena.</div>
-  <div class="page-sub">SAAMIR & JANA · STARTS APR 6, 2026 · SUN–SAT</div>
+  <div class="page-sub">SAAMIR & JANA · STARTS MAY 17, 2026 · SUN–SAT</div>
   <div class="daily-msg-wrap" id="daily-msg-wrap" style="position:relative;margin-bottom:28px;border:1px solid rgba(26,110,245,0.15);background:var(--navy2);">
     <div id="daily-msg-accent" style="position:absolute;top:0;left:0;width:4px;height:100%;"></div>
     <div id="daily-msg-glow" style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;pointer-events:none;"></div>
@@ -788,7 +788,7 @@ main{padding-top:70px;min-height:100vh;}
 
 <script>
 // ── CONFIG ───────────────────────────────────────────────────────
-const START_DATE = new Date(2026, 3, 5); // Week 1 starts Sunday Apr 5 (they log from Apr 6)
+const START_DATE = new Date(2026, 4, 17); // Week 1 starts Sunday May 17 2026
 
 // ── DATA ─────────────────────────────────────────────────────────
 // Individual prayers — each tracked per day
@@ -2714,7 +2714,7 @@ function renderBadges() {
 
 // ── CALENDAR ──────────────────────────────────────────────────────
 const CAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-let calState = { month: 3, year: 2026 }; // April 2026
+let calState = { month: 4, year: 2026 }; // May 2026
 
 function openCal() {
   // Open to the month containing current week
@@ -3051,7 +3051,7 @@ function getMonthData(user, mi) {
   var weeks = [];
   for(var w=1;w<=TOTAL_WEEKS;w++) {
     var ws = new Date(START_DATE.getTime()+(w-1)*7*24*60*60*1000);
-    if((ws.getMonth()-3+12)%12 === mi) weeks.push(w);
+    if((ws.getMonth()-4+12)%12 === mi) weeks.push(w);
   }
   if(!weeks.length) return {weeks:[],pct:0,done:0,total:0,spPct:0,boPct:0,miPct:0,wuPct:0,fire:0,total_weeks:0};
   var td=0,tp=0,sd=0,sp=0,bd=0,bp=0,md=0,mp=0,wd=0,wp=0,fire=0;
@@ -3086,7 +3086,7 @@ function getMonthData(user, mi) {
 function renderMonthly() {
   var u = monthlyUser;
   var col = u==="saamir" ? "var(--cyan)" : "var(--purple2)";
-  var MNAMES = ["April","May","June","July","August","September","October","November","December","January","February","March"];
+  var MNAMES = ["May","June","July","August","September","October","November","December","January","February","March","April"];
   var allP=[],totalFire=0;
   for(var mi=0;mi<12;mi++){var md=getMonthData(u,mi);if(md.pct>0)allP.push(md.pct);totalFire+=md.fire;}
   var avg=allP.length?Math.round(allP.reduce(function(a,b){return a+b;},0)/allP.length):0;
