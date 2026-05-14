@@ -376,8 +376,13 @@ main{padding-top:70px;min-height:100vh;}
   // Listen for remote changes in real time
   const dataRef = ref(db, 'shoopa/data');
   onValue(dataRef, (snapshot) => {
-    const val = snapshot.val();
-    if (!val) return;
+    const raw = snapshot.val();
+    const val = raw || { saamir: {}, jana: {} }; // null = DB wiped, reset everything
+    if (!raw) {
+      // Firebase is empty — clear local cache and reset state
+      try { localStorage.removeItem('shoopa_v2'); } catch(e) {}
+      if (window.state) { window.state.data = val; }
+    }
     const incoming = JSON.stringify(val);
     // Skip if this is our own write echoing back
     if (incoming === window._lastWritten) return;
