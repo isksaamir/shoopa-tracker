@@ -219,6 +219,13 @@ main{padding-top:70px;min-height:100vh;}
 .exam-btn.exam-on{border-color:var(--gold);background:rgba(245,200,66,0.1);color:var(--gold);}
 .luna-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .luna-btn.luna-on{border-color:var(--purple2);background:rgba(160,126,213,0.1);color:var(--purple2);}
+.injury-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(255,133,179,0.3);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.injury-btn.injury-on{border-color:#FF85B3;background:rgba(255,133,179,0.1);color:#FF85B3;}
+.chk.auto-j{border-color:#FF85B3;background:rgba(255,133,179,0.08);color:#FF85B3;cursor:default;pointer-events:none;}
+.luna-day-pick{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.08em;padding:6px 4px;border:1px solid rgba(160,126,213,0.2);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.15s;flex:1;}
+.luna-day-pick.selected{border-color:var(--purple2);background:rgba(160,126,213,0.15);color:var(--purple2);}
+.rec-day-pick{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.08em;padding:6px 4px;border:1px solid rgba(255,133,179,0.2);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.15s;flex:1;}
+.rec-day-pick.selected{border-color:#FF85B3;background:rgba(255,133,179,0.15);color:#FF85B3;}
 .exam-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;padding:3px 10px;border:1px solid rgba(245,200,66,0.4);background:rgba(245,200,66,0.08);color:var(--gold);}
 .habit-row.exam-exempt{opacity:0.3;pointer-events:none;}
 .habit-row.exam-exempt .habit-name::after{content:' — exam week';font-size:9px;color:var(--gold);margin-left:4px;}
@@ -283,6 +290,7 @@ main{padding-top:70px;min-height:100vh;}
 .tier-weekly{background:rgba(0,200,255,0.1);color:var(--cyan);border:1px solid rgba(0,200,255,0.3);}
 .tier-monthly{background:rgba(160,126,213,0.1);color:var(--purple2);border:1px solid rgba(160,126,213,0.3);}
 .tier-legendary{background:rgba(245,200,66,0.1);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
+.tier-quirky{background:rgba(0,200,150,0.1);color:var(--green);border:1px solid rgba(0,200,150,0.3);}
 .badge-cabinet{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px;}
 .badge-card{background:var(--navy2);border:1px solid rgba(26,110,245,0.08);padding:18px 12px;text-align:center;position:relative;transition:all 0.2s;cursor:default;}
 .badge-card:hover{transform:translateY(-2px);}
@@ -303,6 +311,27 @@ main{padding-top:70px;min-height:100vh;}
 .badge-earned-tag.both{background:rgba(245,200,66,0.15);color:var(--gold);}
 .badge-count-pill{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;font-style:italic;}
 
+/* CELEBRATION */
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+@keyframes celPop{0%{transform:scale(0.7);opacity:0;}70%{transform:scale(1.05);}100%{transform:scale(1);opacity:1;}}
+@keyframes toastSlide{from{transform:translateX(320px);}to{transform:translateX(0);}}
+#cel-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(5,12,26,0.92);align-items:center;justify-content:center;overflow:hidden;}
+#cel-box{position:relative;z-index:2;background:var(--navy2);padding:40px 32px;text-align:center;max-width:400px;width:90vw;animation:celPop 0.5s ease;}
+#badge-toast{display:none;position:fixed;top:80px;right:20px;z-index:1999;background:var(--navy2);padding:14px 16px;max-width:280px;gap:12px;align-items:flex-start;transform:translateX(320px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.hero-level{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;padding:3px 8px;}
+.hero-level.s{background:rgba(0,200,255,0.12);color:var(--cyan);border:1px solid rgba(0,200,255,0.3);}
+.hero-level.j{background:rgba(160,126,213,0.12);color:var(--purple2);border:1px solid rgba(160,126,213,0.3);}
+.boss-card{background:var(--navy2);border:1px solid rgba(255,122,0,0.25);padding:20px;margin-bottom:16px;position:relative;overflow:hidden;}
+.boss-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ff7a00,#ff9a40);}
+.monthly-card{background:var(--navy2);border:1px solid rgba(245,200,66,0.2);padding:20px;margin-bottom:20px;position:relative;}
+.monthly-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);}
+.week-note-wrap{margin:8px 0 0 0;padding:8px 12px;background:var(--navy2);border:1px solid rgba(26,110,245,0.1);}
+.week-note-input{width:100%;background:transparent;border:none;outline:none;font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:0.05em;resize:none;line-height:1.5;}
+.week-note-input::placeholder{color:var(--dimmer);}
+.habit-sel-btn{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;padding:5px 10px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--dimmer);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.habit-sel-btn.active-s{border-color:var(--cyan);background:rgba(0,200,255,0.08);color:var(--cyan);}
+.habit-sel-btn.active-j{border-color:var(--purple2);background:rgba(160,126,213,0.08);color:var(--purple2);}
+#changelog-overlay{display:none;position:fixed;inset:0;z-index:3000;background:rgba(5,12,26,0.9);align-items:center;justify-content:center;}
 /* RESPONSIVE */
 @media(max-width:768px){
   nav{padding:12px 16px;}
@@ -431,7 +460,10 @@ main{padding-top:70px;min-height:100vh;}
   </div>
   <div class="hero-dash">
     <div class="hero-card s">
-      <div class="hero-name s">SAAMIR</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div class="hero-name s">SAAMIR</div>
+        <div class="hero-level s" id="dash-s-level">LVL 1</div>
+      </div>
       <div class="hero-streak s" id="dash-s-streak">0</div>
       <div class="hero-streak-lbl">week streak</div>
       <div class="hero-mini-stats">
@@ -440,9 +472,13 @@ main{padding-top:70px;min-height:100vh;}
         <div class="hero-mini"><div class="hero-mini-num s" id="dash-s-done">0</div><div class="hero-mini-lbl">Habits done</div></div>
         <div class="hero-mini"><div class="hero-mini-num s" id="dash-s-trophies">0</div><div class="hero-mini-lbl">Trophies</div></div>
       </div>
+      <div style="height:2px;background:var(--navy3);margin-top:12px;"><div id="dash-s-xpbar" style="height:100%;background:var(--cyan);transition:width 0.6s;width:0%;"></div></div>
     </div>
     <div class="hero-card j">
-      <div class="hero-name j">JANA</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div class="hero-name j">JANA</div>
+        <div class="hero-level j" id="dash-j-level">LVL 1</div>
+      </div>
       <div class="hero-streak j" id="dash-j-streak">0</div>
       <div class="hero-streak-lbl">week streak</div>
       <div class="hero-mini-stats">
@@ -451,8 +487,11 @@ main{padding-top:70px;min-height:100vh;}
         <div class="hero-mini"><div class="hero-mini-num j" id="dash-j-done">0</div><div class="hero-mini-lbl">Habits done</div></div>
         <div class="hero-mini"><div class="hero-mini-num j" id="dash-j-trophies">0</div><div class="hero-mini-lbl">Trophies</div></div>
       </div>
+      <div style="height:2px;background:var(--navy3);margin-top:12px;"><div id="dash-j-xpbar" style="height:100%;background:var(--purple2);transition:width 0.6s;width:0%;"></div></div>
     </div>
   </div>
+  <div id="dash-boss-section"></div>
+  <div id="dash-monthly-section"></div>
   <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">THIS WEEK — WEEK <span id="dash-thisweek">1</span></div>
   <div id="dash-week-summary"></div>
 </div>
@@ -475,7 +514,11 @@ main{padding-top:70px;min-height:100vh;}
     <button class="cal-btn" onclick="openCal()">&#128197; Jump to week</button>
     <button class="exam-btn" id="exam-btn" onclick="toggleExamWeek()">&#127979; Exam week</button>
     <button class="luna-btn" id="luna-btn" onclick="toggleLunaWeek()" style="display:none;">&#127775; Luna week</button>
+    <button class="injury-btn" id="injury-btn" onclick="toggleInjuryWeek()">🩹 Recovery week</button>
     <button class="wk-btn" onclick="changeWeek(1)">&#8250;</button>
+  </div>
+  <div class="week-note-wrap">
+    <textarea id="week-note-input" class="week-note-input" rows="1" placeholder="Week note — what happened this week? (optional)" onchange="saveWeekNote()" oninput="autoResizeNote(this)"></textarea>
   </div>
   <div class="day-header">
     <div></div>
@@ -510,6 +553,7 @@ main{padding-top:70px;min-height:100vh;}
     <button class="user-btn saamir active" id="year-s-btn" onclick="setYearUser('saamir')">Saamir</button>
     <button class="user-btn jana" id="year-j-btn" onclick="setYearUser('jana')">Jana</button>
   </div>
+  <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;" id="year-habit-selector"></div>
   <div class="heatmap-wrap">
     <div class="heatmap-months" id="hm-months"></div>
     <div class="heatmap-grid" id="heatmap"></div>
@@ -524,6 +568,18 @@ main{padding-top:70px;min-height:100vh;}
   <div class="page-title">Head-to-Head.</div>
   <div class="page-sub">WHO'S WINNING THIS WEEK</div>
   <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">WEEK <span id="vs-week-num">1</span> — <span id="vs-week-dates"></span></div>
+  <div id="vs-live-gap" style="background:var(--navy2);border:1px solid rgba(26,110,245,0.15);padding:16px 20px;margin-bottom:20px;display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span id="vs-gap-s-lbl" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:0.1em;color:var(--cyan);">SAAMIR 0%</span>
+      <span id="vs-gap-label" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--dimmer);">LIVE RACE</span>
+      <span id="vs-gap-j-lbl" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:0.1em;color:var(--purple2);">JANA 0%</span>
+    </div>
+    <div style="height:10px;background:var(--navy3);position:relative;overflow:hidden;">
+      <div id="vs-gap-bar-s" style="position:absolute;left:0;top:0;height:100%;background:var(--cyan);transition:width 0.5s;"></div>
+      <div id="vs-gap-bar-j" style="position:absolute;right:0;top:0;height:100%;background:var(--purple2);transition:width 0.5s;"></div>
+    </div>
+    <div id="vs-gap-delta" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--dimmer);margin-top:6px;text-align:center;"></div>
+  </div>
   <div class="vs-wrap">
     <div class="vs-card s">
       <div class="vs-player s">SAAMIR</div>
@@ -563,23 +619,102 @@ main{padding-top:70px;min-height:100vh;}
 
 <!-- LUNA PICKER MODAL -->
 <div id="luna-picker-overlay" style="display:none;position:fixed;inset:0;background:rgba(5,12,26,0.88);z-index:300;align-items:center;justify-content:center;">
-  <div style="background:var(--navy2);border:1px solid rgba(160,126,213,0.3);padding:28px;width:320px;max-width:90vw;">
+  <div style="background:var(--navy2);border:1px solid rgba(160,126,213,0.3);padding:28px;width:340px;max-width:92vw;">
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--white);margin-bottom:4px;">🌸 Luna Week</div>
-    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.15em;margin-bottom:20px;" id="luna-picker-week">Week 1</div>
-    <div style="font-size:13px;color:var(--dim);margin-bottom:16px;">How many days this week? Prayers will be auto-counted for those days, everything else stays normal.</div>
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-      <label style="font-family:'Space Mono',monospace;font-size:10px;color:var(--purple2);letter-spacing:0.15em;">DAYS</label>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button onclick="adjustLunaDays(-1)" style="width:32px;height:32px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">−</button>
-        <input type="number" id="luna-days-input" min="1" max="7" value="5" style="width:52px;height:32px;text-align:center;border:1px solid rgba(160,126,213,0.4);background:var(--navy3);color:var(--purple2);font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;">
-        <button onclick="adjustLunaDays(1)" style="width:32px;height:32px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">+</button>
-      </div>
-      <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);">/ 7 days</span>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.15em;margin-bottom:16px;" id="luna-picker-week">Week 1</div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:16px;">Pick when it started — prayers auto-counted from that day, even if it spills into next week.</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--purple2);letter-spacing:0.15em;margin-bottom:8px;">STARTS ON</div>
+    <div style="display:flex;gap:3px;margin-bottom:20px;">
+      <button class="luna-day-pick" id="ldp0" onclick="selectLunaStartDay(0)">SUN</button>
+      <button class="luna-day-pick" id="ldp1" onclick="selectLunaStartDay(1)">MON</button>
+      <button class="luna-day-pick" id="ldp2" onclick="selectLunaStartDay(2)">TUE</button>
+      <button class="luna-day-pick" id="ldp3" onclick="selectLunaStartDay(3)">WED</button>
+      <button class="luna-day-pick" id="ldp4" onclick="selectLunaStartDay(4)">THU</button>
+      <button class="luna-day-pick" id="ldp5" onclick="selectLunaStartDay(5)">FRI</button>
+      <button class="luna-day-pick" id="ldp6" onclick="selectLunaStartDay(6)">SAT</button>
+    </div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--purple2);letter-spacing:0.15em;margin-bottom:8px;">DURATION</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+      <button onclick="adjustLunaDays(-1)" style="width:32px;height:32px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">−</button>
+      <input type="number" id="luna-days-input" min="1" max="10" value="5" style="width:52px;height:32px;text-align:center;border:1px solid rgba(160,126,213,0.4);background:var(--navy3);color:var(--purple2);font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;">
+      <button onclick="adjustLunaDays(1)" style="width:32px;height:32px;border:1px solid rgba(160,126,213,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">+</button>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);">days</span>
+      <span id="luna-overflow-hint" style="font-family:'Space Mono',monospace;font-size:8px;color:var(--purple2);margin-left:4px;"></span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
       <button id="luna-picker-save" style="padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;border:1px solid rgba(160,126,213,0.4);background:rgba(160,126,213,0.1);color:var(--purple2);cursor:pointer;">SAVE</button>
       <button id="luna-picker-cancel" style="padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--dimmer);cursor:pointer;">CANCEL</button>
     </div>
+  </div>
+</div>
+
+<!-- RECOVERY PICKER MODAL -->
+<div id="recovery-picker-overlay" style="display:none;position:fixed;inset:0;background:rgba(5,12,26,0.88);z-index:300;align-items:center;justify-content:center;">
+  <div style="background:var(--navy2);border:1px solid rgba(255,133,179,0.3);padding:28px;width:320px;max-width:90vw;">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;color:var(--white);margin-bottom:4px;">🩹 Recovery Week</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.15em;margin-bottom:16px;" id="recovery-picker-label">Jana — Week 1</div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:16px;">How many days? Workouts will be auto-counted so your streak stays protected.</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:#FF85B3;letter-spacing:0.15em;margin-bottom:8px;">RECOVERY DAYS</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+      <button onclick="adjustRecoveryDays(-1)" style="width:32px;height:32px;border:1px solid rgba(255,133,179,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">−</button>
+      <input type="number" id="recovery-days-input" min="1" max="7" value="5" style="width:52px;height:32px;text-align:center;border:1px solid rgba(255,133,179,0.4);background:var(--navy3);color:#FF85B3;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;">
+      <button onclick="adjustRecoveryDays(1)" style="width:32px;height:32px;border:1px solid rgba(255,133,179,0.3);background:transparent;color:var(--white);font-size:18px;cursor:pointer;">+</button>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dimmer);">/ 7 days</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button id="recovery-picker-save" style="padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;border:1px solid rgba(255,133,179,0.4);background:rgba(255,133,179,0.1);color:#FF85B3;cursor:pointer;">SAVE</button>
+      <button id="recovery-picker-cancel" style="padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--dimmer);cursor:pointer;">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- BADGE CELEBRATION OVERLAY (monthly / legendary / quirky) -->
+<div id="cel-overlay" onclick="if(event.target===this)closeCelebration()">
+  <div id="cel-confetti-container" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
+  <div id="cel-box" style="border:1px solid var(--cyan);">
+    <div id="cel-tier-label" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;margin-bottom:16px;"></div>
+    <div id="cel-icon" style="font-size:60px;line-height:1;margin-bottom:16px;display:block;"></div>
+    <div id="cel-user" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;margin-bottom:10px;"></div>
+    <div id="cel-title" style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:38px;line-height:1;margin-bottom:12px;"></div>
+    <div id="cel-desc" style="font-size:13px;color:var(--dim);line-height:1.6;margin-bottom:24px;"></div>
+    <button id="cel-close" onclick="closeCelebration()" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;padding:12px 32px;cursor:pointer;width:100%;"></button>
+  </div>
+</div>
+
+<!-- BADGE TOAST (weekly) -->
+<div id="badge-toast" style="display:flex;border:1px solid var(--cyan);">
+  <div id="toast-icon" style="font-size:30px;flex-shrink:0;line-height:1;margin-right:12px;"></div>
+  <div>
+    <div id="toast-user" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;margin-bottom:3px;"></div>
+    <div id="toast-title" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:0.03em;color:var(--white);"></div>
+    <div id="toast-desc" style="font-size:11px;color:var(--dim);margin-top:2px;line-height:1.4;"></div>
+  </div>
+</div>
+
+<!-- SECRET TEST BUTTON (bottom-right corner, nearly invisible) -->
+<button onclick="testCelebration()" title="test celebration" style="position:fixed;bottom:6px;right:6px;width:10px;height:10px;background:red;border:1px solid rgba(255,255,255,0.08);cursor:pointer;z-index:100;padding:0;border-radius:50%;opacity:0.25;"></button>
+
+<!-- CHANGELOG MODAL -->
+<div id="changelog-overlay" onclick="if(event.target===this)closeChangelog()" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(5,12,26,0.92);align-items:center;justify-content:center;">
+  <div style="background:var(--navy2);border:1px solid rgba(0,200,255,0.25);padding:32px;width:420px;max-width:92vw;position:relative;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple2));"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.3em;color:var(--cyan);margin-bottom:8px;">WHAT'S NEW</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--white);margin-bottom:4px;">SHOOPA v3.0</div>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);margin-bottom:20px;">Latest update</div>
+    <div style="font-size:12px;color:var(--dim);line-height:1.8;">
+      <div style="margin-bottom:8px;"><span style="color:var(--cyan);">✦</span> Level system — earn XP and rank up on the dashboard</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--gold);">✦</span> Weekly Boss Battle — a new challenge every week on the dashboard</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--gold);">✦</span> Monthly Challenge — auto-rotating goal for the current month</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--green);">✦</span> Week Notes — write one line of context per week in the Log</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--purple2);">✦</span> Recovery week now has a day picker, works for both of you</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--purple2);">✦</span> Luna week now picks start day + auto-spills into next week</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--cyan);">✦</span> Per-habit heatmap on the Year page</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--cyan);">✦</span> Live race bar on Head-to-Head</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--gold);">✦</span> Personal bests + weekly report card on Stats</div>
+      <div style="margin-bottom:8px;"><span style="color:var(--green);">✦</span> 45 new badges across weekly, monthly, legendary &amp; quirky tiers</div>
+      <div style="margin-bottom:0;"><span style="color:var(--red);">✦</span> 100+ new daily messages added</div>
+    </div>
+    <button onclick="closeChangelog()" style="width:100%;margin-top:24px;padding:12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;border:1px solid rgba(0,200,255,0.3);background:rgba(0,200,255,0.06);color:var(--cyan);cursor:pointer;">LET'S GO →</button>
   </div>
 </div>
 
@@ -648,9 +783,9 @@ const HABITS = [
   {id:'athkar_m', name:'Morning athkar',    icon:'✨', section:'Spirit', freq:7, examExempt:false},
   {id:'athkar_e', name:'Evening athkar',    icon:'🌙', section:'Spirit', freq:7, examExempt:false},
   {id:'sleep',    name:'Sleep 6.5h+',       icon:'💤', section:'Body',   freq:7, examExempt:false},
-  {id:'abs',      name:'Abs session',       icon:'⚡', section:'Body',   freq:2, examExempt:true},
-  {id:'mobility', name:'Mobility session',  icon:'🧘', section:'Body',   freq:2, examExempt:true},
-  {id:'explosive',name:'Explosive session', icon:'🔥', section:'Body',   freq:1, examExempt:true},
+  {id:'abs',      name:'Abs session',       icon:'⚡', section:'Body',   freq:2, examExempt:true, injuryExempt:true},
+  {id:'mobility', name:'Mobility session',  icon:'🧘', section:'Body',   freq:2, examExempt:true, injuryExempt:true},
+  {id:'explosive',name:'Explosive session', icon:'🔥', section:'Body',   freq:1, examExempt:true, injuryExempt:true},
   {id:'reading',  name:'Read 5 pages+',     icon:'📖', section:'Mind',   freq:7, examExempt:true},
   {id:'journal',  name:'Journal',           icon:'✍',  section:'Mind',   freq:7, examExempt:false},
 ];
@@ -673,6 +808,7 @@ function togglePrayer(user, week, prayerId, day, type) {
   save();
   renderLog();
   updateLogBadge();
+  detectNewBadges(user);
 }
 // How many prayers done in a day (0-5)
 function dayPrayersDone(user, week, day) {
@@ -784,6 +920,48 @@ const BADGE_DEFS = [
   {id:'consistent_10',  icon:'💎', title:'Diamond',          desc:'80%+ completion in 10 or more weeks',              tier:'legendary'},
   {id:'fire_8',         icon:'☄',  title:'Unstoppable',      desc:'Eight perfect weeks in a row',                    tier:'legendary'},
   {id:'full_year',      icon:'🌙', title:'Year of SHOOPA',   desc:'Complete the full 52-week challenge at 80%+',      tier:'legendary'},
+  // ── NEW WEEKLY ───────────────────────────────────────────────────
+  {id:'night_owl',      icon:'🌙', title:'Night Owl',        desc:'Log every Isha prayer for a full week',            tier:'weekly'},
+  {id:'sun_chaser',     icon:'☀️', title:'Sun Chaser',       desc:'Log every Fajr for a full week',                  tier:'weekly'},
+  {id:'offline_mode',   icon:'📵', title:'Offline Mode',     desc:'Every daily habit done every day for a full week', tier:'weekly'},
+  {id:'tied_up',        icon:'🤝', title:'Tied Up',          desc:'Both end the same week with the exact same %',     tier:'weekly'},
+  {id:'full_kit',       icon:'🎽', title:'Full Kit',         desc:'Complete all 3 body sessions in one week',         tier:'weekly'},
+  {id:'chapter_one',    icon:'📖', title:'Chapter One',      desc:'Read every single day for a full week',            tier:'weekly'},
+  {id:'zen_week',       icon:'🧘', title:'Zen Week',         desc:'Complete all Mind habits every day for a week',    tier:'weekly'},
+  // ── NEW MONTHLY ──────────────────────────────────────────────────
+  {id:'fajr_month',     icon:'🌅', title:'Fajr Month',       desc:'Fajr on time every day for 30 days',               tier:'monthly'},
+  {id:'maghrib_magic',  icon:'🌇', title:'Maghrib Magic',    desc:'Maghrib on time every day for 30 days',            tier:'monthly'},
+  {id:'body_of_work',   icon:'💪', title:'Body of Work',     desc:'All body sessions complete for 4 weeks in a row',  tier:'monthly'},
+  {id:'no_miss_month',  icon:'📆', title:'No Miss Month',    desc:'Not a single zero day across 4 full weeks',        tier:'monthly'},
+  {id:'month_sweep',    icon:'🏆', title:'Month Sweep',      desc:'Win 4 weekly trophies in a row',                   tier:'monthly'},
+  {id:'mind_palace',    icon:'🧠', title:'Mind Palace',      desc:'Read + Journal every day for 4 weeks in a row',    tier:'monthly'},
+  {id:'pure_month',     icon:'💧', title:'Pure Month',       desc:'Wudhu with every single prayer for 4 weeks',       tier:'monthly'},
+  {id:'library_card',   icon:'📚', title:'Library Card',     desc:'Read every day for 30 consecutive days',           tier:'monthly'},
+  // ── NEW LEGENDARY ────────────────────────────────────────────────
+  {id:'the_trinity',    icon:'🔱', title:'The Trinity',      desc:'100% in Spirit, Body AND Mind in same week — 4 times', tier:'legendary'},
+  {id:'world_record',   icon:'🌍', title:'World Record',     desc:'Fire week every week for a full month (4 in a row)',   tier:'legendary'},
+  {id:'the_five_prayer',icon:'🕌', title:'The Five',         desc:'All 5 prayers every day for 90 days straight',     tier:'legendary'},
+  {id:'hafidh_progress',icon:'📖', title:'Hafidh in Progress',desc:'Quran every single day for all 52 weeks',         tier:'legendary'},
+  {id:'black_belt',     icon:'🥋', title:'Black Belt Energy',desc:'All body sessions complete for 12 weeks in a row',  tier:'legendary'},
+  {id:'the_scholar',    icon:'🧠', title:'The Scholar',      desc:'Read every day for 90 days straight',              tier:'legendary'},
+  {id:'unstoppable',    icon:'🔥', title:'Unstoppable Force',desc:'10 fire weeks in a row',                           tier:'legendary'},
+  {id:'diamond_life',   icon:'💎', title:'Diamond Life',     desc:'80%+ every single week of the entire year',        tier:'legendary'},
+  {id:'shoopa_royalty',  icon:'👑', title:'SHOOPA Royalty',   desc:'Both Saamir AND Jana hit 100% the same week — 4 times', tier:'legendary'},
+  {id:'speed_run',      icon:'⚡', title:'Speed Run',        desc:'Hit 80%+ in your first 4 weeks',                   tier:'legendary'},
+  {id:'thousand_nights',icon:'🌙', title:'1000 Nights',      desc:'Log habits every single day for 100 days straight', tier:'legendary'},
+  {id:'devoted_soul',   icon:'🤲', title:'Devoted Soul',     desc:'Never miss all 5 prayers in any logged week',      tier:'legendary'},
+  // ── QUIRKY ───────────────────────────────────────────────────────
+  {id:'plot_twist',     icon:'🎭', title:'Plot Twist',       desc:'0% week immediately followed by a fire week',      tier:'quirky'},
+  {id:'lucky_7',        icon:'🎰', title:'Lucky 7',          desc:'7/7 on every daily habit in a week',               tier:'quirky'},
+  {id:'comeback_kid',   icon:'🌀', title:'Comeback Kid',     desc:'Pull off 3 separate comebacks across the year',    tier:'quirky'},
+  {id:'metamorphosis',  icon:'🦋', title:'Metamorphosis',    desc:'3 full months (12 weeks) all above 80%',           tier:'quirky'},
+  {id:'show_stopper',   icon:'🎪', title:'Show Stopper',     desc:'Set your all-time personal best weekly score',     tier:'quirky'},
+  {id:'ice_cold',       icon:'🧊', title:'Ice Cold',         desc:'Keep any daily habit going for 14 days straight',  tier:'quirky'},
+  {id:'tsunami',        icon:'🌊', title:'Tsunami',          desc:'Go from 0% directly to a fire week',               tier:'quirky'},
+  {id:'bullseye',       icon:'🎯', title:'Bullseye',         desc:'Hit exactly 100% three times in any 4-week period',tier:'quirky'},
+  {id:'silent_assassin',icon:'🤫', title:'Silent Assassin',  desc:'Win 3 head-to-heads in a row without missing a beat',tier:'quirky'},
+  {id:'solo_flight',    icon:'🦅', title:'Solo Flight',      desc:'Win 7 weekly trophies in a row',                   tier:'quirky'},
+  {id:'full_circle',    icon:'🔄', title:'Full Circle',      desc:'Every daily habit done every day for 4 weeks straight', tier:'quirky'},
 ];
 
 const SECTIONS = ['Spirit','Body','Mind'];
@@ -852,21 +1030,22 @@ function toggle(user, week, habitId, day) {
   save();
   renderLog();
   updateLogBadge();
+  detectNewBadges(user);
 }
 
 function weekPct(user, week) {
   let total = 0, done = 0;
   const luna = user === 'jana' && isLunaWeek(week);
+  const lunaIdx = luna ? getLunaDayIndices(week) : new Set();
   activeHabits(week, user).forEach(h => {
     if (h.isPrayers) {
       total += 7;
       if (luna) {
-        // Auto-count prayer days only for the luna days, rest user logs normally
-        const lunaDays = getLunaDays(week);
-        // Non-luna days: count actual full prayer days
-        let actualDone = weekFullPrayerDays(user, week);
-        // Luna days: auto-count those days as done (add days not already counted)
-        done += Math.min(7, actualDone + lunaDays);
+        let pDone = 0;
+        for (let d = 0; d < 7; d++) {
+          if (lunaIdx.has(d) || dayPrayersDone(user, week, d) === 5) pDone++;
+        }
+        done += Math.min(7, pDone);
         return;
       }
       done += weekFullPrayerDays(user, week);
@@ -874,6 +1053,7 @@ function weekPct(user, week) {
     }
     total += h.freq;
     if (luna && h.lunaExempt) { done += h.freq; return; }
+    if (isInjuryWeek(user, week) && h.injuryExempt) { done += h.freq; return; }
     let hDone = 0;
     for(let d=0;d<7;d++) { if(isChecked(user,week,h.id,d)) hDone++; }
     done += Math.min(hDone, h.freq);
@@ -884,18 +1064,22 @@ function weekPct(user, week) {
 function weekDone(user, week) {
   let done = 0;
   const luna = user === 'jana' && isLunaWeek(week);
+  const lunaIdx = luna ? getLunaDayIndices(week) : new Set();
   activeHabits(week, user).forEach(h => {
     if (h.isPrayers) {
       if (luna) {
-        const lunaDays = getLunaDays(week);
-        let actualDone = weekFullPrayerDays(user, week);
-        done += Math.min(7, actualDone + lunaDays);
+        let pDone = 0;
+        for (let d = 0; d < 7; d++) {
+          if (lunaIdx.has(d) || dayPrayersDone(user, week, d) === 5) pDone++;
+        }
+        done += Math.min(7, pDone);
         return;
       }
       done += weekFullPrayerDays(user, week);
       return;
     }
     if (luna && h.lunaExempt) { done += h.freq; return; }
+    if (isInjuryWeek(user, week) && h.injuryExempt) { done += h.freq; return; }
     let hDone = 0;
     for(let d=0;d<7;d++) { if(isChecked(user,week,h.id,d)) hDone++; }
     done += Math.min(hDone, h.freq);
@@ -950,22 +1134,43 @@ function updateExamBtn() {
   btn.textContent = on ? '📚 Exam week ON' : '📚 Exam week';
 }
 
+function getLunaInfo(week) {
+  if (!state.data.lunaWeeks) return null;
+  const raw = state.data.lunaWeeks[week];
+  if (!raw) return null;
+  if (typeof raw === 'number') return { startDay: 0, duration: raw }; // backward compat
+  return raw;
+}
+
+function getLunaDayIndices(week) {
+  const indices = new Set();
+  const info = getLunaInfo(week);
+  if (info) {
+    for (let i = info.startDay; i < Math.min(7, info.startDay + info.duration); i++) indices.add(i);
+  }
+  // Overflow from previous week
+  const prev = getLunaInfo(week - 1);
+  if (prev) {
+    const overflow = (prev.startDay + prev.duration) - 7;
+    for (let i = 0; i < Math.min(overflow, 7); i++) indices.add(i);
+  }
+  return indices;
+}
+
 function isLunaWeek(week) {
-  if (!state.data.lunaWeeks) return false;
-  return !!state.data.lunaWeeks[week];
+  return getLunaDayIndices(week).size > 0;
 }
 
 function getLunaDays(week) {
-  if (!state.data.lunaWeeks) return 0;
-  return state.data.lunaWeeks[week] || 0;
+  return getLunaDayIndices(week).size;
 }
 
-function setLunaDays(week, days) {
+function setLunaConfig(week, startDay, duration) {
   if (!state.data.lunaWeeks) state.data.lunaWeeks = {};
-  if (!days || days <= 0) {
+  if (!duration || duration <= 0) {
     delete state.data.lunaWeeks[week];
   } else {
-    state.data.lunaWeeks[week] = days;
+    state.data.lunaWeeks[week] = { startDay, duration };
   }
   save();
   renderLog();
@@ -975,25 +1180,25 @@ function setLunaDays(week, days) {
 }
 
 function toggleLunaWeek() {
-  // Just open the modal — actual save happens via setLunaDays
   const w = state.currentWeek;
-  const current = getLunaDays(w);
-  if (current > 0) {
-    // Already on — turn off
-    setLunaDays(w, 0);
+  if (isLunaWeek(w) && getLunaInfo(w)) {
+    setLunaConfig(w, 0, 0); // turn off
   } else {
-    // Show day picker
     showLunaPicker(w);
   }
 }
 
 function showLunaPicker(week) {
+  const info = getLunaInfo(week);
+  window._lunaPickerStartDay = info ? info.startDay : 0;
   document.getElementById('luna-picker-overlay').style.display = 'flex';
-  document.getElementById('luna-days-input').value = getLunaDays(week) || 5;
+  document.getElementById('luna-days-input').value = info ? info.duration : 5;
   document.getElementById('luna-picker-week').textContent = 'Week ' + week;
+  updateLunaStartDayUI();
+  updateLunaOverflowHint();
   document.getElementById('luna-picker-save').onclick = function() {
-    const days = parseInt(document.getElementById('luna-days-input').value) || 5;
-    setLunaDays(week, Math.min(7, Math.max(1, days)));
+    const dur = Math.min(10, Math.max(1, parseInt(document.getElementById('luna-days-input').value) || 5));
+    setLunaConfig(week, window._lunaPickerStartDay, dur);
     document.getElementById('luna-picker-overlay').style.display = 'none';
   };
   document.getElementById('luna-picker-cancel').onclick = function() {
@@ -1001,14 +1206,108 @@ function showLunaPicker(week) {
   };
 }
 
+function selectLunaStartDay(d) {
+  window._lunaPickerStartDay = d;
+  updateLunaStartDayUI();
+  updateLunaOverflowHint();
+}
+
+function updateLunaStartDayUI() {
+  for (let i = 0; i < 7; i++) {
+    const btn = document.getElementById('ldp' + i);
+    if (btn) btn.className = 'luna-day-pick' + (i === window._lunaPickerStartDay ? ' selected' : '');
+  }
+}
+
+function updateLunaOverflowHint() {
+  const hint = document.getElementById('luna-overflow-hint');
+  if (!hint) return;
+  const dur = parseInt(document.getElementById('luna-days-input').value) || 5;
+  const start = window._lunaPickerStartDay || 0;
+  const overflow = (start + dur) - 7;
+  hint.textContent = overflow > 0 ? `(+${overflow} day${overflow>1?'s':''} → next week)` : '';
+}
+
 function updateLunaBtn() {
   const btn = document.getElementById('luna-btn');
   if (!btn) return;
   btn.style.display = state.logUser === 'jana' ? '' : 'none';
+  const info = getLunaInfo(state.currentWeek);
   const days = getLunaDays(state.currentWeek);
   const on = days > 0;
   btn.className = 'luna-btn' + (on ? ' luna-on' : '');
-  btn.textContent = on ? '🌸 Luna (' + days + ' days)' : '🌸 Luna week';
+  if (on && info) {
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    btn.textContent = `🌸 Luna (${dayNames[info.startDay]}, ${info.duration}d)`;
+  } else {
+    btn.textContent = '🌸 Luna week';
+  }
+}
+
+function isInjuryWeek(user, week) {
+  if (!state.data.injuryWeeks) return false;
+  const u = state.data.injuryWeeks[user];
+  return !!(u && u[week]);
+}
+
+function getInjuryDays(user, week) {
+  if (!state.data.injuryWeeks) return 0;
+  const u = state.data.injuryWeeks[user];
+  return (u && u[week]) || 0;
+}
+
+function setInjuryDays(user, week, days) {
+  if (!state.data.injuryWeeks) state.data.injuryWeeks = {};
+  if (!state.data.injuryWeeks[user]) state.data.injuryWeeks[user] = {};
+  if (!days || days <= 0) {
+    delete state.data.injuryWeeks[user][week];
+  } else {
+    state.data.injuryWeeks[user][week] = days;
+  }
+  save();
+  renderLog();
+  updateLogBadge();
+  updateInjuryBtn();
+}
+
+function toggleInjuryWeek() {
+  const u = state.logUser, w = state.currentWeek;
+  if (isInjuryWeek(u, w)) {
+    setInjuryDays(u, w, 0);
+  } else {
+    showRecoveryPicker(u, w);
+  }
+}
+
+function showRecoveryPicker(user, week) {
+  document.getElementById('recovery-picker-overlay').style.display = 'flex';
+  const days = getInjuryDays(user, week);
+  document.getElementById('recovery-days-input').value = days || 5;
+  const name = user === 'saamir' ? 'Saamir' : 'Jana';
+  document.getElementById('recovery-picker-label').textContent = name + ' — Week ' + week;
+  document.getElementById('recovery-picker-save').onclick = function() {
+    const d = Math.min(7, Math.max(1, parseInt(document.getElementById('recovery-days-input').value) || 5));
+    setInjuryDays(user, week, d);
+    document.getElementById('recovery-picker-overlay').style.display = 'none';
+  };
+  document.getElementById('recovery-picker-cancel').onclick = function() {
+    document.getElementById('recovery-picker-overlay').style.display = 'none';
+  };
+}
+
+function adjustRecoveryDays(delta) {
+  const inp = document.getElementById('recovery-days-input');
+  inp.value = Math.min(7, Math.max(1, parseInt(inp.value) + delta));
+}
+
+function updateInjuryBtn() {
+  const btn = document.getElementById('injury-btn');
+  if (!btn) return;
+  const u = state.logUser, w = state.currentWeek;
+  const days = getInjuryDays(u, w);
+  const on = days > 0;
+  btn.className = 'injury-btn' + (on ? ' injury-on' : '');
+  btn.textContent = on ? `🩹 Recovery (${days}d) 💕` : '🩹 Recovery week';
 }
 
 function getElapsedWeeks() {
@@ -1232,8 +1531,234 @@ function checkBadge(user, id) {
     for(let w=1;w<=TOTAL_WEEKS;w++) if(weekPct(user,w)>=80) good++;
     return good>=52;
   }
+  // ── NEW WEEKLY ───────────────────────────────────────────────────
+  if(id==='night_owl') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) { let ok=true; for(let d=0;d<7;d++) if(!isPrayerChecked(user,w,'isha',d)){ok=false;break;} if(ok) return true; }
+  }
+  if(id==='sun_chaser') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) { let ok=true; for(let d=0;d<7;d++) if(!isPrayerChecked(user,w,'fajr',d)){ok=false;break;} if(ok) return true; }
+  }
+  if(id==='offline_mode') {
+    const dh=HABITS.filter(h=>!h.isPrayers&&h.freq===7);
+    for(let w=1;w<=TOTAL_WEEKS;w++) { let ok=true; for(let d=0;d<7;d++) { if(!dh.every(h=>isChecked(user,w,h.id,d))){ok=false;break;} } if(ok&&dh.length) return true; }
+  }
+  if(id==='tied_up') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) { const sp=weekPct('saamir',w),jp=weekPct('jana',w); if(sp>0&&jp>0&&sp===jp) return true; }
+  }
+  if(id==='full_kit') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) { let a=0,m=0,e=0; for(let d=0;d<7;d++){if(isChecked(user,w,'abs',d))a++;if(isChecked(user,w,'mobility',d))m++;if(isChecked(user,w,'explosive',d))e++;} if(a>=2&&m>=2&&e>=1) return true; }
+  }
+  if(id==='chapter_one') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) { let r=0; for(let d=0;d<7;d++) if(isChecked(user,w,'reading',d)) r++; if(r>=7) return true; }
+  }
+  if(id==='zen_week') {
+    for(let w=1;w<=TOTAL_WEEKS;w++) { let ok=true; for(let d=0;d<7;d++) if(!isChecked(user,w,'reading',d)||!isChecked(user,w,'journal',d)){ok=false;break;} if(ok) return true; }
+  }
+  // ── NEW MONTHLY ──────────────────────────────────────────────────
+  if(id==='fajr_month') {
+    let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(isPrayerChecked(user,w,'fajr',d)){s++;if(s>=30)return true;}else s=0;}
+  }
+  if(id==='maghrib_magic') {
+    let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(isPrayerChecked(user,w,'maghrib',d)){s++;if(s>=30)return true;}else s=0;}
+  }
+  if(id==='body_of_work') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let a=0,m=0,e=0;for(let d=0;d<7;d++){if(isChecked(user,w,'abs',d))a++;if(isChecked(user,w,'mobility',d))m++;if(isChecked(user,w,'explosive',d))e++;}if(a>=2&&m>=2&&e>=1){s++;if(s>=4)return true;}else s=0;}
+  }
+  if(id==='no_miss_month') {
+    for(let w=1;w<=TOTAL_WEEKS-3;w++){let ok=true;outer:for(let ww=w;ww<w+4;ww++)for(let d=0;d<7;d++){const any=HABITS.some(h=>h.isPrayers?dayPrayersDone(user,ww,d)>0:isChecked(user,ww,h.id,d));if(!any){ok=false;break outer;}}if(ok)return true;}
+  }
+  if(id==='month_sweep') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){const sp=weekPct('saamir',w),jp=weekPct('jana',w);if(sp===0&&jp===0){s=0;continue;}const won=(user==='saamir'&&sp>jp)||(user==='jana'&&jp>sp);if(won){s++;if(s>=4)return true;}else s=0;}
+  }
+  if(id==='mind_palace') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let ok=true;for(let d=0;d<7;d++)if(!isChecked(user,w,'reading',d)||!isChecked(user,w,'journal',d)){ok=false;break;}if(ok){s++;if(s>=4)return true;}else s=0;}
+  }
+  if(id==='pure_month') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let ok=true;outer:for(let d=0;d<7;d++)for(const p of PRAYERS)if(isPrayerChecked(user,w,p.id,d)&&!isWudhuChecked(user,w,p.id,d)){ok=false;break outer;}if(ok){s++;if(s>=4)return true;}else s=0;}
+  }
+  if(id==='library_card') {
+    let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(isChecked(user,w,'reading',d)){s++;if(s>=30)return true;}else s=0;}
+  }
+  // ── NEW LEGENDARY ────────────────────────────────────────────────
+  if(id==='the_trinity') {
+    let c=0; for(let w=1;w<=TOTAL_WEEKS;w++) if(isFireWeekCategory(user,w,'Spirit')&&isFireWeekCategory(user,w,'Body')&&isFireWeekCategory(user,w,'Mind')){c++;if(c>=4)return true;}
+  }
+  if(id==='world_record') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){if(isFireWeek(user,w)){s++;if(s>=4)return true;}else s=0;}
+  }
+  if(id==='the_five_prayer') {
+    let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(dayPrayersDone(user,w,d)===5){s++;if(s>=90)return true;}else s=0;}
+  }
+  if(id==='hafidh_progress') {
+    for(let w=1;w<=TOTAL_WEEKS;w++){let c=0;for(let d=0;d<7;d++)if(isChecked(user,w,'quran',d))c++;if(c<7)return false;}
+    return weekPct(user,1)>0;
+  }
+  if(id==='black_belt') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let a=0,m=0,e=0;for(let d=0;d<7;d++){if(isChecked(user,w,'abs',d))a++;if(isChecked(user,w,'mobility',d))m++;if(isChecked(user,w,'explosive',d))e++;}if(a>=2&&m>=2&&e>=1){s++;if(s>=12)return true;}else s=0;}
+  }
+  if(id==='the_scholar') {
+    let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(isChecked(user,w,'reading',d)){s++;if(s>=90)return true;}else s=0;}
+  }
+  if(id==='unstoppable') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){if(isFireWeek(user,w)){s++;if(s>=10)return true;}else s=0;}
+  }
+  if(id==='diamond_life') {
+    let logged=0,ok=true; for(let w=1;w<=TOTAL_WEEKS;w++){const p=weekPct(user,w);if(p===0)continue;logged++;if(p<80){ok=false;break;}} return ok&&logged>=4;
+  }
+  if(id==='shoopa_royalty') {
+    let c=0; for(let w=1;w<=TOTAL_WEEKS;w++) if(isFireWeek('saamir',w)&&isFireWeek('jana',w)){c++;if(c>=4)return true;}
+  }
+  if(id==='speed_run') {
+    let ok=true; for(let w=1;w<=4;w++) if(weekPct(user,w)<80){ok=false;break;} return ok&&weekPct(user,4)>0;
+  }
+  if(id==='thousand_nights') {
+    let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;const any=HABITS.some(h=>h.isPrayers?dayPrayersDone(user,w,d)>0:isChecked(user,w,h.id,d));if(any){s++;if(s>=100)return true;}else s=0;}
+  }
+  if(id==='devoted_soul') {
+    let logged=0,ok=true; for(let w=1;w<=TOTAL_WEEKS;w++){const p=weekPct(user,w);if(p===0)continue;logged++;if(weekFullPrayerDays(user,w)<7){ok=false;break;}} return ok&&logged>=4;
+  }
+  // ── QUIRKY ───────────────────────────────────────────────────────
+  if(id==='plot_twist') {
+    for(let w=2;w<=TOTAL_WEEKS;w++) if(weekPct(user,w-1)===0&&isFireWeek(user,w)) return true;
+  }
+  if(id==='lucky_7') {
+    const dh=HABITS.filter(h=>!h.isPrayers&&h.freq===7);
+    for(let w=1;w<=TOTAL_WEEKS;w++){const ok=dh.every(h=>{let c=0;for(let d=0;d<7;d++)if(isChecked(user,w,h.id,d))c++;return c===7;});if(ok&&weekFullPrayerDays(user,w)===7&&dh.length)return true;}
+  }
+  if(id==='comeback_kid') {
+    let c=0; for(let w=2;w<=TOTAL_WEEKS;w++) if(weekPct(user,w-1)===0&&weekPct(user,w)>0){c++;if(c>=3)return true;}
+  }
+  if(id==='metamorphosis') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){if(weekPct(user,w)>=80){s++;if(s>=12)return true;}else s=0;}
+  }
+  if(id==='show_stopper') {
+    let max=0,maxW=0; for(let w=1;w<=TOTAL_WEEKS;w++){const p=weekPct(user,w);if(p>max){max=p;maxW=w;}} return max>0&&maxW===state.currentWeek&&max===weekPct(user,state.currentWeek);
+  }
+  if(id==='ice_cold') {
+    const dh=HABITS.filter(h=>!h.isPrayers&&h.freq===7);
+    for(const h of dh){let s=0;for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(isChecked(user,w,h.id,d)){s++;if(s>=14)return true;}else s=0;}}
+  }
+  if(id==='tsunami') {
+    for(let w=2;w<=TOTAL_WEEKS;w++) if(weekPct(user,w-1)===0&&weekPct(user,w)===100) return true;
+  }
+  if(id==='bullseye') {
+    for(let w=1;w<=TOTAL_WEEKS-3;w++){let c=0;for(let ww=w;ww<w+4;ww++)if(weekPct(user,ww)===100)c++;if(c>=3)return true;}
+  }
+  if(id==='silent_assassin') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){const sp=weekPct('saamir',w),jp=weekPct('jana',w);if(sp===0&&jp===0){s=0;continue;}const won=(user==='saamir'&&sp>jp)||(user==='jana'&&jp>sp);if(won){s++;if(s>=3)return true;}else s=0;}
+  }
+  if(id==='solo_flight') {
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){const sp=weekPct('saamir',w),jp=weekPct('jana',w);if(sp===0&&jp===0){s=0;continue;}const won=(user==='saamir'&&sp>jp)||(user==='jana'&&jp>sp);if(won){s++;if(s>=7)return true;}else s=0;}
+  }
+  if(id==='full_circle') {
+    const dh=HABITS.filter(h=>!h.isPrayers&&h.freq===7);
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let ok=true;for(let d=0;d<7;d++)if(!dh.every(h=>isChecked(user,w,h.id,d))){ok=false;break;}if(ok){s++;if(s>=4)return true;}else s=0;}
+  }
   return false;
 }
+
+// ── CELEBRATION SYSTEM ────────────────────────────────────────────
+function isFireWeekCategory(user, week, section) {
+  return HABITS.filter(h=>h.section===section).every(h => {
+    if (h.isPrayers) return weekFullPrayerDays(user,week)>=7;
+    let done=0; for(let d=0;d<7;d++) if(isChecked(user,week,h.id,d)) done++;
+    return done>=h.freq;
+  });
+}
+
+function initBadgeState() {
+  window._earnedBadges = {};
+  ['saamir','jana'].forEach(u => {
+    BADGE_DEFS.forEach(b => {
+      if (b.janaOnly && u!=='jana') return;
+      window._earnedBadges[u+'_'+b.id] = checkBadge(u, b.id);
+    });
+  });
+}
+
+function detectNewBadges(user) {
+  if (!window._earnedBadges) return;
+  const queue = [];
+  BADGE_DEFS.forEach(b => {
+    if (b.janaOnly && user!=='jana') return;
+    const key = user+'_'+b.id;
+    if (!window._earnedBadges[key] && checkBadge(user, b.id)) {
+      window._earnedBadges[key] = true;
+      queue.push(b);
+    }
+  });
+  if (queue.length) showBadgeCelebration(user, queue[0]);
+}
+
+function showBadgeCelebration(user, badge) {
+  const uColor = user==='saamir' ? 'var(--cyan)' : 'var(--purple2)';
+  const uName  = user==='saamir' ? 'SAAMIR' : 'JANA';
+  if (badge.tier === 'weekly') {
+    const toast = document.getElementById('badge-toast');
+    document.getElementById('toast-icon').textContent  = badge.icon;
+    document.getElementById('toast-title').textContent = badge.title;
+    document.getElementById('toast-desc').textContent  = badge.desc;
+    const ul = document.getElementById('toast-user');
+    ul.textContent = uName + ' — NEW BADGE';
+    ul.style.color = uColor;
+    toast.style.borderColor = uColor;
+    toast.style.display = 'flex';
+    requestAnimationFrame(() => { toast.style.transform = 'translateX(0)'; });
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => {
+      toast.style.transform = 'translateX(320px)';
+      setTimeout(() => { toast.style.display = 'none'; }, 400);
+    }, 4500);
+  } else {
+    const tierLabel = {monthly:'MONTHLY BADGE',legendary:'LEGENDARY BADGE',quirky:'QUIRKY BADGE'}[badge.tier] || 'BADGE UNLOCKED';
+    const tierColor = {monthly:'var(--purple2)',legendary:'var(--gold)',quirky:'var(--green)'}[badge.tier] || uColor;
+    const cel = document.getElementById('cel-overlay');
+    document.getElementById('cel-tier-label').textContent = tierLabel;
+    document.getElementById('cel-tier-label').style.color = tierColor;
+    document.getElementById('cel-icon').textContent  = badge.icon;
+    const ul = document.getElementById('cel-user');
+    ul.textContent = uName + ' EARNED THIS';
+    ul.style.color = uColor;
+    document.getElementById('cel-title').textContent = badge.title;
+    document.getElementById('cel-title').style.color = tierColor;
+    document.getElementById('cel-desc').textContent  = badge.desc;
+    document.getElementById('cel-box').style.borderColor = tierColor;
+    const btn = document.getElementById('cel-close');
+    btn.textContent = badge.tier==='legendary' ? '⭐ LEGENDARY UNLOCKED ⭐' : 'CLAIM IT 🎉';
+    btn.style.cssText = `font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;padding:12px 32px;cursor:pointer;width:100%;background:${tierColor}22;color:${tierColor};border:1px solid ${tierColor};`;
+    cel.style.display = 'flex';
+    spawnConfetti(tierColor, uColor);
+  }
+}
+
+function spawnConfetti(c1, c2) {
+  const wrap = document.getElementById('cel-confetti-container');
+  wrap.innerHTML = '';
+  const colors = [c1, c2, '#ffffff', '#FFD700', '#FF85B3', '#00C896'];
+  for (let i=0; i<70; i++) {
+    const el = document.createElement('div');
+    const sz = 4 + Math.random()*9;
+    el.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:-20px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation:confettiFall ${1.5+Math.random()*2}s ease-in ${Math.random()*1.2}s forwards;`;
+    wrap.appendChild(el);
+  }
+}
+
+function closeCelebration() {
+  document.getElementById('cel-overlay').style.display = 'none';
+  document.getElementById('cel-confetti-container').innerHTML = '';
+}
+
+function testCelebration() {
+  const tiers = ['weekly','monthly','legendary','quirky'];
+  window._testTierIdx = ((window._testTierIdx||0)+1) % tiers.length;
+  const tier = tiers[window._testTierIdx];
+  const badge = BADGE_DEFS.find(b=>b.tier===tier) || BADGE_DEFS[0];
+  showBadgeCelebration(state.logUser, badge);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key==='T') { e.preventDefault(); testCelebration(); }
+});
 
 // ── NAVIGATION ────────────────────────────────────────────────────
 function showPage(id) {
@@ -1252,6 +1777,157 @@ function showPage(id) {
   if(id==='backup') initBackup();
 }
 
+// ── LEVEL / XP ────────────────────────────────────────────────────
+function getUserXP(user) {
+  const badges = BADGE_DEFS.filter(b=>(!b.janaOnly||user==='jana') && checkBadge(user,b.id)).length;
+  const fire = getFireWeekCount(user);
+  const streak = getBestStreak(user);
+  return badges * 10 + fire * 5 + streak * 2;
+}
+function getUserLevel(user) { return Math.min(50, Math.max(1, Math.floor(getUserXP(user)/20)+1)); }
+function getLevelTitle(level) {
+  if(level<=5)  return 'ROOKIE';
+  if(level<=10) return 'GRINDER';
+  if(level<=15) return 'CONSISTENT';
+  if(level<=20) return 'FOCUSED';
+  if(level<=25) return 'DRIVEN';
+  if(level<=30) return 'ELITE';
+  if(level<=35) return 'CHAMPION';
+  if(level<=40) return 'LEGEND';
+  if(level<=45) return 'MYTHIC';
+  return 'GOAT';
+}
+
+// ── BOSS BATTLES ──────────────────────────────────────────────────
+const BOSSES = [
+  { icon:'👹', name:'THE PROCRASTINATOR', desc:'Complete all habits before Thursday midnight.',
+    check:(u,w)=>{ for(let d=0;d<4;d++) { let ok=true; HABITS.forEach(h=>{ if(h.freq===7&&!isChecked(u,w,h.id,d)) ok=false; }); if(!ok) return false; } return true; }},
+  { icon:'🧊', name:'THE ICE KING', desc:'5 days in a row of 100% daily habits.',
+    check:(u,w)=>{ let streak=0,max=0; for(let d=0;d<7;d++){const done=HABITS.filter(h=>h.freq===7&&isChecked(u,w,h.id,d)).length;const total=HABITS.filter(h=>h.freq===7).length;if(done===total){streak++;max=Math.max(max,streak);}else streak=0;} return max>=5; }},
+  { icon:'⚡', name:'THE SPARTAN', desc:'Hit all 3 Body sessions this week.',
+    check:(u,w)=>{ const bodyH=HABITS.filter(h=>h.section==='Body'&&h.id!=='sleep'); return bodyH.every(h=>{ let c=0; for(let d=0;d<7;d++) if(isChecked(u,w,h.id,d)) c++; return c>=h.freq; }); }},
+  { icon:'📿', name:'THE MONK', desc:'Complete all Spirit habits every single day.',
+    check:(u,w)=>{ const sH=HABITS.filter(h=>h.section==='Spirit'&&!h.isPrayers); return sH.every(h=>{ let c=0; for(let d=0;d<7;d++) if(isChecked(u,w,h.id,d)) c++; return c>=h.freq; }); }},
+  { icon:'🧠', name:'THE SCHOLAR', desc:'Journal and read every single day this week.',
+    check:(u,w)=>{ return ['journal','reading'].every(id=>{ let c=0; for(let d=0;d<7;d++) if(isChecked(u,w,id,d)) c++; return c>=7; }); }},
+  { icon:'🔥', name:'THE INFERNO', desc:'Reach a fire week — 100% completion.',
+    check:(u,w)=>weekPct(u,w)===100},
+  { icon:'🌙', name:'NIGHT OWL', desc:'Log sleep 6 out of 7 nights.',
+    check:(u,w)=>{ let c=0; for(let d=0;d<7;d++) if(isChecked(u,w,'sleep',d)) c++; return c>=6; }},
+  { icon:'💫', name:'THE STREAK KEEPER', desc:'Keep a 7-day habit streak across all daily habits.',
+    check:(u,w)=>{ return HABITS.filter(h=>h.freq===7).every(h=>{ let c=0; for(let d=0;d<7;d++) if(isChecked(u,w,h.id,d)) c++; return c>=7; }); }},
+];
+function getWeekBoss(week) { return BOSSES[(week-1) % BOSSES.length]; }
+
+function renderBossSection() {
+  const el = document.getElementById('dash-boss-section');
+  if(!el) return;
+  const w = state.currentWeek;
+  const boss = getWeekBoss(w);
+  const sDefeated = boss.check('saamir', w);
+  const jDefeated = boss.check('jana', w);
+  let html = `<div style="background:var(--navy2);border:1px solid rgba(224,85,85,0.2);padding:20px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+      <div style="font-size:28px;">${boss.icon}</div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;color:var(--dimmer);margin-bottom:3px;">WEEKLY BOSS</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:0.05em;color:var(--red);">${boss.name}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:14px;">${boss.desc}</div>
+    <div style="display:flex;gap:10px;">`;
+  [['saamir','var(--cyan)','S'],['jana','var(--purple2)','J']].forEach(([u,col,lbl])=>{
+    const def = u==='saamir' ? sDefeated : jDefeated;
+    html += `<div style="flex:1;padding:10px;border:1px solid ${def?col:'rgba(255,255,255,0.08)'};background:${def?col+'18':'transparent'};text-align:center;">
+      <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:${def?col:'var(--dimmer)'};">${u.toUpperCase()}</div>
+      <div style="font-size:18px;margin-top:4px;">${def?'⚔️ DEFEATED':'🛡️ BATTLE ON'}</div>
+    </div>`;
+  });
+  html += `</div></div>`;
+  el.innerHTML = html;
+}
+
+// ── MONTHLY CHALLENGE ─────────────────────────────────────────────
+const MONTHLY_CHALLENGES = [
+  { icon:'🌅', name:'FAJR FORTRESS', desc:'Pray Fajr every single day of the month.' },
+  { icon:'📚', name:'SCHOLAR MONTH', desc:'Read 5+ pages every day for 30 days.' },
+  { icon:'💪', name:'IRON BODY', desc:'Hit every Body habit to its full frequency all month.' },
+  { icon:'✍️', name:'JOURNAL MASTER', desc:'Journal every single day without a single miss.' },
+  { icon:'☪️', name:'SPIRIT SWEEP', desc:'Complete all Spirit habits every day this month.' },
+  { icon:'⚡', name:'SPARK MONTH', desc:'Hit at least 80% every week this month.' },
+  { icon:'🧘', name:'MOBILITY KING', desc:'Complete all mobility and abs sessions this month.' },
+  { icon:'💤', name:'SLEEP GUARDIAN', desc:'Log 6.5h+ sleep at least 25 days this month.' },
+  { icon:'🔥', name:'FIRE ALL MONTH', desc:'Get a fire week every single week this month.' },
+  { icon:'🌙', name:'SPIRIT & BODY', desc:'Zero misses on Spirit AND zero misses on Body this month.' },
+  { icon:'🏆', name:'THE COMPLETE', desc:'Hit 100% at least once this month.' },
+  { icon:'📿', name:'ATHKAR STREAK', desc:'Complete both morning and evening athkar every day.' },
+];
+function getMonthlyChallenge() {
+  const m = new Date().getMonth();
+  return MONTHLY_CHALLENGES[m % MONTHLY_CHALLENGES.length];
+}
+
+function renderMonthlySection() {
+  const el = document.getElementById('dash-monthly-section');
+  if(!el) return;
+  const ch = getMonthlyChallenge();
+  const monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'][new Date().getMonth()];
+  el.innerHTML = `<div style="background:var(--navy2);border:1px solid rgba(245,200,66,0.2);padding:20px;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="font-size:28px;">${ch.icon}</div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.2em;color:var(--dimmer);margin-bottom:3px;">${monthName.toUpperCase()} CHALLENGE</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:0.05em;color:var(--gold);">${ch.name}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--dim);">${ch.desc}</div>
+  </div>`;
+}
+
+// ── WEEK NOTES ────────────────────────────────────────────────────
+function getWeekNote(week) { return (state.data.weekNotes && state.data.weekNotes[week]) || ''; }
+function setWeekNote(week, text) {
+  if(!state.data.weekNotes) state.data.weekNotes = {};
+  state.data.weekNotes[week] = text;
+  save();
+}
+function saveWeekNote() {
+  const el = document.getElementById('week-note-input');
+  if(el) setWeekNote(state.currentWeek, el.value);
+}
+function autoResizeNote(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+// ── PERSONAL BESTS ────────────────────────────────────────────────
+function getPersonalBests(user) {
+  const elapsed = getElapsedWeeks();
+  let bestWeekPct = 0, bestWeekNum = 0;
+  let bestFireStreak = 0, curFireStreak = 0;
+  let bestConsec = 0, curConsec = 0;
+  for(let w=1; w<=elapsed; w++) {
+    const p = weekPct(user, w);
+    if(p > bestWeekPct) { bestWeekPct = p; bestWeekNum = w; }
+    if(p === 100) { curFireStreak++; bestFireStreak = Math.max(bestFireStreak, curFireStreak); } else curFireStreak = 0;
+    if(p > 0) { curConsec++; bestConsec = Math.max(bestConsec, curConsec); } else curConsec = 0;
+  }
+  return { bestWeekPct, bestWeekNum, bestFireStreak, bestConsec };
+}
+
+// ── CHANGELOG ─────────────────────────────────────────────────────
+function checkChangelog() {
+  if(localStorage.getItem('shoopa_changelog_seen') !== '3.0') {
+    const el = document.getElementById('changelog-overlay');
+    if(el) el.style.display = 'flex';
+  }
+}
+function closeChangelog() {
+  localStorage.setItem('shoopa_changelog_seen','3.0');
+  const el = document.getElementById('changelog-overlay');
+  if(el) el.style.display = 'none';
+}
+
 // ── DASHBOARD ─────────────────────────────────────────────────────
 function renderDashboard() {
   renderDailyMessage();
@@ -1264,13 +1940,27 @@ function renderDashboard() {
     document.getElementById(`dash-${prefix}-done`).textContent = getTotalDone(u);
     document.getElementById(`dash-${prefix}-trophies`).textContent = getTrophies(u);
   });
+  // Level / XP bars
+  ['saamir','jana'].forEach(u => {
+    const prefix = u==='saamir' ? 's' : 'j';
+    const lvl = getUserLevel(u);
+    const xp = getUserXP(u);
+    const xpForNext = (lvl - 1) * 20;
+    const xpThisLevel = xp - xpForNext;
+    const xpNeeded = 20;
+    const xpPct = Math.min(100, Math.round(xpThisLevel / xpNeeded * 100));
+    const lvlEl = document.getElementById(`dash-${prefix}-level`);
+    const barEl = document.getElementById(`dash-${prefix}-xpbar`);
+    if(lvlEl) lvlEl.textContent = `LVL ${lvl} · ${getLevelTitle(lvl)}`;
+    if(barEl) barEl.style.width = xpPct + '%';
+  });
+
   document.getElementById('dash-thisweek').textContent = w;
   const sP = weekPct('saamir',w), jP = weekPct('jana',w);
   let summHtml = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">`;
   ['saamir','jana'].forEach(u => {
     const p = u==='saamir' ? sP : jP;
     const col = u==='saamir' ? 'var(--cyan)' : 'var(--purple2)';
-    const bgCol = u==='saamir' ? 'rgba(0,200,255,0.08)' : 'rgba(160,126,213,0.08)';
     summHtml += `<div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.12);padding:16px;">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.15em;color:${col};margin-bottom:8px;">${u.toUpperCase()}</div>
       <div style="height:6px;background:var(--navy3);margin-bottom:8px;">
@@ -1282,6 +1972,9 @@ function renderDashboard() {
   });
   summHtml += `</div>`;
   document.getElementById('dash-week-summary').innerHTML = summHtml;
+
+  renderBossSection();
+  renderMonthlySection();
 }
 
 // ── LOG ───────────────────────────────────────────────────────────
@@ -1298,7 +1991,8 @@ function setLogUser(u) {
 function adjustLunaDays(delta) {
   const inp = document.getElementById('luna-days-input');
   let v = parseInt(inp.value) + delta;
-  inp.value = Math.min(7, Math.max(1, v));
+  inp.value = Math.min(10, Math.max(1, v));
+  updateLunaOverflowHint();
 }
 
 function togglePrayerExpand(key) {
@@ -1362,14 +2056,28 @@ function renderLog() {
     </div>`;
   }
   const isLuna = u === 'jana' && isLunaWeek(w);
+  const lunaIndices = isLuna ? getLunaDayIndices(w) : new Set();
   if (isLuna) {
-    const ld = getLunaDays(w);
+    const info = getLunaInfo(w);
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const overflow = info ? Math.max(0, (info.startDay + info.duration) - 7) : 0;
+    const startName = info ? dayNames[info.startDay] : 'Sun';
+    const dur = info ? info.duration : getLunaDays(w);
     html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(160,126,213,0.06);border:1px solid rgba(160,126,213,0.25);margin-bottom:16px;">
       <span style="font-size:14px;">🌸</span>
-      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--purple2);">LUNA WEEK (${ld} days) — Prayers auto-counted for first ${ld} days. Rest, recover, keep showing up.</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--purple2);">LUNA WEEK — Started ${startName}, ${dur} days${overflow>0?` (+${overflow} spill next week)`:''} · Prayers auto-counted for those days.</span>
     </div>`;
   }
-  const lunaDays = isLuna ? getLunaDays(w) : 0;
+  const isInjury = isInjuryWeek(u, w);
+  const injuryDays = isInjury ? getInjuryDays(u, w) : 0;
+  if (isInjury) {
+    const uName = u === 'saamir' ? 'Saamir' : 'Jana';
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,133,179,0.06);border:1px solid rgba(255,133,179,0.25);margin-bottom:16px;">
+      <span style="font-size:14px;">🩹</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:#FF85B3;">RECOVERY WEEK (${injuryDays} days) — ${uName}'s workouts auto-counted 💕 Focus on healing.</span>
+    </div>`;
+  }
+  const lunaDays = isLuna ? getLunaDays(w) : 0; // kept for compat, use lunaIndices.has(d) for per-day checks
   let lastSec = '';
   HABITS.forEach(h => {
     const sLabel = h.section==='Spirit'?'Spiritual':h.section==='Body'?'Physical':'Mental';
@@ -1400,7 +2108,7 @@ function renderLog() {
         <span class="prayer-expand-icon ${isOpen?'open':''}">▶</span>
       </div>`;
       for(let d=0;d<7;d++) {
-        const isAutoDay = isLuna && d < lunaDays;
+        const isAutoDay = lunaIndices.has(d);
         html += `<div class="check-cell"><div style="display:flex;flex-wrap:wrap;gap:2px;justify-content:center;width:30px;">`;
         PRAYERS.forEach(p => {
           const checked = isAutoDay || isPrayerChecked(u,w,p.id,d);
@@ -1416,7 +2124,7 @@ function renderLog() {
       // Day tabs
       html += `<div class="prayer-day-tabs">`;
       days.forEach((dayName, d) => {
-        const isAutoDay = isLuna && d < lunaDays;
+        const isAutoDay = lunaIndices.has(d);
         const donePrayers = isAutoDay ? 5 : PRAYERS.filter(p=>isPrayerChecked(u,w,p.id,d)).length;
         const isActive = d === activeDay;
         const tabCls = isActive ? (u==='saamir'?'active-s':'active-j') : '';
@@ -1433,7 +2141,7 @@ function renderLog() {
 
       // Active day panel
       const ad = activeDay;
-      const isAutoDay = isLuna && ad < lunaDays;
+      const isAutoDay = lunaIndices.has(ad);
       html += `<div class="prayer-day-panel">`;
 
       if (isAutoDay) {
@@ -1488,13 +2196,18 @@ function renderLog() {
       ? `<span class="habit-freq" style="color:${capped>=h.freq?'#00C896':'var(--dimmer)'}">${capped}/${h.freq}</span>`
       : `<span class="habit-freq">${h.freq}×</span>`;
     html += `<div class="habit-name"><span class="habit-icon">${h.icon}</span><span>${h.name}</span>${freqLabel}</div>`;
+    const autoInjury = isInjury && h.injuryExempt;
     for(let d=0;d<7;d++) {
       const done = isChecked(u,w,h.id,d);
       const doneClass = done ? (u==='saamir'?'done-s':'done-j') : '';
       const daysDoneThisHabit = Array.from({length:7},(_,x)=>isChecked(u,w,h.id,x)).filter(Boolean).length;
       const blocked = !done && daysDoneThisHabit >= h.freq;
       html += `<div class="check-cell">`;
-      html += `<button class="chk ${blocked?'na':doneClass}" onclick="${blocked?'':`toggle('${u}',${w},'${h.id}',${d})`}">${done?'✓':''}</button>`;
+      if (autoInjury) {
+        html += `<button class="chk auto-j" title="Auto-counted — recovery week 🩹">💕</button>`;
+      } else {
+        html += `<button class="chk ${blocked?'na':doneClass}" onclick="${blocked?'':`toggle('${u}',${w},'${h.id}',${d})`}">${done?'✓':''}</button>`;
+      }
       html += `</div>`;
     }
     html += `</div>`;
@@ -1503,6 +2216,10 @@ function renderLog() {
   updateLogBadge();
   updateExamBtn();
   updateLunaBtn();
+  updateInjuryBtn();
+  // Week note
+  const noteEl = document.getElementById('week-note-input');
+  if(noteEl) { noteEl.value = getWeekNote(w); autoResizeNote(noteEl); }
 }
 
 // ── STATS ─────────────────────────────────────────────────────────
@@ -1661,7 +2378,29 @@ function renderStats() {
   }
   if(!hasWudhu) wudhuHtml += `<div style="font-size:12px;color:var(--dimmer);padding:8px 0;">No wudhu logged yet.</div>`;
 
-  document.getElementById('stats-bars').innerHTML = catHtml + habitBarsHtml + barsHtml + wudhuHtml;
+  // ── Personal Bests ──
+  const pb = getPersonalBests(u);
+  let pbHtml = `<div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin:28px 0 12px;display:flex;align-items:center;gap:10px;">
+    <span>🏆 PERSONAL BESTS</span>
+    <div style="flex:1;height:1px;background:rgba(26,110,245,0.08);"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">`;
+  const pbItems = [
+    { icon:'🔥', label:'Fire streak', val: pb.bestFireStreak + ' wks' },
+    { icon:'📈', label:'Best week', val: pb.bestWeekNum ? `W${pb.bestWeekNum} (${pb.bestWeekPct}%)` : '—' },
+    { icon:'📅', label:'Consec. weeks', val: pb.bestConsec + ' wks' },
+    { icon:'⭐', label:'Badges earned', val: BADGE_DEFS.filter(b=>(!b.janaOnly||u==='jana')&&checkBadge(u,b.id)).length },
+  ];
+  pbItems.forEach(item => {
+    pbHtml += `<div style="background:var(--navy2);border:1px solid rgba(26,110,245,0.1);padding:16px;border-top:2px solid ${col};">
+      <div style="font-size:18px;margin-bottom:6px;">${item.icon}</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:${col};line-height:1;">${item.val}</div>
+      <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--dimmer);margin-top:4px;letter-spacing:0.1em;">${item.label.toUpperCase()}</div>
+    </div>`;
+  });
+  pbHtml += `</div>`;
+
+  document.getElementById('stats-bars').innerHTML = catHtml + habitBarsHtml + barsHtml + wudhuHtml + pbHtml;
 }
 
 // ── YEAR HEATMAP ──────────────────────────────────────────────────
@@ -1675,13 +2414,36 @@ function setYearUser(u) {
 function renderYear() {
   const u = state.yearUser;
   const isJana = u==='jana';
+  const col = isJana ? 'var(--purple2)' : 'var(--cyan)';
+  if(!state.yearHabit) state.yearHabit = 'all';
+
+  // Habit selector
+  const selEl = document.getElementById('year-habit-selector');
+  if(selEl) {
+    const selBtns = [{ id:'all', icon:'📊', name:'Overall' }, ...HABITS.map(h=>({ id:h.id, icon:h.icon, name:h.name }))];
+    selEl.innerHTML = selBtns.map(h => {
+      const active = state.yearHabit === h.id;
+      const bc = active ? (isJana ? 'rgba(160,126,213,0.3)' : 'rgba(0,200,255,0.3)') : 'rgba(255,255,255,0.08)';
+      const tc = active ? col : 'var(--dimmer)';
+      return `<button onclick="setYearHabit('${h.id}')" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;padding:5px 10px;background:${active?col+'18':'transparent'};border:1px solid ${bc};color:${tc};cursor:pointer;">${h.icon} ${h.name.split(' ')[0].toUpperCase()}</button>`;
+    }).join('');
+  }
 
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('hm-months').innerHTML = months.map(m=>`<div class="hm-month">${m}</div>`).join('');
 
   let gridHtml = '';
   for(let w=1;w<=TOTAL_WEEKS;w++) {
-    const pct = weekPct(u,w);
+    let pct;
+    if(state.yearHabit === 'all') {
+      pct = weekPct(u,w);
+    } else {
+      const h = HABITS.find(h=>h.id===state.yearHabit);
+      if(!h) { pct = weekPct(u,w); } else {
+        let done=0; for(let d=0;d<7;d++) if(isChecked(u,w,h.id,d)) done++;
+        pct = Math.round(Math.min(done,h.freq)/h.freq*100);
+      }
+    }
     let cls = 'hm-cell ';
     if(pct===100) cls += isJana ? 'hm-high-j' : 'hm-fire';
     else if(pct>=80) cls += isJana ? 'hm-mid-j' : 'hm-high-s';
@@ -1723,6 +2485,11 @@ function renderYear() {
   document.getElementById('year-habit-breakdown').innerHTML = breakdownHtml;
 }
 
+function setYearHabit(id) {
+  state.yearHabit = id;
+  renderYear();
+}
+
 function showTooltip(e, week, pct) {
   const t = document.getElementById('tooltip');
   t.textContent = `Week ${week} · ${getWeekDates(week)} · ${pct}%`;
@@ -1761,6 +2528,24 @@ function renderVersus() {
   });
 
   const sP = weekPct('saamir',w), jP = weekPct('jana',w);
+
+  // Live gap bar
+  const gapEl = document.getElementById('vs-live-gap');
+  if(gapEl && (sP > 0 || jP > 0)) {
+    gapEl.style.display = 'block';
+    const total = sP + jP;
+    const sW = total === 0 ? 50 : Math.round(sP / total * 100);
+    const jW = 100 - sW;
+    document.getElementById('vs-gap-bar-s').style.width = sW + '%';
+    document.getElementById('vs-gap-bar-j').style.width = jW + '%';
+    document.getElementById('vs-gap-s-lbl').textContent = `SAAMIR ${sP}%`;
+    document.getElementById('vs-gap-j-lbl').textContent = `JANA ${jP}%`;
+    const diff = Math.abs(sP - jP);
+    const deltaEl = document.getElementById('vs-gap-delta');
+    if(diff === 0) deltaEl.textContent = 'DEAD EVEN — perfect tie';
+    else deltaEl.textContent = (sP > jP ? 'SAAMIR' : 'JANA') + ` leads by ${diff}pp`;
+  } else if(gapEl) { gapEl.style.display = 'none'; }
+
   const leaderEl = document.getElementById('vs-leader');
   if(sP>jP) leaderEl.textContent = 'SAAMIR LEADS';
   else if(jP>sP) leaderEl.textContent = 'JANA LEADS';
@@ -1806,6 +2591,7 @@ function renderBadges() {
     { id:'weekly',    label:'Weekly Trophies',   tagClass:'tier-weekly',    tagLabel:'WEEKLY'   },
     { id:'monthly',   label:'Monthly Trophies',  tagClass:'tier-monthly',   tagLabel:'MONTHLY'  },
     { id:'legendary', label:'Legendary Badges',  tagClass:'tier-legendary', tagLabel:'LEGENDARY'},
+    { id:'quirky',    label:'Quirky Badges',      tagClass:'tier-quirky',    tagLabel:'QUIRKY'   },
   ];
 
   let earnedCount = BADGE_DEFS.filter(b=>!b.janaOnly || u==='jana').filter(b=>checkBadge(u,b.id)).length;
@@ -2089,6 +2875,82 @@ var MSGS = [
   {e:"🌈",t:"The week is just 7 chances to show up.",s:"You've already used some. Use the rest well.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
   {e:"🫁",t:"Breathe. Reset. Log.",s:"That's the whole system.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
   {e:"💪",t:"Your muscles don't grow during the workout. They grow after.",s:"Same with your mind. Same with your faith.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  // ── FIRE / WARRIOR COMEBACK SERIES ──────────────────────────────
+  {e:"🥷",t:"Day 1 back. The hardest one. You're already doing it.",s:"Getting back up is the move. Everything else follows.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"⚡",t:"Day 2. Yesterday you chose to come back. Today you choose to stay.",s:"Two days in a row is a streak. Protect it.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🔥",t:"Day 3. The excuses are getting quieter.",s:"Your habits are getting louder. Good.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"💪",t:"Day 4. This is where most people quit again.",s:"You're not most people. Keep going.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🗡",t:"Day 5. Halfway through the hard part.",s:"The comeback is already working. You just can't see it yet.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🔩",t:"Day 6. Momentum is a machine. You're building it.",s:"Don't stop now. The machine needs fuel.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏹",t:"Day 7. One week back. That's not nothing. That's everything.",s:"Seven days of choosing yourself. Keep choosing.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌊",t:"Day 8. The wave is yours now. Ride it.",s:"You rebuilt the rhythm. Don't break it.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🦁",t:"Day 9. Warriors don't just fight. They endure.",s:"Endurance is what separates the good from the great.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🧱",t:"Day 10. You've laid 10 bricks. The wall is real now.",s:"Keep building. One brick at a time.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"⚔",t:"Day 11. The belt remembers every session you showed up for.",s:"Add today to the count.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌋",t:"Day 12. You're one day from two weeks back.",s:"This is the version of you that wins.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏆",t:"Day 13. You said you'd get back up. You did.",s:"Nobody can take this streak from you. Own it.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  // ── MORE FIRE ────────────────────────────────────────────────────
+  {e:"🐉",t:"Greatness isn't given. It's built in the dark when nobody's watching.",s:"Someone's watching. You are.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🔱",t:"Every champion has a comeback story.",s:"Yours is being written right now.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🌪",t:"You don't wait for the storm to pass. You learn to train in it.",s:"Log the habits. Storm or not.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏴",t:"Plant the flag. This is your territory.",s:"Defend it with your habits every single day.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"💥",t:"The version of you who quits is terrified of the version who doesn't.",s:"Be terrifying.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🎖",t:"Medals go to the people who showed up when they didn't have to.",s:"Show up today.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🦊",t:"Outwork everyone. Outthink everyone. Outpray everyone.",s:"That's the SHOOPA formula.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🏔",t:"The summit looks far. The next step is right here.",s:"Take it.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  {e:"🎯",t:"Laser focus. One habit at a time.",s:"Not the whole year. Just today.",tag:"FIRE",c:"#ff9a40",ac:"#ff7a00",g:"rgba(255,122,0,0.12)"},
+  // ── GRIND ────────────────────────────────────────────────────────
+  {e:"🛠",t:"Show up broken. Show up tired. Just show up.",s:"The mats fix everything.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"📊",t:"Track everything. What gets measured gets improved.",s:"That's why this tracker exists.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🔄",t:"Same time. Same habits. Different results every month.",s:"Compounding works. Trust it.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🌿",t:"Slow growth is still growth.",s:"Don't mistake steady for stagnant.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🧲",t:"Your habits are the magnetic field of your life.",s:"What you repeat, you attract.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🪨",t:"Be the rock. Not the wave.",s:"Consistent. Immovable. Reliable.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🔬",t:"The scientist runs the experiment even when they expect failure.",s:"Run your habits today regardless.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"⏰",t:"5 minutes of journaling beats 0 minutes every time.",s:"Don't let perfect be the enemy of done.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🗂",t:"Organize your day around your habits not your mood.",s:"Moods change. Habits compound.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🌙",t:"End the day with your log complete.",s:"Sleep better knowing you showed up.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  {e:"🧭",t:"When you don't know what to do, go back to the basics.",s:"Quran. Prayer. Move. Read. Sleep. Repeat.",tag:"GRIND",c:"#00C896",ac:"#00C896",g:"rgba(0,200,150,0.1)"},
+  // ── SPIRIT ───────────────────────────────────────────────────────
+  {e:"☀",t:"Dhuhr is the midday reset.",s:"Everything that went wrong this morning? Let it go. Pray.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌇",t:"Maghrib is the most beautiful prayer.",s:"The sky agrees. Pray it on time.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌃",t:"Isha closes the day with remembrance.",s:"End tonight in a state of gratitude.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🤍",t:"Wudhu before every prayer is a ritual of renewal.",s:"You are not the same person who woke up. Cleanse and reset.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌟",t:"The companions prayed in every condition.",s:"Battle. Travel. Sickness. Rain. No excuses.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"📜",t:"Every letter of the Quran you read carries reward.",s:"Even struggling through it counts. Read it.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🕊",t:"Peace isn't found. It's built through Dhikr.",s:"Say your athkar today.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌙",t:"SubhanAllah 33. Alhamdulillah 33. Allahu Akbar 34.",s:"100 pieces of armor. Say them tonight.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🤲",t:"Make dua for each other today.",s:"A couple that prays for each other stays together.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"⭐",t:"Istighfar clears the fog.",s:"Say it 100 times today. Then log your habits.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"🌅",t:"The morning belongs to those who take Fajr.",s:"They get a head start on the whole world.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  {e:"💎",t:"Sincerity makes a small deed enormous.",s:"Pray with full presence today.",tag:"SPIRIT",c:"#00C8FF",ac:"#00C8FF",g:"rgba(0,200,255,0.08)"},
+  // ── CHESS / MIND ─────────────────────────────────────────────────
+  {e:"🎯",t:"The best chess players study their losses more than their wins.",s:"Journal what went wrong today. That's where growth lives.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🔭",t:"Zoom out. Where will today's habits put you in 6 months?",s:"That's why you keep going.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🧩",t:"Every book is a puzzle piece of someone else's mind.",s:"Collect as many as you can.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🗝",t:"The journal is the key to your own locked room.",s:"Open it. Write in it. Understand yourself.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🌌",t:"The more you read the more you realize you don't know.",s:"That's not weakness. That's wisdom starting.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"♟",t:"In chess and in life the pawns move first.",s:"Do the small habits. They set up the big wins.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🏛",t:"Ancient civilizations built libraries before they built armies.",s:"Your 5 pages a day is the library.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🖋",t:"Writing clarifies thinking. Thinking clarifies action.",s:"Journal first. Then act.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🔍",t:"The sharpest minds never stop asking questions.",s:"Write one question in your journal today.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  {e:"🎲",t:"Luck favors the prepared mind.",s:"Prepare yours. Read. Journal. Think.",tag:"CHESS",c:"#F5C842",ac:"#F5C842",g:"rgba(245,200,66,0.08)"},
+  // ── LOVE ─────────────────────────────────────────────────────────
+  {e:"💍",t:"You're not just building habits. You're building a life together.",s:"Make it worth looking back on.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🫂",t:"On the days she's struggling she needs you to show up too.",s:"Your green checks are encouragement she can see.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌙",t:"Imagine praying Isha at the same time from different rooms.",s:"Same God. Same mission. Same love.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"💌",t:"The best love story is built on shared values.",s:"Yours has Quran, Jiu-Jitsu, Chess, and Reading. Iconic.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌺",t:"She chose discipline before she chose you.",s:"That's how you know she means it.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🫶",t:"Loving someone means wanting them to grow.",s:"This tracker is love in spreadsheet form.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌸",t:"She's going to open this app and check your score.",s:"Make it worth checking.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"💫",t:"The couple that sweats together stays together.",s:"And reads. And prays. And journals.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🎯",t:"You're each other's accountability partner and competition.",s:"That's actually the dream combination.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🏡",t:"SHOOPA will be your legacy.",s:"But first it's your morning routine.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌹",t:"Anyone can be romantic. You two are building something real.",s:"That's rarer and better.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🥋",t:"She taps people out on the mat and reads books after.",s:"Keep up. She's not waiting.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"👊",t:"Competition between you two makes you both better.",s:"Don't let her win today without a fight.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🌙",t:"Before you sleep check one thing: did you show up today?",s:"If yes, kiss her goodnight knowing you earned it.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
+  {e:"🔥",t:"Two fires don't cancel each other out. They become a bonfire.",s:"Be the bonfire.",tag:"LOVE",c:"#C4A8F0",ac:"#A07ED5",g:"rgba(160,126,213,0.12)"},
 ];
 
 function renderDailyMessage() {
@@ -2270,6 +3132,8 @@ const months = ['January','February','March','April','May','June','July','August
 const now = new Date();
 document.getElementById('nav-date').textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
 
+initBadgeState();
+checkChangelog();
 renderDashboard();
 renderLog();
 updateLogBadge();
