@@ -229,6 +229,10 @@ main{padding-top:70px;min-height:100vh;}
 .exam-badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;padding:3px 10px;border:1px solid rgba(245,200,66,0.4);background:rgba(245,200,66,0.08);color:var(--gold);}
 .habit-row.exam-exempt{opacity:0.3;pointer-events:none;}
 .habit-row.exam-exempt .habit-name::after{content:' — exam week';font-size:9px;color:var(--gold);margin-left:4px;}
+@keyframes confetti-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0.3;}}
+.confetti-piece{position:absolute;top:-20px;pointer-events:none;animation:confetti-fall ease-in forwards;}
+.recap-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--gold);background:linear-gradient(135deg,rgba(245,200,66,0.18),rgba(255,122,0,0.12));color:var(--gold);cursor:pointer;transition:all 0.2s;font-weight:700;}
+.recap-btn:hover{background:rgba(245,200,66,0.28);transform:scale(1.03);}
 .cal-btn:hover{background:rgba(0,200,255,0.12);}
 
 /* PRAYER SECTION */
@@ -497,6 +501,7 @@ main{padding-top:70px;min-height:100vh;}
   </div>
   <div id="dash-boss-section"></div>
   <div id="dash-monthly-section"></div>
+  <div id="dash-saturday-recap" style="display:none;margin-bottom:20px;text-align:center;"></div>
   <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin-bottom:12px;">THIS WEEK — WEEK <span id="dash-thisweek">1</span></div>
   <div id="dash-week-summary"></div>
 </div>
@@ -642,6 +647,19 @@ main{padding-top:70px;min-height:100vh;}
     <div style="margin-top:12px;text-align:center;">
       <button onclick="clearExamWeek()" style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);background:transparent;border:none;cursor:pointer;letter-spacing:0.1em;text-decoration:underline;">TURN OFF EXAM WEEK</button>
     </div>
+  </div>
+</div>
+
+<!-- WEEKLY RECAP MODAL -->
+<div id="recap-overlay" style="display:none;position:fixed;inset:0;background:rgba(5,12,26,0.92);z-index:400;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:var(--navy2);border:1px solid rgba(245,200,66,0.4);padding:32px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:40px;margin-bottom:4px;">🏁</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:var(--white);letter-spacing:1px;">END OF WEEK RECAP</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.2em;margin-top:4px;" id="recap-week-label">WEEK 1</div>
+    </div>
+    <div id="recap-body"></div>
+    <button onclick="closeRecap()" style="display:block;margin:20px auto 0;padding:12px 32px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--dim);cursor:pointer;">CLOSE</button>
   </div>
 </div>
 
@@ -830,6 +848,7 @@ function isWudhuChecked(user, week, prayerId, day) {
   return !!state.data[user][pKey(user,week,prayerId,day,'wudhu')];
 }
 function togglePrayer(user, week, prayerId, day, type) {
+  const beforePct = weekPct(user, week);
   const k = pKey(user,week,prayerId,day,type);
   state.data[user][k] = !state.data[user][k];
   if(!state.data[user][k]) delete state.data[user][k];
@@ -837,6 +856,7 @@ function togglePrayer(user, week, prayerId, day, type) {
   renderLog();
   updateLogBadge();
   detectNewBadges(user);
+  if (type === 'prayer' && typeof checkPerfectWeekConfetti === 'function') checkPerfectWeekConfetti(user, beforePct);
 }
 // How many prayers done in a day (0-5)
 function dayPrayersDone(user, week, day) {
@@ -1053,6 +1073,7 @@ function isChecked(user, week, habitId, day) { if(!state.data[user]) return fals
 
 function toggle(user, week, habitId, day) {
   if(!state.data[user]) state.data[user]={};
+  const beforePct = weekPct(user, week);
   const key = k(user,week,habitId,day);
   state.data[user][key] = !state.data[user][key];
   if(!state.data[user][key]) delete state.data[user][key];
@@ -1060,6 +1081,7 @@ function toggle(user, week, habitId, day) {
   renderLog();
   updateLogBadge();
   detectNewBadges(user);
+  if (typeof checkPerfectWeekConfetti === 'function') checkPerfectWeekConfetti(user, beforePct);
 }
 
 function weekPct(user, week) {
@@ -1997,6 +2019,154 @@ function closeChangelog() {
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────────
+// ── CONFETTI ──────────────────────────────────────────────────────
+function fireConfetti(intensity) {
+  intensity = intensity || 60;
+  const colors = ['#00C8FF','#A07ED5','#ff7a00','#F5C842','#00C896','#ff85b3','#ffffff'];
+  const shapes = ['■','●','▲','★','♦'];
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
+  document.body.appendChild(container);
+  for (let i = 0; i < intensity; i++) {
+    const p = document.createElement('div');
+    const size = 8 + Math.random() * 10;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const shape = shapes[Math.floor(Math.random() * shapes.length)];
+    const left = Math.random() * 100;
+    const delay = Math.random() * 0.4;
+    const duration = 2.4 + Math.random() * 1.8;
+    p.className = 'confetti-piece';
+    p.textContent = shape;
+    p.style.cssText += `left:${left}vw;color:${color};font-size:${size}px;animation-duration:${duration}s;animation-delay:${delay}s;`;
+    container.appendChild(p);
+  }
+  setTimeout(() => container.remove(), 5000);
+}
+
+// ── PERFECT-WEEK DETECTION ────────────────────────────────────────
+function checkPerfectWeekConfetti(user, beforePct) {
+  const after = weekPct(user, state.currentWeek);
+  if (beforePct < 100 && after === 100) {
+    fireConfetti(100);
+  }
+}
+
+// ── WEEKLY RECAP MODAL ────────────────────────────────────────────
+function openRecap() {
+  const w = state.currentWeek;
+  document.getElementById('recap-week-label').textContent = 'WEEK ' + w;
+  const sP = weekPct('saamir', w), jP = weekPct('jana', w);
+  const sD = weekDone('saamir', w), jD = weekDone('jana', w);
+  const sFire = sP === 100, jFire = jP === 100;
+  let winner, winnerEmoji, winnerMsg;
+  if (sP > jP) { winner = 'SAAMIR'; winnerEmoji = '🏆'; winnerMsg = `Leading by ${sP - jP}%`; }
+  else if (jP > sP) { winner = 'JANA'; winnerEmoji = '🏆'; winnerMsg = `Leading by ${jP - sP}%`; }
+  else { winner = 'TIE'; winnerEmoji = '🤝'; winnerMsg = `Both at ${sP}% — neck and neck`; }
+  const winnerColor = winner === 'SAAMIR' ? 'var(--cyan)' : winner === 'JANA' ? 'var(--purple2)' : 'var(--gold)';
+  let html = '';
+  // Winner banner
+  html += `<div style="background:linear-gradient(135deg,${winnerColor}1f,${winnerColor}08);border:1px solid ${winnerColor}66;padding:20px;margin-bottom:24px;text-align:center;">
+    <div style="font-size:36px;line-height:1;margin-bottom:6px;">${winnerEmoji}</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:${winnerColor};letter-spacing:1.5px;">${winner === 'TIE' ? 'IT\'S A TIE' : winner + ' LEADS'}</div>
+    <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);letter-spacing:0.1em;margin-top:4px;">${winnerMsg}</div>
+  </div>`;
+  // Side by side
+  html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">`;
+  [['saamir', sP, sD, sFire, 'var(--cyan)'], ['jana', jP, jD, jFire, 'var(--purple2)']].forEach(([u, p, d, fire, col]) => {
+    html += `<div style="background:rgba(5,12,26,0.5);border:1px solid ${col}40;border-top:3px solid ${fire ? '#ff7a00' : col};padding:18px;">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:${col};letter-spacing:0.2em;margin-bottom:8px;">${u.toUpperCase()}</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:54px;font-weight:900;font-style:italic;color:${fire ? '#ff7a00' : col};line-height:1;">${p}%</div>
+      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.15em;margin-top:6px;">${d} HABITS DONE</div>
+      ${fire ? `<div style="margin-top:10px;padding:4px 8px;background:rgba(255,122,0,0.15);border:1px solid rgba(255,122,0,0.4);font-family:'Space Mono',monospace;font-size:8px;color:#ff7a00;letter-spacing:0.15em;text-align:center;">🔥 FIRE WEEK</div>` : ''}
+    </div>`;
+  });
+  html += `</div>`;
+  // Gap visualization
+  const total = sP + jP;
+  const sShare = total === 0 ? 50 : (sP / total * 100);
+  html += `<div style="margin-bottom:16px;">
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.2em;margin-bottom:8px;">LIVE GAP</div>
+    <div style="display:flex;height:14px;border:1px solid rgba(255,255,255,0.1);overflow:hidden;">
+      <div style="background:var(--cyan);width:${sShare}%;transition:width 0.5s;"></div>
+      <div style="background:var(--purple2);width:${100 - sShare}%;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:'Space Mono',monospace;font-size:9px;">
+      <span style="color:var(--cyan);">SAAMIR ${sP}%</span>
+      <span style="color:var(--purple2);">JANA ${jP}%</span>
+    </div>
+  </div>`;
+  // Category breakdown for the week (for both)
+  html += `<div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dimmer);letter-spacing:0.2em;margin:18px 0 10px;">BREAKDOWN BY CATEGORY</div>`;
+  ['Spirit','Body','Mind'].forEach(sec => {
+    const icon = sec === 'Spirit' ? '☪' : sec === 'Body' ? '⚡' : '📖';
+    const sCat = weekCategoryPct('saamir', w, sec);
+    const jCat = weekCategoryPct('jana', w, sec);
+    html += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="font-size:14px;width:20px;">${icon}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--dim);width:60px;letter-spacing:0.1em;">${sec.toUpperCase()}</span>
+      <div style="flex:1;display:flex;gap:8px;align-items:center;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--cyan);width:40px;text-align:right;">${sCat}%</span>
+        <div style="flex:1;height:5px;background:var(--navy3);position:relative;">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${sCat}%;background:var(--cyan);"></div>
+        </div>
+        <div style="flex:1;height:5px;background:var(--navy3);position:relative;">
+          <div style="position:absolute;right:0;top:0;height:100%;width:${jCat}%;background:var(--purple2);"></div>
+        </div>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--purple2);width:40px;">${jCat}%</span>
+      </div>
+    </div>`;
+  });
+  document.getElementById('recap-body').innerHTML = html;
+  document.getElementById('recap-overlay').style.display = 'flex';
+}
+
+function closeRecap() {
+  document.getElementById('recap-overlay').style.display = 'none';
+}
+
+// Helper: week category pct
+function weekCategoryPct(user, week, section) {
+  let total = 0, done = 0;
+  activeHabits(week, user).filter(h => h.section === section).forEach(h => {
+    if (h.isPrayers) {
+      total += 7;
+      done += weekFullPrayerDays(user, week);
+      return;
+    }
+    const examDays = getExamDays(week);
+    const eff = (h.examExempt && h.freq === 7 && examDays > 0) ? Math.max(0, 7 - examDays) : h.freq;
+    total += eff;
+    let hd = 0;
+    for (let d = 0; d < 7; d++) if (isChecked(user, week, h.id, d)) hd++;
+    done += Math.min(hd, eff);
+  });
+  return total === 0 ? 0 : Math.round(done / total * 100);
+}
+
+// ── DAY-OF-WEEK PATTERNS ──────────────────────────────────────────
+function getDayOfWeekStats(user) {
+  const elapsed = getElapsedWeeks();
+  const dayStats = [0,1,2,3,4,5,6].map(() => ({ done: 0, total: 0 }));
+  const now = Date.now();
+  for (let w = 1; w <= elapsed; w++) {
+    const active = activeHabits(w, user);
+    for (let d = 0; d < 7; d++) {
+      const dayTime = START_DATE.getTime() + ((w - 1) * 7 + d) * 86400000;
+      if (dayTime > now) continue;
+      active.forEach(h => {
+        if (h.isPrayers) {
+          dayStats[d].total += 5;
+          PRAYERS.forEach(p => { if (isPrayerChecked(user, w, p.id, d)) dayStats[d].done++; });
+        } else if (h.freq === 7) {
+          dayStats[d].total++;
+          if (isChecked(user, w, h.id, d)) dayStats[d].done++;
+        }
+      });
+    }
+  }
+  return dayStats.map(s => s.total === 0 ? null : Math.round(s.done / s.total * 100));
+}
+
 function renderDashboard() {
   renderDailyMessage();
   const w = state.currentWeek;
@@ -2043,6 +2213,18 @@ function renderDashboard() {
 
   renderBossSection();
   renderMonthlySection();
+
+  // Saturday recap button — only on Saturday
+  const recapEl = document.getElementById('dash-saturday-recap');
+  if (recapEl) {
+    if (new Date().getDay() === 6) { // 6 = Saturday
+      recapEl.style.display = 'block';
+      recapEl.innerHTML = `<button class="recap-btn" onclick="openRecap()">🏁 End-of-Week Recap</button>`;
+    } else {
+      recapEl.style.display = 'none';
+      recapEl.innerHTML = '';
+    }
+  }
 }
 
 // ── LOG ───────────────────────────────────────────────────────────
@@ -2468,7 +2650,44 @@ function renderStats() {
   });
   pbHtml += `</div>`;
 
-  document.getElementById('stats-bars').innerHTML = catHtml + habitBarsHtml + barsHtml + wudhuHtml + pbHtml;
+  // ── Day-of-week patterns ──
+  const dowStats = getDayOfWeekStats(u);
+  const dayNames = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  let dowHtml = `<div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--dimmer);margin:28px 0 12px;display:flex;align-items:center;gap:10px;">
+    <span>📅 DAY-OF-WEEK PATTERNS</span>
+    <div style="flex:1;height:1px;background:rgba(26,110,245,0.08);"></div>
+  </div>`;
+  const validDows = dowStats.filter(s => s !== null);
+  const hasDow = validDows.length > 0;
+  if (!hasDow) {
+    dowHtml += `<div style="font-size:13px;color:var(--dimmer);padding:12px 0;">Log a few days to see patterns!</div>`;
+  } else {
+    const best = Math.max(...validDows);
+    const worst = Math.min(...validDows);
+    const bestDay = dayNames[dowStats.indexOf(best)];
+    const worstDay = dayNames[dowStats.indexOf(worst)];
+    dowHtml += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:14px;">`;
+    dowStats.forEach((pct, i) => {
+      const isBest = pct === best && pct !== null;
+      const isWorst = pct === worst && pct !== null && best !== worst;
+      const bg = pct === null ? 'rgba(255,255,255,0.04)' : isBest ? '#ff7a00' : col;
+      const opacity = pct === null ? 0.4 : Math.max(0.25, pct / 100);
+      dowHtml += `<div style="background:var(--navy2);border:1px solid ${isBest ? 'rgba(255,122,0,0.5)' : isWorst ? 'rgba(255,80,80,0.3)' : 'rgba(26,110,245,0.1)'};padding:12px 4px;text-align:center;">
+        <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--dimmer);letter-spacing:0.1em;margin-bottom:6px;">${dayNames[i]}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:${isBest ? '#ff7a00' : col};">${pct === null ? '—' : pct + '%'}</div>
+        <div style="margin-top:6px;height:3px;background:var(--navy3);">
+          <div style="height:100%;width:${pct || 0}%;background:${bg};opacity:${opacity};"></div>
+        </div>
+      </div>`;
+    });
+    dowHtml += `</div>`;
+    dowHtml += `<div style="display:flex;gap:12px;font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;letter-spacing:0.05em;">
+      <span>🔥 Strongest: <strong style="color:#ff7a00;">${bestDay} (${best}%)</strong></span>
+      ${best !== worst ? `<span>📉 Weakest: <strong style="color:var(--dimmer);">${worstDay} (${worst}%)</strong></span>` : ''}
+    </div>`;
+  }
+
+  document.getElementById('stats-bars').innerHTML = catHtml + habitBarsHtml + barsHtml + dowHtml + wudhuHtml + pbHtml;
 }
 
 // ── YEAR HEATMAP ──────────────────────────────────────────────────
