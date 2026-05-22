@@ -1764,7 +1764,7 @@ function checkBadge(user, id) {
     let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let ok=true;for(let d=0;d<7;d++)if(!isChecked(user,w,'reading',d)||!isChecked(user,w,'journal',d)){ok=false;break;}if(ok){s++;if(s>=4)return true;}else s=0;}
   }
   if(id==='pure_month') {
-    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let ok=true;outer:for(let d=0;d<7;d++)for(const p of PRAYERS)if(isPrayerChecked(user,w,p.id,d)&&!isWudhuChecked(user,w,p.id,d)){ok=false;break outer;}if(ok){s++;if(s>=4)return true;}else s=0;}
+    let s=0; for(let w=1;w<=TOTAL_WEEKS;w++){let ok=true;outer:for(let d=0;d<7;d++)for(const p of PRAYERS)if(!isPrayerChecked(user,w,p.id,d)||!isWudhuChecked(user,w,p.id,d)){ok=false;break outer;}if(ok){s++;if(s>=4)return true;}else s=0;}
   }
   if(id==='library_card') {
     let s=0; for(let i=0;i<TOTAL_WEEKS*7;i++){const w=Math.floor(i/7)+1,d=i%7;if(isChecked(user,w,'reading',d)){s++;if(s>=30)return true;}else s=0;}
