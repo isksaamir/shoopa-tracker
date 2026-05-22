@@ -233,6 +233,16 @@ main{padding-top:70px;min-height:100vh;}
 .confetti-piece{position:absolute;top:-20px;pointer-events:none;animation:confetti-fall ease-in forwards;}
 .recap-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:9px 16px;border:1px solid var(--gold);background:linear-gradient(135deg,rgba(245,200,66,0.18),rgba(255,122,0,0.12));color:var(--gold);cursor:pointer;transition:all 0.2s;font-weight:700;}
 .recap-btn:hover{background:rgba(245,200,66,0.28);transform:scale(1.03);}
+.prayer-quick-actions{display:flex;gap:8px;margin:12px 0 4px;}
+.pq-btn{flex:1;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.08em;padding:10px 8px;border:1px solid rgba(0,200,255,0.3);background:rgba(0,200,255,0.06);color:var(--cyan);cursor:pointer;transition:all 0.15s;text-transform:uppercase;}
+.pq-btn:hover{background:rgba(0,200,255,0.16);}
+.pq-btn.pq-wudhu{border-color:rgba(0,200,255,0.5);background:linear-gradient(135deg,rgba(0,200,255,0.14),rgba(0,200,150,0.1));font-weight:700;}
+.pq-btn.pq-wudhu:hover{background:rgba(0,200,255,0.24);}
+.save-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;padding:7px 14px;border:1px solid;cursor:pointer;transition:all 0.2s;font-weight:700;white-space:nowrap;}
+.save-btn.clean{border-color:rgba(255,255,255,0.1);background:transparent;color:var(--dimmer);cursor:default;}
+.save-btn.dirty{border-color:var(--gold);background:rgba(245,200,66,0.15);color:var(--gold);animation:save-pulse 1.6s ease-in-out infinite;}
+.save-btn.dirty:hover{background:rgba(245,200,66,0.3);}
+@keyframes save-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,200,66,0.45);}50%{box-shadow:0 0 0 7px rgba(245,200,66,0);}}
 .cal-btn:hover{background:rgba(0,200,255,0.12);}
 
 /* PRAYER SECTION */
@@ -381,22 +391,40 @@ main{padding-top:70px;min-height:100vh;}
   const dataRef = ref(db, 'shoopa/data');
   onValue(dataRef, (snapshot) => {
     const raw = snapshot.val();
-    const val = raw || { saamir: {}, jana: {} }; // null = DB wiped, reset everything
-    if (!raw) {
-      // Firebase is empty — clear local cache and reset state
-      try { localStorage.removeItem('shoopa_v2'); } catch(e) {}
-      if (window.state) { window.state.data = val; }
-    }
-    const incoming = JSON.stringify(val);
-    // Skip if this is our own write echoing back
-    if (incoming === window._lastWritten) return;
-    // Wait for app to be ready then update
     function applyUpdate() {
       if (!window.state) { setTimeout(applyUpdate, 100); return; }
-      if(!val.saamir)val.saamir={}; if(!val.jana)val.jana={};
-      window.state.data = val;
-      // Also update localStorage
-      try { localStorage.setItem('shoopa_v2', JSON.stringify(val)); } catch(e) {}
+      const st = window.state;
+
+      // DB fully wiped — reset everything
+      if (!raw) {
+        try { localStorage.removeItem('shoopa_v2'); localStorage.removeItem('shoopa_synced'); } catch(e) {}
+        st.data = { saamir:{}, jana:{} };
+        st.lastSynced = { saamir:{}, jana:{} };
+      } else {
+        const val = raw;
+        const local = st.data;
+        const oldSynced = st.lastSynced || {};
+        // Per-key merge: take remote ONLY for keys with no unsaved local edits
+        const allKeys = new Set([...Object.keys(val), ...Object.keys(local)]);
+        allKeys.forEach(key => {
+          const localDirty = JSON.stringify(local[key]) !== JSON.stringify(oldSynced[key]);
+          if (!localDirty) {
+            if (val[key] === undefined) delete local[key];
+            else local[key] = val[key];
+          }
+          // localDirty → keep the unsaved local edit untouched
+        });
+        if(!local.saamir)local.saamir={}; if(!local.jana)local.jana={};
+        // lastSynced = the authoritative server snapshot
+        st.lastSynced = JSON.parse(JSON.stringify(val));
+        if(!st.lastSynced.saamir)st.lastSynced.saamir={};
+        if(!st.lastSynced.jana)st.lastSynced.jana={};
+        try {
+          localStorage.setItem('shoopa_v2', JSON.stringify(local));
+          localStorage.setItem('shoopa_synced', JSON.stringify(st.lastSynced));
+        } catch(e) {}
+      }
+
       // Re-render whatever page is active
       const activePage = document.querySelector('.page.active')?.id?.replace('page-','');
       try {
@@ -407,18 +435,15 @@ main{padding-top:70px;min-height:100vh;}
         if (activePage === 'badges')    renderBadges();
         if (activePage === 'dashboard') renderDashboard();
       } catch(e) { console.log('render error:', e); }
+      if (typeof updateSaveBtn === 'function') updateSaveBtn();
       showSyncBadge('synced');
     }
     applyUpdate();
   });
 
-  // Save to Firebase
-  window._saveToFirebase = function(data) {
-    if (!window._fbDb) return;
-    window._lastWritten = JSON.stringify(data);
-    set(ref(db, 'shoopa/data'), data)
-      .then(() => showSyncBadge('saved'))
-      .catch(() => showSyncBadge('error'));
+  // Write a single top-level key to Firebase (used by manual Save)
+  window._fbWriteKey = function(key, value) {
+    return set(ref(db, 'shoopa/data/' + key), value === undefined ? null : value);
   };
 
   window._fbReady = true;
@@ -442,6 +467,7 @@ main{padding-top:70px;min-height:100vh;}
     <button class="nav-tab" onclick="showPage('backup')">Backup</button>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
+    <button id="save-btn" class="save-btn clean" onclick="pushToCloud()" disabled>✓ ALL SAVED</button>
     <div class="sync-badge" id="sync-badge" style="display:none;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:4px 10px;border-radius:2px;"></div>
     <div class="nav-date" id="nav-date"></div>
   </div>
@@ -858,6 +884,32 @@ function togglePrayer(user, week, prayerId, day, type) {
   detectNewBadges(user);
   if (type === 'prayer' && typeof checkPerfectWeekConfetti === 'function') checkPerfectWeekConfetti(user, beforePct);
 }
+// Log/clear ALL 5 prayers for a day at once (optionally with wudhu)
+function prayAllForDay(user, week, day, withWudhu) {
+  if(!state.data[user]) state.data[user]={};
+  const beforePct = weekPct(user, week);
+  const allPrayed = PRAYERS.every(p => isPrayerChecked(user,week,p.id,day));
+  const allWudhu  = PRAYERS.every(p => isWudhuChecked(user,week,p.id,day));
+  // Toggle: if target state already fully met, clear it; otherwise set it
+  const setOn = withWudhu ? !(allPrayed && allWudhu) : !allPrayed;
+  PRAYERS.forEach(p => {
+    const prayerKey = pKey(user,week,p.id,day,'prayer');
+    const wudhuKey  = pKey(user,week,p.id,day,'wudhu');
+    if (setOn) {
+      state.data[user][prayerKey] = true;
+      if (withWudhu) state.data[user][wudhuKey] = true;
+    } else {
+      delete state.data[user][prayerKey];
+      if (withWudhu) delete state.data[user][wudhuKey];
+    }
+  });
+  save();
+  renderLog();
+  updateLogBadge();
+  detectNewBadges(user);
+  if (typeof checkPerfectWeekConfetti === 'function') checkPerfectWeekConfetti(user, beforePct);
+}
+
 // How many prayers done in a day (0-5)
 function dayPrayersDone(user, week, day) {
   return PRAYERS.filter(p => isPrayerChecked(user,week,p.id,day)).length;
@@ -1031,21 +1083,69 @@ try {
   const s = localStorage.getItem('shoopa_v2');
   if(s) { const p = JSON.parse(s); if(!p.saamir)p.saamir={}; if(!p.jana)p.jana={}; state.data = p; }
 } catch(e) {}
-// Firebase will override with cloud data once it loads via onValue listener above
+// lastSynced = last known server snapshot. Used to detect unsaved local changes.
+try {
+  const syn = localStorage.getItem('shoopa_synced');
+  state.lastSynced = syn ? JSON.parse(syn) : JSON.parse(JSON.stringify(state.data));
+} catch(e) { state.lastSynced = JSON.parse(JSON.stringify(state.data)); }
+window.state = state;
+// Firebase merges in cloud data once it loads via the onValue listener above
 
+// save() = LOCAL ONLY. Changes go to the cloud only when you press SAVE.
 function save() {
-  // Always save to localStorage as fallback
   try { localStorage.setItem('shoopa_v2', JSON.stringify(state.data)); } catch(e) {}
-  // Save to Firebase if connected
-  showSyncBadge('saving');
-  if (window._saveToFirebase) {
-    window._saveToFirebase(state.data);
+  updateSaveBtn();
+}
+
+// Which top-level data keys differ from the last server snapshot
+function dirtyKeys() {
+  const synced = state.lastSynced || {};
+  const all = new Set([...Object.keys(state.data), ...Object.keys(synced)]);
+  const dirty = [];
+  all.forEach(key => {
+    if (JSON.stringify(state.data[key]) !== JSON.stringify(synced[key])) dirty.push(key);
+  });
+  return dirty;
+}
+function hasUnsaved() { return dirtyKeys().length > 0; }
+
+function updateSaveBtn() {
+  const btn = document.getElementById('save-btn');
+  if (!btn) return;
+  const n = dirtyKeys().length;
+  if (n > 0) {
+    btn.className = 'save-btn dirty';
+    btn.textContent = '● SAVE CHANGES';
+    btn.disabled = false;
   } else {
-    // Firebase not ready yet — retry once after 2s
-    setTimeout(() => {
-      if (window._saveToFirebase) window._saveToFirebase(state.data);
-    }, 2000);
+    btn.className = 'save-btn clean';
+    btn.textContent = '✓ ALL SAVED';
+    btn.disabled = true;
   }
+}
+
+// Push unsaved changes to Firebase (manual — triggered by the SAVE button)
+function pushToCloud() {
+  const dirty = dirtyKeys();
+  if (dirty.length === 0) return;
+  if (!window._fbWriteKey) {
+    showSyncBadge('error');
+    alert('Not connected to the cloud yet. Check your internet and try again.');
+    return;
+  }
+  showSyncBadge('saving');
+  let pending = dirty.length, failed = false;
+  dirty.forEach(key => {
+    window._fbWriteKey(key, state.data[key])
+      .then(() => { pending--; if (pending === 0 && !failed) finishPush(); })
+      .catch(() => { if (!failed) { failed = true; showSyncBadge('error'); } });
+  });
+}
+function finishPush() {
+  state.lastSynced = JSON.parse(JSON.stringify(state.data));
+  try { localStorage.setItem('shoopa_synced', JSON.stringify(state.lastSynced)); } catch(e) {}
+  updateSaveBtn();
+  showSyncBadge('saved');
 }
 
 function showSyncBadge(status) {
@@ -2428,6 +2528,13 @@ function renderLog() {
           </div>`;
         });
         html += `</div>`;
+        // Quick actions — mark all 5 at once
+        const allPrayedToday = totalPrayedToday === 5;
+        const allWudhuToday  = totalWudhuToday === 5;
+        html += `<div class="prayer-quick-actions">
+          <button class="pq-btn" onclick="prayAllForDay('${u}',${w},${ad},false)">${allPrayedToday?'✕ Clear prayers':'✓ All 5 prayed'}</button>
+          <button class="pq-btn pq-wudhu" onclick="prayAllForDay('${u}',${w},${ad},true)">${(allPrayedToday&&allWudhuToday)?'✕ Clear all':'💧 All 5 + wudhu'}</button>
+        </div>`;
         const scoreCol = u==='saamir'?'s':'j';
         html += `<div class="prayer-day-score ${scoreCol}">${totalPrayedToday}/5 prayers · ${totalWudhuToday}/5 with wudhu</div>`;
       }
@@ -2803,7 +2910,12 @@ function renderVersus() {
     let habHtml = '';
     HABITS.forEach(h => {
       let hDone=0;
-      for(let d=0;d<7;d++) if(isChecked(u,w,h.id,d)) hDone++; hDone=Math.min(hDone,h.freq);
+      if (h.isPrayers) {
+        hDone = weekFullPrayerDays(u,w);
+      } else {
+        for(let d=0;d<7;d++) if(isChecked(u,w,h.id,d)) hDone++;
+        hDone = Math.min(hDone,h.freq);
+      }
       const hPct = Math.round(hDone/h.freq*100);
       const col = u==='saamir' ? 'var(--cyan)' : 'var(--purple2)';
       habHtml += `<div class="vs-habit-row">
@@ -3380,7 +3492,7 @@ function doImport(e) {
       var p=JSON.parse(ev.target.result);
       var d=p.data||p;
       if(!d.saamir)d.saamir={}; if(!d.jana)d.jana={};
-      state.data=d; save(); renderSnap(); bkMsg("Imported!",true);
+      state.data=d; save(); pushToCloud(); renderSnap(); bkMsg("Imported & saved to cloud!",true);
     }catch(err){bkMsg("Error: "+err.message,false);}
   };
   r.readAsText(file); e.target.value="";
@@ -3388,7 +3500,7 @@ function doImport(e) {
 function doReset() {
   if(!confirm("Delete ALL data?"))return;
   if(!confirm("Are you sure? Cannot be undone."))return;
-  state.data={saamir:{},jana:{}}; save(); renderSnap(); bkMsg("Reset done.",true);
+  state.data={saamir:{},jana:{}}; save(); pushToCloud(); renderSnap(); bkMsg("Reset done & saved to cloud.",true);
 }
 function bkMsg(msg,ok) {
   var el=document.getElementById("bk-msg"); if(!el)return;
@@ -3424,6 +3536,15 @@ checkChangelog();
 renderDashboard();
 renderLog();
 updateLogBadge();
+updateSaveBtn();
+
+// Warn before leaving with unsaved changes
+window.addEventListener('beforeunload', function(e) {
+  if (typeof hasUnsaved === 'function' && hasUnsaved()) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
 </script>
 </body>
 </html>
